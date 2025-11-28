@@ -1,4 +1,4 @@
-import Searchbar from '@/components/search-bar/Searchbar';
+import Searchbar from '@/components/features/search-bar/Searchbar';
 
 // cards/page.tsx
 function CardsPage() {
