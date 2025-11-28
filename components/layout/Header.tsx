@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import Navbar from './NavBar';
 
 import logo from '@/assets/logo.svg';
+import Navbar from './NavBar';
 
 function Header() {
   return (
