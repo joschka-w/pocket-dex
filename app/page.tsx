@@ -1,3 +1,9 @@
+import Checkbox from '@/components/ui/Checkbox';
+
 export default function Home() {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Checkbox />
+    </div>
+  );
 }
