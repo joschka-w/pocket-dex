@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
-import FilterWrapper from './FIlterWrapper';
 import Seperator from '@/components/ui/Seperator';
+import ColorFilter from './filter-components/ColorFilter';
 
 interface Props {
   className?: string;
@@ -17,7 +17,7 @@ function FilterSidebar({ className }: Props) {
       </header>
 
       <ul className="flex flex-col gap-5 mt-7">
-        <FilterWrapper label="Set" />
+        <ColorFilter />
         <Seperator />
       </ul>
     </aside>
