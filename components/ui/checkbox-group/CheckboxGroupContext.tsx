@@ -4,8 +4,8 @@ import { createContext, Dispatch, SetStateAction, useContext, ReactNode } from '
 
 interface CheckboxGroupContext {
   state: Set<string>;
-  removeValue: (value: string) => void;
-  addValue: (value: string) => void;
+  removeValue: (value: string | Set<string>) => void;
+  addValue: (value: string | Set<string>) => void;
 }
 
 export const CheckboxGroupContext = createContext<CheckboxGroupContext | undefined>(undefined);
@@ -17,21 +17,23 @@ interface Props {
 }
 
 export function CheckboxGroupContextProvider({ value, setValue, children }: Props) {
-  const removeValue = (value: string) => {
+  const removeValue = (value: string | Set<string>) => {
     setValue(prevSet => {
       const newSet = new Set(prevSet);
-      newSet.delete(value);
 
-      return newSet;
+      if (typeof value === 'string') {
+        newSet.delete(value);
+        return newSet;
+      } else return newSet.difference(value);
     });
   };
 
-  const addValue = (value: string) => {
+  const addValue = (value: string | Set<string>) => {
     setValue(prevSet => {
       const newSet = new Set(prevSet);
-      newSet.add(value);
 
-      return newSet;
+      if (typeof value === 'string') return newSet.add(value);
+      else return newSet.union(value);
     });
   };
 
