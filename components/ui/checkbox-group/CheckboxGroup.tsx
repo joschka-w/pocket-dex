@@ -1,12 +1,9 @@
 import { ReactNode } from 'react';
 import CheckboxGroupItem from './CheckboxGroupItem';
+import CheckboxGroup from './CheckboxGroupRoot';
 
-interface Props {
-  children?: ReactNode;
-}
-
-function CheckboxGroup({ children }: Props) {
-  return <fieldset>{children}</fieldset>;
+function CheckboxGroup({ value, onValueChange, children }: Props) {
+  return <CheckboxGroup>{children}</CheckboxGroup>;
 }
 
 CheckboxGroup.Item = CheckboxGroupItem;
