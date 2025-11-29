@@ -12,7 +12,7 @@ function RarityFilter() {
             <ToggleGroup.Item
               key={`color-filter-${value}`}
               value={value}
-              className="rounded-full cursor-pointer h-9 inset-ring-1 inset-ring-bg-3 px-4 data-[state=on]:bg-primary/10 data-[state=on]:inset-ring-primary"
+              className="rounded-full cursor-pointer h-9 inset-ring-1 inset-ring-bg-3 px-4 hover:bg-white/7 transition-colors data-[state=on]:bg-primary/10 data-[state=on]:inset-ring-primary"
             >
               <Image src={img} alt={value} />
             </ToggleGroup.Item>
