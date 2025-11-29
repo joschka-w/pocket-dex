@@ -11,7 +11,7 @@ function FilterWrapper({ label, children }: Props) {
       <div className="flex justify-between items-center">
         <label className="font-semibold text-text-muted">{label}</label>
 
-        <button className="text-text-muted cursor-pointer hover:underline hover:text-text transition-colors active:text-text-muted">
+        <button className="text-text-muted text-sm cursor-pointer hover:underline hover:text-text transition-colors active:text-text-muted">
           Clear
         </button>
       </div>

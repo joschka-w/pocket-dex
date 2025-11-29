@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils/cn';
 import Seperator from '@/components/ui/Seperator';
 import ColorFilter from './filter-components/ColorFilter';
 import HpFilter from './filter-components/HpFilter';
+import RarityFilter from './filter-components/RarityFilter';
 
 interface Props {
   className?: string;
@@ -13,7 +14,7 @@ function FilterSidebar({ className }: Props) {
     <aside className={cn('bg-bg-1 rounded-xl p-7', className)}>
       <header className="flex items-center justify-between">
         <h3 className="font-semibold text-xl">Filters</h3>
-        <button className="text-text-muted cursor-pointer hover:underline hover:text-text transition-colors active:text-text-muted">
+        <button className="text-text-muted text-sm cursor-pointer hover:underline hover:text-text transition-colors active:text-text-muted">
           Clear all
         </button>
       </header>
@@ -22,6 +23,8 @@ function FilterSidebar({ className }: Props) {
         <ColorFilter />
         <Seperator />
         <HpFilter min={0} max={210} />
+        <Seperator />
+        <RarityFilter />
         <Seperator />
       </ul>
     </aside>
