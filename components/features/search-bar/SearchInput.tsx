@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
 import { Search } from 'lucide-react';
 import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 

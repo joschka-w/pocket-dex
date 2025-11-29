@@ -1,4 +1,5 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
+
 import Seperator from '@/components/ui/Seperator';
 import ColorFilter from './filter-components/ColorFilter';
 import HpFilter from './filter-components/HpFilter';

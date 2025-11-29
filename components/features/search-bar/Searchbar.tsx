@@ -1,4 +1,5 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
+
 import SearchInput from './SearchInput';
 import SortSelect from './SortSelect';
 import SortDirectionToggle from './SortDirectionToggle';
