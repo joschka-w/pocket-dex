@@ -2,10 +2,10 @@
 
 import { useEffect, useId, ReactNode } from 'react';
 
-import { useNestedGroupContext } from './CheckboxNestedGroupContext';
-import { useCheckboxGroupContext } from './CheckboxGroupContext';
-import Checkbox from '../Checkbox';
 import CheckboxGroupItemWrapper from './CheckboxGroupItemWrapper';
+import { useCheckboxGroupContext } from '../root/CheckboxGroupContext';
+import { useNestedGroupContext } from '../nested-group/NestedGroupContext';
+import Checkbox from '../../Checkbox';
 
 interface Props {
   children?: ReactNode;

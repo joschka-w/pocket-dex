@@ -9,9 +9,9 @@ import {
 } from 'react';
 
 import { CheckboxGroupContextProvider } from './CheckboxGroupContext';
-import CheckboxGroupItem from './CheckboxGroupItem';
-import CheckboxNestedGroup from './CheckboxNestedGroup';
 import { cn } from '@/lib/utils/cn';
+import CheckboxNestedGroup from '../nested-group/NestedGroup';
+import CheckboxGroupItem from '../item/CheckboxGroupItem';
 
 interface Props
   extends DetailedHTMLProps<FieldsetHTMLAttributes<HTMLFieldSetElement>, HTMLFieldSetElement> {

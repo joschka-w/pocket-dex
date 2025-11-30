@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 
 import { CheckboxState } from '@/components/ui/Checkbox';
-import { useCheckboxGroupContext } from '@/components/ui/checkbox-group/CheckboxGroupContext';
-import { NestedGroupContextType } from '@/components/ui/checkbox-group/CheckboxNestedGroupContext';
+import { useCheckboxGroupContext } from '@/components/ui/checkbox-group/root/CheckboxGroupContext';
+import { NestedGroupContextType } from '@/components/ui/checkbox-group/nested-group/NestedGroupContext';
 
 function useNestedCheckboxGroup() {
   const { state, addValues, removeValues } = useCheckboxGroupContext();

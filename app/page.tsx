@@ -1,6 +1,6 @@
 'use client';
 
-import CheckboxGroup from '@/components/ui/checkbox-group/CheckboxGroup';
+import CheckboxGroup from '@/components/ui/checkbox-group/root/CheckboxGroup';
 import { useState } from 'react';
 
 function Home() {

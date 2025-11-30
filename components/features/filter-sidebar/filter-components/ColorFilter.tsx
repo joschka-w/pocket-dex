@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import { ToggleGroup } from 'radix-ui';
 import FilterWrapper from '../FIlterWrapper';
 import { colorSVGs } from '@/lib/constants/asset-maps';
-import Image from 'next/image';
 
 function ColorFilter() {
   return (

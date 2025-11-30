@@ -1,8 +1,8 @@
 'use client';
 
 import { Slider } from 'radix-ui';
-import FilterWrapper from '../FIlterWrapper';
 import { useState } from 'react';
+import FilterWrapper from '../FIlterWrapper';
 
 interface Props {
   max: number;

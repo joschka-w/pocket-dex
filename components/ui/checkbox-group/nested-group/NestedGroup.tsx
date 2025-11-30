@@ -4,10 +4,10 @@ import { ReactNode, useId } from 'react';
 import { Collapsible } from 'radix-ui';
 import { ChevronDownIcon } from 'lucide-react';
 
-import { NestedGroupContext } from './CheckboxNestedGroupContext';
+import { NestedGroupContext } from './NestedGroupContext';
 import useNestedCheckboxGroup from '@/lib/hooks/useNestedCheckboxGroup';
-import Checkbox from '../Checkbox';
-import CheckboxGroupItemWrapper from './CheckboxGroupItemWrapper';
+import Checkbox from '../../Checkbox';
+import CheckboxGroupItemWrapper from '../item/CheckboxGroupItemWrapper';
 
 interface Props {
   children?: ReactNode;
@@ -28,7 +28,7 @@ function CheckboxNestedGroup({ label, children }: Props) {
           </label>
           <Collapsible.Trigger
             onClick={e => e.stopPropagation()}
-            className="flex items-center group justify-center ml-auto text-text-muted  hover:text-text rounded-md transition-all hover:scale-115 p-0.5 cursor-pointer"
+            className="flex items-center group justify-center ml-auto text-text-muted hover:text-text rounded-md transition-all hover:scale-115 aspect-square h-7 cursor-pointer"
           >
             <ChevronDownIcon
               size={18}
