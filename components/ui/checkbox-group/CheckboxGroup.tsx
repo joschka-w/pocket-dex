@@ -1,20 +1,28 @@
 'use client';
 
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import {
+  DetailedHTMLProps,
+  Dispatch,
+  FieldsetHTMLAttributes,
+  ReactNode,
+  SetStateAction,
+} from 'react';
 
 import { CheckboxGroupContextProvider } from './CheckboxGroupContext';
 import CheckboxGroupItem from './CheckboxGroupItem';
 import CheckboxNestedGroup from './CheckboxNestedGroup';
+import { cn } from '@/lib/utils/cn';
 
-interface Props {
+interface Props
+  extends DetailedHTMLProps<FieldsetHTMLAttributes<HTMLFieldSetElement>, HTMLFieldSetElement> {
   value: Set<string>;
   setValue: Dispatch<SetStateAction<Set<string>>>;
   children?: ReactNode;
 }
 
-function CheckboxGroup({ value, setValue, children }: Props) {
+function CheckboxGroup({ value, setValue, className, children, ...props }: Props) {
   return (
-    <fieldset>
+    <fieldset className={cn('flex flex-col gap-1', className)} {...props}>
       <CheckboxGroupContextProvider value={value} setValue={setValue}>
         {children}
       </CheckboxGroupContextProvider>

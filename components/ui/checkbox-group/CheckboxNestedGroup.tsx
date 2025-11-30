@@ -1,8 +1,9 @@
 'use client';
 
 import { createContext, ReactNode, useContext, useId, useMemo, useState } from 'react';
-import Checkbox, { CheckboxState } from '../Checkbox';
+import Checkbox from '../Checkbox';
 import { useCheckboxGroupContext } from './CheckboxGroupContext';
+import CheckboxGroupItemWrapper from './CheckboxGroupItemWrapper';
 
 interface NestedGroupContext {
   registerItem: (value: string) => void;
@@ -13,7 +14,20 @@ interface NestedGroupContext {
 // this way we can track which checkbox values belong to the NestedGroup and manage their state
 const NestedGroupContext = createContext<NestedGroupContext | undefined>(undefined);
 
-export const useNestedGroupContext = () => useContext(NestedGroupContext);
+export const useNestedGroupContext = () => {
+  const context = useContext(NestedGroupContext);
+
+  return context
+    ? {
+        isInNestedGroup: true as const,
+        ...context,
+      }
+    : {
+        isInNestedGroup: false as const,
+        registerItem: undefined,
+        unregisterItem: undefined,
+      };
+};
 
 interface Props {
   children?: ReactNode;
@@ -53,22 +67,22 @@ function CheckboxNestedGroup({ label, children }: Props) {
     else return 'indeterminate';
   }, [registeredItems, state]);
 
-  const handleCheckedChange = (checked: CheckboxState) => {
-    if (checked) addValues(registeredItems);
+  const handleClick = () => {
+    if (!checkedState) addValues(registeredItems);
     else removeValues(registeredItems);
   };
 
   return (
     <NestedGroupContext.Provider value={contextValue}>
       <div>
-        <div className="flex items-center gap-2">
-          <Checkbox checked={checkedState} onCheckedChange={handleCheckedChange} id={id} />
-          <label htmlFor={id}>{label}</label>
-        </div>
+        <CheckboxGroupItemWrapper onClick={handleClick}>
+          <Checkbox checked={checkedState} onCheckedChange={handleClick} id={id} />
+          <label onClick={e => e.preventDefault()} className="cursor-pointer" htmlFor={id}>
+            {label}
+          </label>
+        </CheckboxGroupItemWrapper>
 
-        <div role="group" className="pl-6 mb-1">
-          {children}
-        </div>
+        <div role="group">{children}</div>
       </div>
     </NestedGroupContext.Provider>
   );

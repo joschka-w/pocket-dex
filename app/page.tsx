@@ -8,7 +8,7 @@ function Home() {
 
   return (
     <div>
-      <CheckboxGroup setValue={setValue} value={value}>
+      <CheckboxGroup setValue={setValue} value={value} className="w-60">
         <CheckboxGroup.NestedGroup label="Group">
           <CheckboxGroup.Item value="item-1">Item 1</CheckboxGroup.Item>
           <CheckboxGroup.Item value="item-2">Item 2</CheckboxGroup.Item>

@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useId } from 'react';
-import Checkbox, { CheckboxState } from '../Checkbox';
+import Checkbox from '../Checkbox';
 
 import { ReactNode } from 'react';
 import { useCheckboxGroupContext } from './CheckboxGroupContext';
 import { useNestedGroupContext } from './CheckboxNestedGroup';
+import CheckboxGroupItemWrapper from './CheckboxGroupItemWrapper';
 
 interface Props {
   children?: ReactNode;
@@ -15,30 +16,37 @@ interface Props {
 function CheckboxGroupItem({ value, children }: Props) {
   const { state, addValues, removeValues } = useCheckboxGroupContext();
   const id = useId();
-  const itemGroupContext = useNestedGroupContext();
+  const { isInNestedGroup, registerItem, unregisterItem } = useNestedGroupContext();
 
   useEffect(() => {
-    if (!itemGroupContext) return;
+    if (!isInNestedGroup) return;
 
-    itemGroupContext.registerItem(value);
+    registerItem(value);
 
     return () => {
-      itemGroupContext.unregisterItem(value);
+      unregisterItem(value);
     };
-  }, [itemGroupContext, value]);
+  }, [isInNestedGroup, registerItem, unregisterItem, value]);
 
   const checked = state.has(value);
 
-  const handleCheckedChange = (checked: CheckboxState) => {
-    if (checked) addValues(value);
+  const handleClick = () => {
+    if (!checked) addValues(value);
     else removeValues(value);
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <Checkbox id={id} checked={checked} onCheckedChange={handleCheckedChange} />
-      {children && <label htmlFor={id}>{children}</label>}
-    </div>
+    <CheckboxGroupItemWrapper
+      onClick={handleClick}
+      variant={isInNestedGroup ? 'nested' : 'default'}
+    >
+      <Checkbox id={id} checked={checked} onCheckedChange={handleClick} />
+      {children && (
+        <label onClick={e => e.preventDefault()} className="cursor-pointer" htmlFor={id}>
+          {children}
+        </label>
+      )}
+    </CheckboxGroupItemWrapper>
   );
 }
 
