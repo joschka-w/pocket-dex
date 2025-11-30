@@ -4,6 +4,7 @@ import Seperator from '@/components/ui/Seperator';
 import ColorFilter from './filter-components/ColorFilter';
 import HpFilter from './filter-components/HpFilter';
 import RarityFilter from './filter-components/RarityFilter';
+import SetFilter from './filter-components/SetFilter';
 
 interface Props {
   className?: string;
@@ -20,6 +21,8 @@ function FilterSidebar({ className }: Props) {
       </header>
 
       <ul className="flex flex-col gap-5 mt-7">
+        <SetFilter />
+        <Seperator />
         <ColorFilter />
         <Seperator />
         <HpFilter min={0} max={210} />
