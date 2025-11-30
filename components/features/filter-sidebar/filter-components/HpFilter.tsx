@@ -32,11 +32,11 @@ function HpFilter({ min, max }: Props) {
           <Slider.Range className="absolute h-full bg-primary/75" />
         </Slider.Track>
         <Slider.Thumb
-          className="block size-4 rounded-full bg-primary hover:bg-primary-light focus:ring-2 hover:scale-120 transition-all duration-75 focus:outline-none"
+          className="block size-4 cursor-pointer rounded-full bg-primary hover:bg-primary-light focus:ring-2 hover:scale-120 transition-all duration-75 focus:outline-none"
           aria-label="Minimum Hp"
         />
         <Slider.Thumb
-          className="block size-4 rounded-full bg-primary hover:bg-primary-light focus:ring-2 hover:scale-120 transition-all duration-75 focus:outline-none"
+          className="block size-4 cursor-pointer rounded-full bg-primary hover:bg-primary-light focus:ring-2 hover:scale-120 transition-all duration-75 focus:outline-none"
           aria-label="Maximum Hp"
         />
       </Slider.Root>
