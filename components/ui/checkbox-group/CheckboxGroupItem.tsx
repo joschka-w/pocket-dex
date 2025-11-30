@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useId } from 'react';
-import Checkbox from '../Checkbox';
+import { useEffect, useId, ReactNode } from 'react';
 
-import { ReactNode } from 'react';
+import { useNestedGroupContext } from './CheckboxNestedGroupContext';
 import { useCheckboxGroupContext } from './CheckboxGroupContext';
-import { useNestedGroupContext } from './CheckboxNestedGroup';
+import Checkbox from '../Checkbox';
 import CheckboxGroupItemWrapper from './CheckboxGroupItemWrapper';
 
 interface Props {
@@ -15,8 +14,8 @@ interface Props {
 
 function CheckboxGroupItem({ value, children }: Props) {
   const { state, addValues, removeValues } = useCheckboxGroupContext();
-  const id = useId();
   const { isInNestedGroup, registerItem, unregisterItem } = useNestedGroupContext();
+  const id = useId();
 
   useEffect(() => {
     if (!isInNestedGroup) return;
