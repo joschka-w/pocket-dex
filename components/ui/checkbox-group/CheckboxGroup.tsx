@@ -1,9 +1,10 @@
 'use client';
 
 import { Dispatch, ReactNode, SetStateAction } from 'react';
+
 import { CheckboxGroupContextProvider } from './CheckboxGroupContext';
 import CheckboxGroupItem from './CheckboxGroupItem';
-import CheckboxGroupItemGroup from './CheckboxGroupItemGroup';
+import CheckboxNestedGroup from './CheckboxNestedGroup';
 
 interface Props {
   value: Set<string>;
@@ -22,6 +23,6 @@ function CheckboxGroup({ value, setValue, children }: Props) {
 }
 
 CheckboxGroup.Item = CheckboxGroupItem;
-CheckboxGroup.Group = CheckboxGroupItemGroup;
+CheckboxGroup.NestedGroup = CheckboxNestedGroup;
 
 export default CheckboxGroup;
