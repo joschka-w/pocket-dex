@@ -3,7 +3,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
 
 interface Props {
   children: ReactNode;
