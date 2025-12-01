@@ -1,8 +1,8 @@
 'use client';
 
 import { Slider } from 'radix-ui';
-import { useState } from 'react';
-import FilterWrapper from '../FIlterWrapper';
+import FilterWrapper from '../FilterWrapper';
+import useFilterState from '@/lib/hooks/useFilterState';
 
 interface Props {
   max: number;
@@ -10,14 +10,17 @@ interface Props {
 }
 
 function HpFilter({ min, max }: Props) {
-  const [value, setValue] = useState([min, max]);
+  const { state, setters } = useFilterState();
 
-  const handleValueChange = (val: number[]) => {
-    setValue(val);
+  const value = [state.minHp, state.maxHp];
+
+  const handleValueChange = (values: number[]) => {
+    setters.minHp(values[0]);
+    setters.maxHp(values[1]);
   };
 
   return (
-    <FilterWrapper label="HP">
+    <FilterWrapper label="HP" setters={[setters.minHp, setters.maxHp]}>
       <Slider.Root
         value={value}
         onValueChange={handleValueChange}

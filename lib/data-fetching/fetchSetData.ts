@@ -11,20 +11,18 @@ async function fetchSetData() {
     },
   });
 
-  const query = supabase
+  return await supabase
     .from('set')
     .select(
       `
-    *,
-    packs:booster_pack (
-      name,
-      symbol
+      *,
+      packs:booster_pack (
+        name,
+        symbol
     )
-  `
+    `
     )
     .order('release_date', { ascending: false });
-
-  return await query;
 }
 
 export type SetsWithPacks = ExtractQueryData<typeof fetchSetData>;

@@ -1,12 +1,27 @@
+'use client';
+
 import Image from 'next/image';
 import { ToggleGroup } from 'radix-ui';
-import FilterWrapper from '../FIlterWrapper';
+import FilterWrapper from '../FilterWrapper';
 import { colorSVGs } from '@/lib/constants/asset-maps';
+import useFilterState from '@/lib/hooks/useFilterState';
+import { Enums } from '@/types/database';
 
 function ColorFilter() {
+  const { state, setters } = useFilterState();
+
+  const handleValueChange = (value: Enums<'color'>[]) => {
+    setters.color(value.length === 0 ? null : value);
+  };
+
   return (
-    <FilterWrapper label="Color">
-      <ToggleGroup.Root type="multiple" className="flex gap-2 flex-wrap">
+    <FilterWrapper label="Color" setters={[setters.color]}>
+      <ToggleGroup.Root
+        value={state.color || []}
+        onValueChange={handleValueChange}
+        type="multiple"
+        className="flex gap-2 flex-wrap"
+      >
         {Object.entries(colorSVGs).map(([value, img]) => {
           return (
             <ToggleGroup.Item

@@ -1,34 +1,43 @@
 import { cn } from '@/lib/utils/cn';
 
+import fetchSetData from '@/lib/data-fetching/fetchSetData';
 import Seperator from '@/components/ui/Seperator';
 import ColorFilter from './filter-components/ColorFilter';
 import HpFilter from './filter-components/HpFilter';
 import RarityFilter from './filter-components/RarityFilter';
 import SetFilter from './filter-components/SetFilter';
+import ClearAllFiltersButton from './ClearAllFiltersButton';
+import CardTypeFilter from './filter-components/CardTypeFilter';
+import ExFilter from './filter-components/ExFilter';
 
 interface Props {
   className?: string;
 }
 
-function FilterSidebar({ className }: Props) {
+async function FilterSidebar({ className }: Props) {
+  const { data: setData, error } = await fetchSetData();
+
+  if (error) console.error(error); // ! Add proper error handling
+
   return (
-    <aside className={cn('bg-bg-1 rounded-xl p-7', className)}>
-      <header className="flex items-center justify-between">
+    <aside className={cn('bg-bg-1 rounded-xl overflow-auto relative', className)}>
+      <header className="flex items-center justify-between sticky top-0 p-7 bg-bg-1">
         <h3 className="font-semibold text-xl">Filters</h3>
-        <button className="text-text-muted text-sm cursor-pointer hover:underline hover:text-text transition-colors active:text-text-muted">
-          Clear all
-        </button>
+        <ClearAllFiltersButton />
       </header>
 
-      <ul className="flex flex-col gap-5 mt-7">
-        <SetFilter />
+      <ul className="flex flex-col gap-5 p-7 pt-0">
+        <SetFilter allSets={setData} />
         <Seperator />
         <ColorFilter />
         <Seperator />
-        <HpFilter min={0} max={210} />
-        <Seperator />
         <RarityFilter />
         <Seperator />
+        <CardTypeFilter />
+        <Seperator />
+        <HpFilter min={0} max={210} />
+        <Seperator />
+        <ExFilter />
       </ul>
     </aside>
   );

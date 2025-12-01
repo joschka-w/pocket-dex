@@ -164,6 +164,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'card_view';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'card_booster_pack_link_card_id_fkey';
+            columns: ['card_id'];
+            isOneToOne: false;
+            referencedRelation: 'card_view_new';
+            referencedColumns: ['id'];
           }
         ];
       };
@@ -229,6 +236,13 @@ export type Database = {
             columns: ['card_id'];
             isOneToOne: false;
             referencedRelation: 'card_view';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'deck_card_link_card_id_fkey';
+            columns: ['card_id'];
+            isOneToOne: false;
+            referencedRelation: 'card_view_new';
             referencedColumns: ['id'];
           },
           {
@@ -325,6 +339,13 @@ export type Database = {
             isOneToOne: true;
             referencedRelation: 'card_view';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'pokemon_card_id_fkey';
+            columns: ['id'];
+            isOneToOne: true;
+            referencedRelation: 'card_view_new';
+            referencedColumns: ['id'];
           }
         ];
       };
@@ -379,6 +400,13 @@ export type Database = {
             isOneToOne: true;
             referencedRelation: 'card_view';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'trainer_card_id_fkey';
+            columns: ['id'];
+            isOneToOne: true;
+            referencedRelation: 'card_view_new';
+            referencedColumns: ['id'];
           }
         ];
       };
@@ -418,6 +446,19 @@ export type Database = {
             referencedColumns: ['symbol'];
           }
         ];
+      };
+      card_view_new: {
+        Row: {
+          card_type: Database['public']['Enums']['card_type'] | null;
+          id: string | null;
+          image_path: string | null;
+          name: string | null;
+          packs: string[] | null;
+          pokemon_card: Json | null;
+          rarity: Database['public']['Enums']['rarity'] | null;
+          set: Json | null;
+        };
+        Relationships: [];
       };
       deck_overview: {
         Row: {

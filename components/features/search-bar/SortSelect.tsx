@@ -1,7 +1,11 @@
-import { ChevronDownIcon } from 'lucide-react';
-import { Select } from 'radix-ui';
+'use client';
 
-type SortFilter = 'name' | 'id' | 'rarity' | 'hp' | 'color';
+import { Select } from 'radix-ui';
+import { CheckIcon, ChevronDownIcon } from 'lucide-react';
+
+import useFilterState from '@/lib/hooks/useFilterState';
+import { SortFilter } from '@/lib/filters/filterConfig';
+import { useId } from 'react';
 
 const sortNamesMap: Record<SortFilter, string> = {
   id: 'Id',
@@ -12,15 +16,27 @@ const sortNamesMap: Record<SortFilter, string> = {
 };
 
 function SortSelect() {
-  return (
-    <Select.Root>
-      <Select.Trigger className="cursor-pointer h-9 min-w-36 w-full flex items-center py-2 px-3 justify-between rounded-lg bg-bg-2 focus:outline-1 outline-neutral-400">
-        <Select.Value placeholder="Sort by:" className="text-text" aria-label="Sorting" />
-        <Select.Icon>
-          <ChevronDownIcon size={20} />
-        </Select.Icon>
-      </Select.Trigger>
+  const id = useId();
+  const { state, setters } = useFilterState();
 
+  const handleValueChange = (value: SortFilter) => setters.sortBy(value);
+
+  return (
+    <Select.Root value={state.sortBy} onValueChange={handleValueChange}>
+      <div className="flex items-center gap-2">
+        <label htmlFor={id} className="text-nowrap">
+          Sort by:
+        </label>
+        <Select.Trigger
+          id={id}
+          className="cursor-pointer h-9 min-w-32 w-full flex items-center py-2 px-3 justify-between rounded-lg bg-bg-2 focus:outline-1 outline-neutral-400"
+        >
+          <Select.Value placeholder="Sort by:" className="text-text" aria-label="Sorting" />
+          <Select.Icon>
+            <ChevronDownIcon size={20} />
+          </Select.Icon>
+        </Select.Trigger>
+      </div>
       <Select.Content
         align="start"
         position="popper"
@@ -31,9 +47,11 @@ function SortSelect() {
           <Select.Item
             value={value}
             key={value}
-            className="bg-transparent hover:bg-bg-3 py-1 cursor-pointer px-3 outline-none rounded-lg select-none"
+            className="bg-transparent data-highlighted:bg-bg-3 py-1 flex items-center justify-between cursor-pointer px-3 outline-none rounded-lg select-none group"
           >
             <Select.ItemText>{displayText}</Select.ItemText>
+
+            <CheckIcon size={16} className="group-data-[state=unchecked]:hidden" />
           </Select.Item>
         ))}
       </Select.Content>

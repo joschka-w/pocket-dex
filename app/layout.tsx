@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -23,8 +24,10 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-bg-base min-h-screen flex flex-col items-center text-text gap-5 antialiased`}
       >
-        <Header />
-        {children}
+        <NuqsAdapter>
+          <Header />
+          {children}
+        </NuqsAdapter>
       </body>
     </html>
   );

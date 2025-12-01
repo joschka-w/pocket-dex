@@ -24,7 +24,9 @@ export function CheckboxGroupContextProvider({ value, setValue, children }: Prop
       if (typeof value === 'string') {
         newSet.delete(value);
         return newSet;
-      } else return newSet.difference(value);
+      }
+
+      return newSet.difference(value);
     });
   };
 

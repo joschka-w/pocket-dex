@@ -1,10 +1,20 @@
-import { cn } from '@/lib/utils/cn';
+'use client';
+
+import { ChangeEventHandler, DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { Search } from 'lucide-react';
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+
+import useFilterState from '@/lib/hooks/useFilterState';
+import { cn } from '@/lib/utils/cn';
 
 type Props = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
 function SearchInput({ className, ...props }: Props) {
+  const { state, setters } = useFilterState();
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = e => {
+    setters.searchQuery(e.target.value);
+  };
+
   return (
     <div
       className={cn([
@@ -13,6 +23,8 @@ function SearchInput({ className, ...props }: Props) {
       ])}
     >
       <input
+        value={state.searchQuery || ''}
+        onChange={handleChange}
         placeholder="Search cards"
         type="search"
         className="w-full bg-transparent py-3 text-sm font-semibold leading-none placeholder:text-text-muted focus:outline-none"

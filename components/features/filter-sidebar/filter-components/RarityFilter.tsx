@@ -1,12 +1,27 @@
+'use client';
+
 import { ToggleGroup } from 'radix-ui';
-import FilterWrapper from '../FIlterWrapper';
+import FilterWrapper from '../FilterWrapper';
 import { raritySVGs } from '@/lib/constants/asset-maps';
 import Image from 'next/image';
+import useFilterState from '@/lib/hooks/useFilterState';
+import { Enums } from '@/types/database';
 
 function RarityFilter() {
+  const { state, setters } = useFilterState();
+
+  const handleValueChange = (value: Enums<'rarity'>[]) => {
+    setters.rarity(value.length === 0 ? null : value);
+  };
+
   return (
-    <FilterWrapper label="Rarity">
-      <ToggleGroup.Root type="multiple" className="flex gap-2 flex-wrap">
+    <FilterWrapper label="Rarity" setters={[setters.rarity]}>
+      <ToggleGroup.Root
+        value={state.rarity || []}
+        onValueChange={handleValueChange}
+        type="multiple"
+        className="flex gap-2 flex-wrap"
+      >
         {Object.entries(raritySVGs).map(([value, img]) => {
           return (
             <ToggleGroup.Item

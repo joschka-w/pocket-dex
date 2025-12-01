@@ -1,0 +1,62 @@
+'use client';
+
+import { Dispatch, SetStateAction } from 'react';
+import useFilterState from '@/lib/hooks/useFilterState';
+import FilterWrapper from '../FilterWrapper';
+import CheckboxGroup from '@/components/ui/checkbox-group/root/CheckboxGroup';
+import {
+  CARD_TYPE_FILTERS,
+  CardTypeFilter as TCardTypeFilter,
+  FilterState,
+} from '@/lib/filters/filterConfig';
+
+const cardTypeNamesMap: Record<TCardTypeFilter, string> = {
+  fossil: 'Item (Fossil)',
+  item: 'Item',
+  pokemon: 'Pokemon',
+  support: 'Supporter',
+  tool: 'Pokemon Tool',
+};
+
+function CardTypeFilter() {
+  const { state, setters } = useFilterState();
+
+  const stateAsSet = new Set(state.cardType);
+
+  // 'Simulating' a react state-update-function so we can pass it to
+  // CheckboxGroup, also to convert the value from a Set to string[]
+  const setValue: Dispatch<SetStateAction<Set<string>>> = value => {
+    if (typeof value === 'function') {
+      const newValue = value(stateAsSet);
+      setters.cardType([...newValue] as FilterState<'cardType'>);
+    } else {
+      setters.cardType([...value] as FilterState<'cardType'>);
+    }
+  };
+
+  const trainerCardTypeFilters = CARD_TYPE_FILTERS.filter(val => val !== 'pokemon');
+
+  return (
+    <FilterWrapper setters={[setters.cardType]} label="Card Type">
+      <CheckboxGroup value={stateAsSet} setValue={setValue}>
+        <CheckboxGroup.Item
+          value={'pokemon' as TCardTypeFilter['0']}
+          key={`card-type-filter-pokemon`}
+        >
+          {cardTypeNamesMap['pokemon']}
+        </CheckboxGroup.Item>
+        <CheckboxGroup.NestedGroup label="Trainer" key={'card-type-filter-trainer'}>
+          {trainerCardTypeFilters.map(value => {
+            return (
+              <CheckboxGroup.Item value={value} key={`card-type-filter-${value}`}>
+                {cardTypeNamesMap[value]}
+              </CheckboxGroup.Item>
+            );
+          })}
+        </CheckboxGroup.NestedGroup>
+      </CheckboxGroup>
+    </FilterWrapper>
+  );
+}
+
+export default CardTypeFilter;
