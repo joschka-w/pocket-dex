@@ -21,7 +21,7 @@ async function FilterSidebar({ className }: Props) {
 
   return (
     <aside className={cn('bg-bg-1 rounded-xl overflow-auto relative', className)}>
-      <header className="flex items-center justify-between sticky top-0 p-7 bg-bg-1">
+      <header className="flex items-center justify-between sticky top-0 p-7 bg-bg-1 z-10">
         <h3 className="font-semibold text-xl">Filters</h3>
         <ClearAllFiltersButton />
       </header>

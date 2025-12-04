@@ -15,9 +15,9 @@ export type FilterSetters = {
 // managing all filter state with searchParam synchronization in a custom hook
 function useFilterState() {
   const [state, setState] = useQueryStates(filterParsers, {
-    limitUrlUpdates: { timeMs: 1000, method: 'debounce' },
-    shallow: false,
     urlKeys: filterUrlKeys,
+    limitUrlUpdates: { timeMs: 500, method: 'debounce' },
+    shallow: false,
   });
 
   // Creating individual setter function for each filter key (with type safety)

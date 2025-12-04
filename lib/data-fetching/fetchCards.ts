@@ -1,11 +1,24 @@
 'use server';
 
+import { LoaderInput } from 'nuqs/server';
 import { FILTER_DEFAULTS, loadSearchParams, SortFilter } from '../filters/filterConfig';
 import { createClient } from '../utils/supabase/server';
 
-async function fetchCards(searchParams: Promise<{ [key: string]: string | string[] | undefined }>) {
-  const supabase = await createClient();
-  const filters = await loadSearchParams(searchParams);
+async function fetchCards(searchParams: LoaderInput) {
+  // Cache each unique filter combination. Common patterns (like no filters or only sorting) avoid repeated fetches.
+  // Use tags on fetchOptions to revalidate all when the database updates (e.g. a new set is added).
+
+  // If cache size becomes problematic (too many filter permutations), we could check
+  // for filter complexity (e.g. how many filters are applied) and skip caching these requests.
+  const supabase = await createClient({
+    fetchOptions: {
+      next: {
+        revalidate: 60 * 60 * 24,
+      },
+    },
+  });
+  const filters = loadSearchParams(searchParams);
+
   let query = supabase.from('card_view_new').select('*');
 
   if (filters.set && filters.set.length > 0) {

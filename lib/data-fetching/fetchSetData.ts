@@ -1,10 +1,10 @@
 'use server';
 
-import { createClient } from '../utils/supabase/server';
 import { ExtractQueryData } from '@/types/helpers';
+import { createClient } from '../utils/supabase/client';
 
 async function fetchSetData() {
-  const supabase = await createClient({
+  const supabase = createClient({
     fetchOptions: {
       cache: 'force-cache',
       next: { tags: ['set-data'] },

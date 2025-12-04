@@ -1,24 +1,23 @@
 import fetchCards from '@/lib/data-fetching/fetchCards';
-import Image from 'next/image';
+import Card from '@/components/common/card/Card';
+import getFilterParamsFromUrl from '@/lib/utils/getFilterParamsFromUrl';
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 async function CardList({ searchParams }: Props) {
-  const { data, error } = await fetchCards(searchParams); // ! Add proper error handling
+  const params = await searchParams;
+  const filterParams = getFilterParamsFromUrl(params);
 
-  if (error) {
-    console.error(error);
-    throw new Error(error.message);
-  }
+  const { data } = await fetchCards(filterParams);
 
   return (
-    <ol className="bg-linear-to-b grid grid-cols-4 gap-4">
+    <ol className="grid grid-cols-4 gap-4">
       {data?.map(card => {
         return (
           <div key={card.id!}>
-            <Image src={card.image_path!} width={605} height={846} alt={`${card.name} Cover art`} />
+            <Card card={card} />
           </div>
         );
       })}
