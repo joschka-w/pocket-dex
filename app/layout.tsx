@@ -5,6 +5,8 @@ import { Inter } from 'next/font/google';
 
 import Header from '@/components/layout/Header';
 import NuqsProvider from '@/components/providers/NuqsProvider';
+import TanstackProvider from '@/components/providers/TanstackProvider';
+import { Provider as JotaiProvider } from 'jotai';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -26,10 +28,14 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-bg-base min-h-screen flex flex-col items-center text-text gap-5 antialiased`}
       >
-        <NuqsProvider>
-          <Header />
-          {children}
-        </NuqsProvider>
+        <TanstackProvider>
+          <NuqsProvider>
+            <JotaiProvider>
+              <Header />
+              {children}
+            </JotaiProvider>
+          </NuqsProvider>
+        </TanstackProvider>
       </body>
     </html>
   );

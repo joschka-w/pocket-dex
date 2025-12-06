@@ -7,7 +7,7 @@ import { FilterParsers } from '@/lib/filters/filterConfig';
 const filtersToSort: Set<keyof FilterParsers> = new Set(['cardType', 'color', 'rarity', 'set']);
 
 function NuqsProvider({ children }: PropsWithChildren) {
-  // Normalizing searchParams, so that we can use the URLState as a queryKey in tanstack-query.
+  // Normalizing searchParams (same filters always are in the same order), so that we can use the URLState as a queryKey in tanstack-query.
   // This way we can cache the requests to the database that have the same filters applied.
   const sortParams = useCallback((params: URLSearchParams) => {
     const sorted = new URLSearchParams();

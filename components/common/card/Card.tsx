@@ -16,6 +16,8 @@ function Card({ card, className }: Props) {
           width={600}
           height={825}
           alt={`${card.name} Cover art`}
+          placeholder="blur"
+          blurDataURL={card.image_placeholder!}
         />
       </div>
 

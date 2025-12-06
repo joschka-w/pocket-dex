@@ -11,7 +11,7 @@ function SortDirectionToggle() {
   const { state, setters } = useFilterState();
 
   const handleValueChange = (value: SortDirection) => {
-    if (value) setters.sortDirection(value);
+    if (value) setters.sortDirection(value, { limitUrlUpdates: { method: 'debounce', timeMs: 0 } });
   };
 
   return (

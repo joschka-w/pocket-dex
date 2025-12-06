@@ -1,28 +1,45 @@
+'use client';
+
 import Link from 'next/link';
 
-import fetchCards from '@/lib/data-fetching/fetchCards';
-import getFilterParamsFromUrl from '@/lib/utils/getFilterParamsFromUrl';
+import { cn } from '@/lib/utils/cn';
+import useCardsQuery from '@/lib/hooks/useCardsQuery';
+
 import Card from '@/components/common/card/Card';
+import InfiniteScroll from '@/components/common/InfiniteScroll';
+import LoadingPopup from './LoadingPopup';
 
-interface Props {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+function CardList() {
+  const { data, error, fetchNextPage, isFetchingNextPage, isLoading, isUpdating } = useCardsQuery();
 
-async function CardList({ searchParams }: Props) {
-  const params = await searchParams;
-  const filterParams = getFilterParamsFromUrl(params);
-
-  const { data } = await fetchCards(filterParams);
+  if (error) {
+    console.error('An error has occured:', error);
+    return <div>An error has occured: {error.message}</div>;
+  }
 
   return (
-    <ol className="grid grid-cols-5 gap-4">
-      {data?.map(card => {
-        return (
-          <Link href={'#'} key={card.id!}>
-            <Card card={card} />
-          </Link>
-        );
-      })}
+    <ol className={cn('relative grid grid-cols-5 gap-4')}>
+      <InfiniteScroll
+        loadMore={fetchNextPage}
+        isLoadingInitial={isLoading}
+        isLoadingMore={isFetchingNextPage}
+        rootMargin={400}
+        className="col-span-5 py-3"
+      >
+        {data?.map(card => {
+          return (
+            <Link href={'#'} key={card.id!}>
+              <Card card={card} />
+            </Link>
+          );
+        })}
+      </InfiniteScroll>
+
+      {isUpdating && (
+        <div className="absolute inset-0 bg-black/30 z-20 flex justify-center">
+          <LoadingPopup className="fixed mt-20" />
+        </div>
+      )}
     </ol>
   );
 }

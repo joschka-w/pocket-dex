@@ -2,14 +2,18 @@
 
 import { LoaderInput } from 'nuqs/server';
 import { FILTER_DEFAULTS, loadSearchParams, SortFilter } from '../filters/filterConfig';
+import { getRange } from '../utils/getRange';
 import { createClient } from '../utils/supabase/server';
 
-async function fetchCards(searchParams: LoaderInput) {
+const CARDS_PER_PAGE = 100;
+
+async function fetchCards(searchParams: LoaderInput, page: number) {
   // Cache each unique filter combination. Common patterns (like no filters or only sorting) avoid repeated fetches.
   // Use tags on fetchOptions to revalidate all when the database updates (e.g. a new set is added).
 
   // If cache size becomes problematic (too many filter permutations), we could check
   // for filter complexity (e.g. how many filters are applied) and skip caching these requests.
+
   const supabase = await createClient({
     fetchOptions: {
       next: {
@@ -17,6 +21,7 @@ async function fetchCards(searchParams: LoaderInput) {
       },
     },
   });
+
   const filters = loadSearchParams(searchParams);
 
   let query = supabase.from('card_view_new').select('*');
@@ -68,15 +73,11 @@ async function fetchCards(searchParams: LoaderInput) {
   }
 
   if (filters.minHp !== FILTER_DEFAULTS.minHp) {
-    query = query.or(
-      `pokemon_card->hp.gte.${filters.minHp}, trainer_card->hp.gte.${filters.minHp}`
-    );
+    query = query.gte('combined_hp', filters.minHp);
   }
 
   if (filters.maxHp !== FILTER_DEFAULTS.maxHp) {
-    query = query.or(
-      `pokemon_card->hp.lte.${filters.maxHp}, trainer_card->hp.gte.${filters.maxHp}`
-    );
+    query = query.lte('combined_hp', filters.maxHp);
   }
 
   if (filters.ex !== FILTER_DEFAULTS.ex) {
@@ -87,10 +88,9 @@ async function fetchCards(searchParams: LoaderInput) {
     query = query.ilike('name', `%${filters.searchQuery}%`);
   }
 
-  //TODO - HP of fossils should be included when filtering for hp, currently its treated as null
   const sortFilterMap: Record<SortFilter, string> = {
     color: 'pokemon_card->type',
-    hp: 'pokemon_card->hp',
+    hp: 'combined_hp',
     id: 'id',
     name: 'name',
     rarity: 'rarity',
@@ -105,7 +105,13 @@ async function fetchCards(searchParams: LoaderInput) {
     })
     .order('name', { ascending: true });
 
-  return await query;
+  query = query.range(...getRange(page, CARDS_PER_PAGE));
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  return data;
 }
 
 export default fetchCards;

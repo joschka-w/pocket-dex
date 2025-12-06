@@ -90,6 +90,7 @@ export type Database = {
           card_type: Database['public']['Enums']['card_type'];
           id: string;
           image_path: string;
+          image_placeholder: string;
           name: string;
           rarity: Database['public']['Enums']['rarity'];
           set_number: number;
@@ -99,6 +100,7 @@ export type Database = {
           card_type: Database['public']['Enums']['card_type'];
           id?: string;
           image_path: string;
+          image_placeholder: string;
           name: string;
           rarity: Database['public']['Enums']['rarity'];
           set_number: number;
@@ -108,6 +110,7 @@ export type Database = {
           card_type?: Database['public']['Enums']['card_type'];
           id?: string;
           image_path?: string;
+          image_placeholder?: string;
           name?: string;
           rarity?: Database['public']['Enums']['rarity'];
           set_number?: number;
@@ -450,13 +453,16 @@ export type Database = {
       card_view_new: {
         Row: {
           card_type: Database['public']['Enums']['card_type'] | null;
+          combined_hp: number | null;
           id: string | null;
           image_path: string | null;
+          image_placeholder: string | null;
           name: string | null;
           packs: string[] | null;
           pokemon_card: Json | null;
           rarity: Database['public']['Enums']['rarity'] | null;
           set: Json | null;
+          trainer_card: Json | null;
         };
         Relationships: [];
       };
@@ -513,6 +519,7 @@ export type Database = {
           hp: number;
           id: string;
           image_path: string;
+          image_placeholder: string;
           is_ex: boolean;
           name: string;
           pack_ids: number[];
@@ -533,6 +540,7 @@ export type Database = {
           hp: number;
           id: string;
           image_path: string;
+          image_placeholder: string;
           name: string;
           pack_ids: number[];
           rarity: Database['public']['Enums']['rarity'];

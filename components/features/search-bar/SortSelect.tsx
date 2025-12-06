@@ -19,7 +19,8 @@ function SortSelect() {
   const id = useId();
   const { state, setters } = useFilterState();
 
-  const handleValueChange = (value: SortFilter) => setters.sortBy(value);
+  const handleValueChange = (value: SortFilter) =>
+    setters.sortBy(value, { limitUrlUpdates: { method: 'debounce', timeMs: 0 } });
 
   return (
     <Select.Root value={state.sortBy} onValueChange={handleValueChange}>
