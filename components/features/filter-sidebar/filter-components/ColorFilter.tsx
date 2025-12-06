@@ -2,10 +2,12 @@
 
 import Image from 'next/image';
 import { ToggleGroup } from 'radix-ui';
-import FilterWrapper from '../FilterWrapper';
+
+import { Enums } from '@/types/database';
 import { colorSVGs } from '@/lib/constants/asset-maps';
 import useFilterState from '@/lib/hooks/useFilterState';
-import { Enums } from '@/types/database';
+import FilterWrapper from '../FilterWrapper';
+import { cn } from '@/lib/utils/cn';
 
 function ColorFilter() {
   const { state, setters } = useFilterState();
@@ -13,6 +15,8 @@ function ColorFilter() {
   const handleValueChange = (value: Enums<'color'>[]) => {
     setters.color(value.length === 0 ? null : value);
   };
+
+  const anySelected = (state.color && state.color.length > 0) || undefined;
 
   return (
     <FilterWrapper label="Color" setters={[setters.color]}>
@@ -27,7 +31,11 @@ function ColorFilter() {
             <ToggleGroup.Item
               key={`color-filter-${value}`}
               value={value}
-              className="rounded-full data-[state=on]:ring-2 w-7 aspect-square cursor-pointer data-[state=on]:scale-110"
+              data-any-selected={anySelected}
+              className={cn(
+                'rounded-full data-[state=on]:ring-2 w-7 relative aspect-square cursor-pointer data-[state=on]:scale-110',
+                "after:content-[''] data-any-selected:data-[state=off]:after:bg-black/40 after:transition-colors after:duration-100 after:inset-0 after:rounded-full after:absolute"
+              )}
             >
               <Image src={img} alt={value} />
             </ToggleGroup.Item>
