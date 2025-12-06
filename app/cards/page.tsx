@@ -14,7 +14,7 @@ async function CardsPage({ searchParams }: Props) {
   return (
     <main className="w-full max-w-mw grid grid-cols-[1fr_3fr] grid-rows-[3rem_1fr] gap-7">
       <Suspense>
-        <Searchbar className="col-start-2 sticky top-16 h-fit py-4 bg-bg-base" />
+        <Searchbar className="col-start-2 sticky top-16 h-fit py-4 z-10" />
       </Suspense>
 
       <FilterSidebar className="row-start-2 sticky top-34 h-[calc(100vh-10rem)]" />
