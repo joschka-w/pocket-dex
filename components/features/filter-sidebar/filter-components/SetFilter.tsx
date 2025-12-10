@@ -50,7 +50,7 @@ function SetFilter({ allSets, initialVisibleCount = 4 }: Props) {
   };
 
   return (
-    <FilterWrapper label="Set" setters={[setters.set]}>
+    <FilterWrapper label="Set" setters={[setters.set]} clearBtnDisabled={state.set.length < 1}>
       <CheckboxGroup value={new Set(state.set)} setValue={setValue}>
         {allSets && allSets.slice(0, initialVisibleCount).map(createItem)}
         {allSets && allSets.length > initialVisibleCount && (

@@ -8,9 +8,11 @@ import useCardsQuery from '@/lib/hooks/useCardsQuery';
 import Card from '@/components/common/card/Card';
 import InfiniteScroll from '@/components/common/InfiniteScroll';
 import LoadingPopup from './LoadingPopup';
+import NoCardsFound from './NoCardsFound';
 
 function CardList() {
   const { data, error, fetchNextPage, isFetchingNextPage, isLoading, isUpdating } = useCardsQuery();
+  const hasCards = data && data.length > 0;
 
   if (error) {
     console.error('An error has occured:', error);
@@ -29,14 +31,16 @@ function CardList() {
         {data?.map(card => {
           return (
             <Link href={'#'} key={card.id!}>
-              <Card card={card} />
+              <Card card={card} isUpdating={isUpdating} />
             </Link>
           );
         })}
       </InfiniteScroll>
 
+      {!isLoading && !hasCards && <NoCardsFound className="col-span-5 row-start-1" />}
+
       {isUpdating && (
-        <div className="absolute inset-0 bg-black/30 z-20 flex justify-center">
+        <div className="absolute inset-0 z-20 flex justify-center">
           <LoadingPopup className="fixed mt-20" />
         </div>
       )}

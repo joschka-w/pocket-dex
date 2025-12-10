@@ -6,7 +6,7 @@ import { CheckIcon, XIcon } from 'lucide-react';
 
 import useFilterState from '@/lib/hooks/useFilterState';
 import { cn } from '@/lib/utils/cn';
-import { ExFilter as ExFilterType } from '@/lib/filters/filterConfig';
+import { ExFilter as ExFilterType, FILTER_DEFAULTS } from '@/lib/filters/filterConfig';
 import FilterWrapper from '../FilterWrapper';
 
 function ExFilter() {
@@ -17,7 +17,11 @@ function ExFilter() {
   };
 
   return (
-    <FilterWrapper label="EX Pokemon?" setters={[setters.ex]}>
+    <FilterWrapper
+      label="EX Pokemon?"
+      setters={[setters.ex]}
+      clearBtnDisabled={state.ex === FILTER_DEFAULTS.ex}
+    >
       <ToggleGroup.Root
         value={state.ex}
         onValueChange={handleValueChange}

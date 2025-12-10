@@ -1,14 +1,16 @@
 import Image from 'next/image';
 import { Tables } from '@/types/database';
+import { cn } from '@/lib/utils/cn';
 
 interface Props {
   card: Tables<'card_view_new'>;
   className?: string;
+  isUpdating?: boolean;
 }
 
-function Card({ card, className }: Props) {
+function Card({ card, isUpdating = false, className }: Props) {
   return (
-    <div className={className}>
+    <div className={cn(isUpdating && 'opacity-50', className)}>
       <div className="aspect-600/825 @container relative">
         <Image
           className="select-none aspect-600/825 hover:scale-104 rounded-[3.5cqw] hover:brightness-110 transition-[filter,scale] duration-250"

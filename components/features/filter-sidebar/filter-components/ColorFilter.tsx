@@ -19,7 +19,7 @@ function ColorFilter() {
   const anySelected = (state.color && state.color.length > 0) || undefined;
 
   return (
-    <FilterWrapper label="Color" setters={[setters.color]}>
+    <FilterWrapper label="Color" setters={[setters.color]} clearBtnDisabled={!anySelected}>
       <ToggleGroup.Root
         value={state.color || []}
         onValueChange={handleValueChange}

@@ -3,6 +3,7 @@
 import { Slider } from 'radix-ui';
 import FilterWrapper from '../FilterWrapper';
 import useFilterState from '@/lib/hooks/useFilterState';
+import { FILTER_DEFAULTS } from '@/lib/filters/filterConfig';
 
 interface Props {
   max: number;
@@ -13,6 +14,8 @@ function HpFilter({ min, max }: Props) {
   const { state, setters } = useFilterState();
 
   const value = [state.minHp, state.maxHp];
+  const isDefaultState =
+    state.minHp === FILTER_DEFAULTS.minHp && state.maxHp === FILTER_DEFAULTS.maxHp;
 
   const handleValueChange = (values: number[]) => {
     setters.minHp(values[0]);
@@ -20,7 +23,11 @@ function HpFilter({ min, max }: Props) {
   };
 
   return (
-    <FilterWrapper label="HP" setters={[setters.minHp, setters.maxHp]}>
+    <FilterWrapper
+      label="HP"
+      setters={[setters.minHp, setters.maxHp]}
+      clearBtnDisabled={isDefaultState}
+    >
       <Slider.Root
         value={value}
         onValueChange={handleValueChange}

@@ -9,11 +9,18 @@ export interface FilterValueProps<K extends keyof FilterParsers> {
   setValue: (value: inferParserType<FilterParsers[K]> | null) => Promise<URLSearchParams>;
 }
 
+interface FilterSetterOptions extends Options {
+  // won't trigger the loading state if true
+  skipLoadingState?: boolean;
+}
+
+type FilterSetter<K extends keyof FilterParsers> = (
+  value: inferParserType<FilterParsers[K]> | null,
+  options?: FilterSetterOptions
+) => Promise<URLSearchParams>;
+
 export type FilterSetters = {
-  [K in keyof FilterParsers]: (
-    value: inferParserType<FilterParsers[K]> | null,
-    options?: Options
-  ) => Promise<URLSearchParams>;
+  [K in keyof FilterParsers]: FilterSetter<K>;
 };
 
 // managing all filter state with searchParam synchronization in a custom hook
@@ -26,20 +33,24 @@ function useFilterState() {
     shallow: false,
   });
 
-  const mySetState: typeof setState = (...args) => {
-    setIsLoading(true);
-    return setState(...args);
+  const setStateWithLoading = (
+    set: Parameters<typeof setState>[0],
+    options?: FilterSetterOptions
+  ): ReturnType<typeof setState> => {
+    if (!options?.skipLoadingState) setIsLoading(true);
+
+    return setState(set, options);
   };
 
   // Creating individual setter function for each filter key (with type safety)
   const setters = {} as FilterSetters;
 
   (Object.keys(filterParsers) as Array<keyof FilterParsers>).forEach(key => {
-    setters[key] = (value: inferParserType<FilterParsers[typeof key]> | null, options?: Options) =>
-      mySetState({ [key]: value }, options);
+    setters[key] = ((value, options) =>
+      setStateWithLoading({ [key]: value }, options)) as FilterSetter<typeof key>;
   });
 
-  return { setters, state, setState: mySetState };
+  return { setters, state, setState: setStateWithLoading };
 }
 
 export default useFilterState;

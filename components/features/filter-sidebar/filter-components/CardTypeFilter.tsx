@@ -37,7 +37,11 @@ function CardTypeFilter() {
   const trainerCardTypeFilters = CARD_TYPE_FILTERS.filter(val => val !== 'pokemon');
 
   return (
-    <FilterWrapper setters={[setters.cardType]} label="Card Type">
+    <FilterWrapper
+      setters={[setters.cardType]}
+      label="Card Type"
+      clearBtnDisabled={state.cardType.length < 1}
+    >
       <CheckboxGroup value={stateAsSet} setValue={setValue}>
         <CheckboxGroup.Item
           value={'pokemon' as TCardTypeFilter['0']}

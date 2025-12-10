@@ -15,7 +15,11 @@ function RarityFilter() {
   };
 
   return (
-    <FilterWrapper label="Rarity" setters={[setters.rarity]}>
+    <FilterWrapper
+      label="Rarity"
+      setters={[setters.rarity]}
+      clearBtnDisabled={!state.rarity || state.rarity.length < 1}
+    >
       <ToggleGroup.Root
         value={state.rarity || []}
         onValueChange={handleValueChange}
