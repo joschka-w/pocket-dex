@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils/cn';
 
-import fetchSetData from '@/lib/data-fetching/fetchSetData';
 import Seperator from '@/components/ui/Seperator';
 import ColorFilter from './filter-components/ColorFilter';
 import HpFilter from './filter-components/HpFilter';
@@ -9,6 +8,8 @@ import SetFilter from './filter-components/SetFilter';
 import ClearAllFiltersButton from './ClearAllFiltersButton';
 import CardTypeFilter from './filter-components/CardTypeFilter';
 import ExFilter from './filter-components/ExFilter';
+import { FILTER_DEFAULTS } from '@/lib/filters/filterConfig';
+import fetchSetData from '@/lib/data/fetchSetData';
 
 interface Props {
   className?: string;
@@ -35,7 +36,7 @@ async function FilterSidebar({ className }: Props) {
         <Seperator />
         <CardTypeFilter />
         <Seperator />
-        <HpFilter min={0} max={210} />
+        <HpFilter min={FILTER_DEFAULTS.minHp} max={FILTER_DEFAULTS.maxHp} />
         <Seperator />
         <ExFilter />
       </ul>

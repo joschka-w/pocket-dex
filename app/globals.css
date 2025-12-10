@@ -15,10 +15,14 @@
   --color-primary-light: rgb(255 216 61);
 
   --color-danger: rgb(208 62 62);
+  --color-danger-light: rgb(233, 178, 178);
   --color-confirmation: rgb(106 186 56);
+  --color-confirmation-light: rgb(195, 231, 173);
 
   /* Spacing */
   --spacing-mw: 1328px;
+  --spacing-header-height: 64px;
+  --spacing-topbar-height: 74px;
 
   /* Animation */
   @keyframes loader-1 {

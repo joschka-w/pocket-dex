@@ -1,31 +1,22 @@
-import Image from 'next/image';
 import { Tables } from '@/types/database';
-import { cn } from '@/lib/utils/cn';
+import CardImage from './components/CardImage';
+import CardRoot from './components/CardRoot';
+import CardInfo from './components/CardInfo';
+import Link from 'next/link';
 
 interface Props {
   card: Tables<'card_view_new'>;
-  className?: string;
   isUpdating?: boolean;
 }
 
-function Card({ card, isUpdating = false, className }: Props) {
+function Card({ card, isUpdating = false }: Props) {
   return (
-    <div className={cn(isUpdating && 'opacity-50', className)}>
-      <div className="aspect-600/825 @container relative">
-        <Image
-          className="select-none aspect-600/825 hover:scale-104 rounded-[3.5cqw] hover:brightness-110 transition-[filter,scale] duration-250"
-          src={card.image_path!}
-          width={600}
-          height={825}
-          alt={`${card.name} Cover art`}
-          placeholder="blur"
-          blurDataURL={card.image_placeholder!}
-        />
-      </div>
-
-      <h4 className="mt-2 font-semibold">{card.name}</h4>
-      <div className="mt-0.5 text-text-muted font-bold text-sm">{card.id}</div>
-    </div>
+    <Link href={'#'}>
+      <CardRoot isUpdating={isUpdating}>
+        <CardImage card={card} hasHoverAnimation />
+        <CardInfo card={card} />
+      </CardRoot>
+    </Link>
   );
 }
 

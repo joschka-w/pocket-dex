@@ -1,4 +1,4 @@
-import { Constants } from '@/types/database';
+import { Constants } from '@/types/database-generated';
 import {
   createLoader,
   inferParserType,
@@ -10,6 +10,7 @@ import {
 } from 'nuqs/server';
 
 export type FilterParsers = typeof filterParsers;
+export type FilterKey = keyof FilterParsers;
 export type FilterState<K extends keyof inferParserType<FilterParsers>> =
   inferParserType<FilterParsers>[K];
 
@@ -25,6 +26,8 @@ export const SORT_DIRECTION = ['asc', 'desc'] as const;
 
 export const FILTER_DEFAULTS = {
   set: [] as string[],
+  color: [],
+  rarity: [],
   minHp: 0,
   maxHp: 210,
   searchQuery: '',
@@ -36,8 +39,12 @@ export const FILTER_DEFAULTS = {
 
 export const filterParsers = {
   set: parseAsArrayOf(parseAsString).withDefault([...FILTER_DEFAULTS.set]),
-  color: parseAsArrayOf(parseAsStringLiteral([...Constants.public.Enums.color])),
-  rarity: parseAsArrayOf(parseAsStringLiteral([...Constants.public.Enums.rarity])),
+  color: parseAsArrayOf(parseAsStringLiteral([...Constants.public.Enums.color])).withDefault([
+    ...FILTER_DEFAULTS.color,
+  ]),
+  rarity: parseAsArrayOf(parseAsStringLiteral([...Constants.public.Enums.rarity])).withDefault([
+    ...FILTER_DEFAULTS.rarity,
+  ]),
   minHp: parseAsInteger.withDefault(FILTER_DEFAULTS.minHp),
   maxHp: parseAsInteger.withDefault(FILTER_DEFAULTS.maxHp),
   cardType: parseAsArrayOf(parseAsStringLiteral(CARD_TYPE_FILTERS)).withDefault([

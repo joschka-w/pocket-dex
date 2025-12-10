@@ -1,27 +1,15 @@
-import { inferParserType, Options, useQueryStates } from 'nuqs';
+import { useQueryStates } from 'nuqs';
 import { useSetAtom } from 'jotai';
 
-import { filterParsers, FilterParsers, filterUrlKeys } from '../filters/filterConfig';
+import {
+  FILTER_DEFAULTS,
+  FilterKey,
+  filterParsers,
+  FilterParsers,
+  filterUrlKeys,
+} from '../filters/filterConfig';
 import { filterLoadingAtom } from '../atoms/filterLoadingAtom';
-
-export interface FilterValueProps<K extends keyof FilterParsers> {
-  value: inferParserType<FilterParsers[K]>;
-  setValue: (value: inferParserType<FilterParsers[K]> | null) => Promise<URLSearchParams>;
-}
-
-interface FilterSetterOptions extends Options {
-  // won't trigger the loading state if true
-  skipLoadingState?: boolean;
-}
-
-type FilterSetter<K extends keyof FilterParsers> = (
-  value: inferParserType<FilterParsers[K]> | null,
-  options?: FilterSetterOptions
-) => Promise<URLSearchParams>;
-
-export type FilterSetters = {
-  [K in keyof FilterParsers]: FilterSetter<K>;
-};
+import { FilterSetter, FilterSetterOptions, FilterSetters } from '@/types/filter-state';
 
 // managing all filter state with searchParam synchronization in a custom hook
 function useFilterState() {
@@ -50,7 +38,20 @@ function useFilterState() {
       setStateWithLoading({ [key]: value }, options)) as FilterSetter<typeof key>;
   });
 
-  return { setters, state, setState: setStateWithLoading };
+  // Helper function
+  function isActive<K extends FilterKey>(filter: K | K) {
+    const parser = filterParsers[filter];
+    const currentValue = state[filter];
+    const defaultValue = FILTER_DEFAULTS[filter];
+
+    // TODO - There's probably a way to make this less hacky, this works for now though
+    type EqualityFn = (a: (typeof state)[K], b: (typeof FILTER_DEFAULTS)[K]) => boolean;
+    const isDefault = (parser.eq as EqualityFn)(currentValue, defaultValue);
+
+    return !isDefault;
+  }
+
+  return { setters, state, setState: setStateWithLoading, isActive };
 }
 
 export default useFilterState;

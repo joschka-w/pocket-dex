@@ -1,4 +1,4 @@
-import { Database } from '@/types/database';
+import { DB } from '@/types/database-generated';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
@@ -11,7 +11,7 @@ export async function createClient(options: CreateClientOptions = {}) {
 
   // Create a server's supabase client with newly configured cookie,
   // which could be used to maintain user's session
-  return createServerClient<Database>(
+  return createServerClient<DB>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!,
     {

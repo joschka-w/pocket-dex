@@ -13,7 +13,7 @@ function ColorFilter() {
   const { state, setters } = useFilterState();
 
   const handleValueChange = (value: Enums<'color'>[]) => {
-    setters.color(value.length === 0 ? null : value);
+    setters.color(value);
   };
 
   const anySelected = (state.color && state.color.length > 0) || undefined;

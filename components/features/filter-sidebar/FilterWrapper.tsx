@@ -1,6 +1,6 @@
 'use client';
 
-import { FilterSetters } from '@/lib/hooks/useFilterState';
+import { FilterSetters } from '@/types/filter-state';
 import { ReactNode } from 'react';
 
 interface Props {
@@ -21,7 +21,7 @@ function FilterWrapper({ label, setters, clearBtnDisabled = false, children }: P
         <button
           disabled={clearBtnDisabled}
           onClick={handleClick}
-          className="text-text-muted text-sm not-disabled:cursor-pointer not-disabled:hover:underline hover:text-text transition-colors disabled:text-text-muted/50 active:text-text-muted"
+          className="text-text-muted text-sm cursor-pointer hover:underline hover:text-text transition-colors disabled:hidden active:text-text-muted"
         >
           Clear
         </button>

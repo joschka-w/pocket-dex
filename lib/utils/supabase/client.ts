@@ -1,4 +1,4 @@
-import { Database } from '@/types/database';
+import { DB } from '@/types/database-generated';
 import { createBrowserClient } from '@supabase/ssr';
 
 interface CreateClientOptions {
@@ -9,7 +9,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
 
 export const createClient = (options: CreateClientOptions = {}) =>
-  createBrowserClient<Database>(supabaseUrl!, supabaseKey!, {
+  createBrowserClient<DB>(supabaseUrl!, supabaseKey!, {
     global: {
       fetch: (url, init) => {
         const mergedInit: RequestInit = { ...init, ...options.fetchOptions };

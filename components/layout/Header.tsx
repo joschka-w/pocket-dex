@@ -6,7 +6,7 @@ import Navbar from './NavBar';
 
 function Header() {
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-center bg-bg-1 shadow-md">
+    <header className="sticky top-0 z-50 flex h-header-height w-full items-center justify-center bg-bg-1 shadow-md">
       <div className="flex h-full w-full max-w-mw items-center gap-16">
         <Link href={'/'} className="flex h-full select-none items-center gap-3">
           <div className="relative h-full w-11">

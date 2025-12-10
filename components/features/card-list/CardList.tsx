@@ -1,43 +1,55 @@
 'use client';
 
-import Link from 'next/link';
-
 import { cn } from '@/lib/utils/cn';
 import useCardsQuery from '@/lib/hooks/useCardsQuery';
 
-import Card from '@/components/common/card/Card';
 import InfiniteScroll from '@/components/common/InfiniteScroll';
 import LoadingPopup from './LoadingPopup';
 import NoCardsFound from './NoCardsFound';
+import Card from '@/components/common/card/Card';
+import DeckBuilderCard from '@/components/common/card/DeckBuilderCard';
 
-function CardList() {
+interface Props {
+  className?: string;
+  columns?: '5' | '4';
+  isInDeckBuilder?: boolean;
+}
+
+function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) {
   const { data, error, fetchNextPage, isFetchingNextPage, isLoading, isUpdating } = useCardsQuery();
   const hasCards = data && data.length > 0;
 
   if (error) {
     console.error('An error has occured:', error);
-    return <div>An error has occured: {error.message}</div>;
+    throw error;
   }
 
   return (
-    <ol className={cn('relative grid grid-cols-5 gap-4')}>
+    <ol
+      className={cn(
+        `relative grid gap-4 ${columns === '5' ? 'grid-cols-5' : 'grid-cols-4'}`,
+        className
+      )}
+    >
       <InfiniteScroll
         loadMore={fetchNextPage}
         isLoadingInitial={isLoading}
         isLoadingMore={isFetchingNextPage}
         rootMargin={400}
-        className="col-span-5 py-3"
+        className={`py-3 ${columns === '5' ? 'col-span-5' : 'col-span-4'}`}
       >
         {data?.map(card => {
-          return (
-            <Link href={'#'} key={card.id!}>
-              <Card card={card} isUpdating={isUpdating} />
-            </Link>
+          return isInDeckBuilder ? (
+            <DeckBuilderCard card={card} isUpdating={isUpdating} key={card.id!} />
+          ) : (
+            <Card card={card} isUpdating={isUpdating} key={card.id!} />
           );
         })}
       </InfiniteScroll>
 
-      {!isLoading && !hasCards && <NoCardsFound className="col-span-5 row-start-1" />}
+      {!isLoading && !hasCards && (
+        <NoCardsFound className={`${columns === '5' ? 'col-span-5' : 'col-span-4'} row-start-1`} />
+      )}
 
       {isUpdating && (
         <div className="absolute inset-0 z-20 flex justify-center">

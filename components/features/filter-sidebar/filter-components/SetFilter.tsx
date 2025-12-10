@@ -2,11 +2,11 @@
 
 import { Dispatch, SetStateAction } from 'react';
 
-import { SetsWithPacks } from '@/lib/data-fetching/fetchSetData';
 import FilterWrapper from '../FilterWrapper';
 import CheckboxGroup from '@/components/ui/checkbox-group/root/CheckboxGroup';
 import useFilterState from '@/lib/hooks/useFilterState';
 import { Collapsible } from 'radix-ui';
+import { SetsWithPacks } from '@/lib/data/fetchSetData';
 
 interface Props {
   allSets: SetsWithPacks;

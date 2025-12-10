@@ -11,7 +11,7 @@ function RarityFilter() {
   const { state, setters } = useFilterState();
 
   const handleValueChange = (value: Enums<'rarity'>[]) => {
-    setters.rarity(value.length === 0 ? null : value);
+    setters.rarity(value);
   };
 
   return (

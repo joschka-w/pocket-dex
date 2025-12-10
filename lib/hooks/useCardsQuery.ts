@@ -1,18 +1,17 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAtom } from 'jotai';
 
-import getFilterParamsFromUrl from '../utils/getFilterParamsFromUrl';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import fetchCards from '../data-fetching/fetchCards';
 import { filterLoadingAtom } from '../atoms/filterLoadingAtom';
-import { useEffect } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import getFilterParamsFromUrl from '../utils/getFilterParamsFromUrl';
+import fetchCards from '../data/fetchCards';
 
 function useCardsQuery() {
   const [filterLoading, setFilterLoading] = useAtom(filterLoadingAtom);
 
   const params = useSearchParams();
   const filterParams = getFilterParamsFromUrl(Object.fromEntries(params.entries())); // TODO - Fix unnecessary parsing to and from entries
-
   const filterParamsSerialized = JSON.stringify(filterParams);
 
   // TODO - Somehow get rid of this useEffect

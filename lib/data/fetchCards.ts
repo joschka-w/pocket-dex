@@ -4,6 +4,7 @@ import { LoaderInput } from 'nuqs/server';
 import { FILTER_DEFAULTS, loadSearchParams, SortFilter } from '../filters/filterConfig';
 import { getRange } from '../utils/getRange';
 import { createClient } from '../utils/supabase/server';
+import { filterValidationSchema } from '../validation/filter-validation-schema';
 
 const CARDS_PER_PAGE = 100;
 
@@ -18,11 +19,13 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
     fetchOptions: {
       next: {
         revalidate: 60 * 60 * 24,
+        tags: ['fetch-cards'],
       },
     },
   });
 
-  const filters = loadSearchParams(searchParams);
+  const filtersUnvalidated = loadSearchParams(searchParams);
+  const filters = filterValidationSchema.parse(filtersUnvalidated);
 
   let query = supabase.from('card_view_new').select('*');
 
