@@ -1,4 +1,4 @@
-import { DB } from '@/types/database-generated';
+import { DB } from '@/types/database';
 import { createBrowserClient } from '@supabase/ssr';
 
 interface CreateClientOptions {

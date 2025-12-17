@@ -15,8 +15,7 @@ async function CardsPage({ searchParams }: Props) {
         <Searchbar className="col-start-2 sticky top-header-height h-topbar-height z-10" />
       </Suspense>
 
-      {/* // TODO - Find better solution for height of sidebar */}
-      <FilterSidebar className="row-start-2 sticky top-[calc(var(--spacing-header-height)+var(--spacing-topbar-height))] h-[calc(100vh-10rem)]" />
+      <FilterSidebar className="row-start-2 sticky top-[calc(var(--spacing-header-height)+var(--spacing-topbar-height))] h-fit max-h-[calc(100vh-((var(--spacing-header-height)+var(--spacing-topbar-height))))]" />
 
       <CardListWithPrefetchedData searchParams={searchParams} />
     </main>

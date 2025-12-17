@@ -17,6 +17,7 @@ function DeckForm() {
 
       <TextArea
         {...register('description')}
+        rows={3}
         placeholder="Description (optional)"
         error={errors.description?.message}
       />
@@ -40,6 +41,7 @@ function DeckForm() {
       <div className="flex flex-col -mt-1.5 ml-1">
         <ErrorMessage name="root" as="span" errors={errors} className="text-sm text-danger" />
         <ErrorMessage
+          // This is necessary to determine whether to render the error or not, based on the errors object
           key={`cards-${JSON.stringify(errors.cards)}`}
           name="cards"
           as="span"

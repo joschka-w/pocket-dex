@@ -5,6 +5,7 @@ import { ChevronDownIcon } from 'lucide-react';
 import { colorSVGs } from '@/lib/constants/asset-maps';
 import { cn } from '@/lib/utils/cn';
 import { Enums } from '@/types/database';
+import { MAX_ENERGIES_PER_DECK } from '@/lib/constants/deck-builder';
 
 interface Props extends Omit<ToggleGroup.ToggleGroupMultipleProps, 'onChange' | 'type'> {
   className?: string;
@@ -13,8 +14,9 @@ interface Props extends Omit<ToggleGroup.ToggleGroupMultipleProps, 'onChange' | 
   onChange?: (values: Enums<'color'>[]) => void;
 }
 
-function DeckEnergySelect({ value, onChange, error, className, ...props }: Props) {
-  const anySelected = false;
+function DeckEnergySelect({ value = [], onChange, error, className, ...props }: Props) {
+  const anySelected = value.length > 0;
+  const maxAmountSelected = value.length >= MAX_ENERGIES_PER_DECK;
 
   return (
     <Popover.Root>
@@ -41,18 +43,19 @@ function DeckEnergySelect({ value, onChange, error, className, ...props }: Props
           <h4 className="text-text-muted">Choose up to 3</h4>
 
           <div className="flex gap-2 flex-wrap mt-3">
-            {Object.entries(colorSVGs).map(([value, img]) => {
+            {Object.entries(colorSVGs).map(([colorName, img]) => {
               return (
                 <ToggleGroup.Item
-                  key={`color-filter-${value}`}
-                  value={value}
+                  key={`color-filter-${colorName}`}
+                  value={colorName}
+                  disabled={!value.includes(colorName as Enums<'color'>) && maxAmountSelected}
                   data-any-selected={anySelected}
                   className={cn(
                     'rounded-full data-[state=on]:ring-2 w-7 relative aspect-square cursor-pointer data-[state=on]:scale-110',
-                    "after:content-[''] data-[any-selected=true]:data-[state=off]:after:bg-black/40 after:transition-colors after:duration-100 after:inset-0 after:rounded-full after:absolute"
+                    "after:content-[''] data-[any-selected=true]:data-[state=off]:after:bg-black/40 after:transition-colors after:duration-100 after:inset-0 after:rounded-full after:absolute disabled:cursor-default"
                   )}
                 >
-                  <Image src={img} alt={value} />
+                  <Image src={img} alt={colorName} />
                 </ToggleGroup.Item>
               );
             })}

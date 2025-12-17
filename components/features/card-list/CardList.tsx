@@ -38,13 +38,15 @@ function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) 
         rootMargin={400}
         className={`py-3 ${columns === '5' ? 'col-span-5' : 'col-span-4'}`}
       >
-        {data?.map(card => {
-          return isInDeckBuilder ? (
-            <DeckBuilderCard card={card} isUpdating={isUpdating} key={card.id!} />
-          ) : (
-            <Card card={card} isUpdating={isUpdating} key={card.id!} />
-          );
-        })}
+        {data?.map(card => (
+          <li key={card.id} className="list-none">
+            {isInDeckBuilder ? (
+              <DeckBuilderCard card={card} isUpdating={isUpdating} />
+            ) : (
+              <Card card={card} isUpdating={isUpdating} />
+            )}
+          </li>
+        ))}
       </InfiniteScroll>
 
       {!isLoading && !hasCards && (

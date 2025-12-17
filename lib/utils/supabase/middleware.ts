@@ -1,4 +1,4 @@
-import { DB } from '@/types/database-generated';
+import { DB } from '@/types/database';
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
