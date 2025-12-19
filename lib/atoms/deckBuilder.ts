@@ -6,6 +6,10 @@ export interface CardWithQuantity extends Tables<'card_view_new'> {
 }
 export type Deck = Map<string, CardWithQuantity>; // Maps cardId -> CardWithQuantity
 
+// TODO - Add privacy notice, something like:
+// "To improve your experience, this site saves your unfinished deck locally in your browser.
+// This data is not sent to our servers and is automatically deleted if you clear your browser's site data."
+
 export const currentDeckAtom = atomWithStorage<Deck>('currentDeck', new Map(), {
   getItem(key, initialValue) {
     const item = localStorage.getItem(key);

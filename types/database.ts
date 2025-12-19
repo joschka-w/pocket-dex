@@ -23,6 +23,16 @@ export type DB = MergeDeep<
           };
         };
       };
+      Functions: {
+        create_deck: {
+          Args: {
+            p_cards: Record<string, number>;
+            p_colors: DatabaseGenerated['public']['Enums']['color'][];
+            p_description: string | null;
+            p_title: string;
+          };
+        };
+      };
     };
   }
 >;

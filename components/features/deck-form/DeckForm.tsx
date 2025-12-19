@@ -7,49 +7,69 @@ import useDeckForm from '@/lib/hooks/useDeckForm';
 import TextArea from '@/components/ui/TextArea';
 import TextInput from '@/components/ui/TextInput';
 import DeckEnergySelect from './DeckEnergySelect';
+import DeckFormSuccessModal from './DeckFormSuccessModal';
 
 function DeckForm() {
-  const { register, handleSubmit, control, errors, isSubmitting } = useDeckForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    errors,
+    isSubmitting,
+    formKey,
+    modalOpen,
+    setModalOpen,
+  } = useDeckForm();
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <TextInput {...register('title')} placeholder="Deck Name" error={errors.title?.message} />
+    <>
+      <DeckFormSuccessModal open={modalOpen} setOpen={setModalOpen} />
 
-      <TextArea
-        {...register('description')}
-        rows={3}
-        placeholder="Description (optional)"
-        error={errors.description?.message}
-      />
+      <form key={formKey} onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <TextInput {...register('title')} placeholder="Deck Name" error={errors.title?.message} />
 
-      <div className="flex gap-3 items-start">
-        <Controller
-          name="energies"
-          control={control}
-          render={({ field }) => (
-            <DeckEnergySelect className="w-fit" {...field} error={errors.energies?.message} />
-          )}
+        <TextArea
+          {...register('description')}
+          rows={3}
+          placeholder="Description (optional)"
+          error={errors.description?.message}
         />
-        <button
-          type="submit"
-          className="bg-primary cursor-pointer hover:bg-primary-light transition-colors text-bg-1 grow py-2 px-3 font-semibold rounded-lg"
-        >
-          {isSubmitting ? 'Loading...' : 'Publish Deck'}
-        </button>
-      </div>
 
-      <div className="flex flex-col -mt-1.5 ml-1">
-        <ErrorMessage name="root" as="span" errors={errors} className="text-sm text-danger" />
-        <ErrorMessage
-          // This is necessary to determine whether to render the error or not, based on the errors object
-          key={`cards-${JSON.stringify(errors.cards)}`}
-          name="cards"
-          as="span"
-          errors={errors}
-          className="text-sm text-danger"
-        />
-      </div>
-    </form>
+        <div className="flex gap-3 items-start">
+          <Controller
+            name="energies"
+            control={control}
+            render={({ field }) => (
+              <DeckEnergySelect className="w-fit" {...field} error={errors.energies?.message} />
+            )}
+          />
+          <button
+            type="submit"
+            className="bg-primary cursor-pointer hover:bg-primary-light transition-colors text-bg-1 grow py-2 px-3 font-semibold rounded-lg"
+          >
+            {isSubmitting ? 'Loading...' : 'Publish Deck'}
+          </button>
+        </div>
+
+        <div className="flex flex-col -mt-1.5 ml-1">
+          <ErrorMessage
+            // The keys are necessary to actually 'update' these components when errors are present
+            key={`error-root-${JSON.stringify(errors.root)}`}
+            name="root"
+            as="span"
+            errors={errors}
+            className="text-sm text-danger"
+          />
+          <ErrorMessage
+            key={`error-cards-${JSON.stringify(errors.cards)}`}
+            name="cards"
+            as="span"
+            errors={errors}
+            className="text-sm text-danger"
+          />
+        </div>
+      </form>
+    </>
   );
 }
 

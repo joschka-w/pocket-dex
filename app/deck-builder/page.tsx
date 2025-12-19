@@ -18,7 +18,7 @@ function DeckBuilderPage({ searchParams }: Props) {
       <div className="flex flex-col gap-4 h-fit sticky top-[calc(var(--spacing-header-height)+var(--spacing-topbar-height))] max-h-[calc(100vh-((var(--spacing-header-height)+var(--spacing-topbar-height))))] overflow-hidden">
         <DeckStatistics />
 
-        <div className="flex h-fit w-fit flex-col gap-4 rounded-xl overflow-auto bg-bg-1/50 p-4">
+        <div className="flex h-fit w-fit flex-col gap-4 rounded-xl overflow-auto bg-bg-1 p-4">
           <DeckForm />
           <Seperator />
           <DeckBuilder />

@@ -172,33 +172,27 @@ export type Database = {
       };
       deck: {
         Row: {
-          author: string;
           colors: Database['public']['Enums']['color'][];
           created_at: string;
           description: string | null;
           id: string;
           likes_count: number;
-          public: boolean;
           title: string;
         };
         Insert: {
-          author: string;
           colors: Database['public']['Enums']['color'][];
           created_at?: string;
           description?: string | null;
           id?: string;
           likes_count?: number;
-          public: boolean;
           title: string;
         };
         Update: {
-          author?: string;
           colors?: Database['public']['Enums']['color'][];
           created_at?: string;
           description?: string | null;
           id?: string;
           likes_count?: number;
-          public?: boolean;
           title?: string;
         };
         Relationships: [];
@@ -239,43 +233,6 @@ export type Database = {
             columns: ['deck_id'];
             isOneToOne: false;
             referencedRelation: 'deck';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'deck_card_link_deck_id_fkey';
-            columns: ['deck_id'];
-            isOneToOne: false;
-            referencedRelation: 'deck_overview';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      deck_likes: {
-        Row: {
-          deck_id: string;
-          user_id: string;
-        };
-        Insert: {
-          deck_id: string;
-          user_id: string;
-        };
-        Update: {
-          deck_id?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'deck_likes_deck_id_fkey';
-            columns: ['deck_id'];
-            isOneToOne: false;
-            referencedRelation: 'deck';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'deck_likes_deck_id_fkey';
-            columns: ['deck_id'];
-            isOneToOne: false;
-            referencedRelation: 'deck_overview';
             referencedColumns: ['id'];
           }
         ];
@@ -403,20 +360,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      deck_overview: {
-        Row: {
-          author: string | null;
-          cards: Json | null;
-          colors: Database['public']['Enums']['color'][] | null;
-          created_at: string | null;
-          description: string | null;
-          id: string | null;
-          likes_count: number | null;
-          public: boolean | null;
-          title: string | null;
-        };
-        Relationships: [];
-      };
       set_overview: {
         Row: {
           name: string | null;
@@ -429,11 +372,9 @@ export type Database = {
     Functions: {
       create_deck: {
         Args: {
-          p_author: string;
           p_cards: Json;
           p_colors: Database['public']['Enums']['color'][];
           p_description: string;
-          p_public: boolean;
           p_title: string;
         };
         Returns: undefined;
