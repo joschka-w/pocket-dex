@@ -1,0 +1,25 @@
+import fetchDecks from '@/lib/data/fetchDecks';
+import { cn } from '@/lib/utils/cn';
+import Deck from './Deck';
+
+interface Props {
+  className?: string;
+}
+
+async function DeckList({ className }: Props) {
+  const { data, error } = await fetchDecks();
+
+  if (error) throw error;
+
+  return (
+    <ol className={cn('w-full grid grid-cols-2 gap-7', className)}>
+      {data?.map(deck => (
+        <li key={`deck-list-${deck.id}`}>
+          <Deck deck={deck} />
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+export default DeckList;

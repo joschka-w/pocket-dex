@@ -38,7 +38,7 @@ function calcRarityStats(cards: CardWithQuantity[]) {
   return map;
 }
 
-function calcDeckPrice(cards: CardWithQuantity[]) {
+export function calcDeckPrice(cards: Pick<CardWithQuantity, 'quantity' | 'rarity'>[]) {
   return cards.reduce((sum, card) => sum + CARD_PRICES[card.rarity] * card.quantity, 0);
 }
 

@@ -3,7 +3,7 @@ import { Tables } from '@/types/database';
 import Image from 'next/image';
 
 interface Props {
-  card: Tables<'card_view_new'>;
+  card: Pick<Tables<'card_view_new'>, 'image_path' | 'name' | 'image_placeholder'>;
   hasHoverAnimation?: boolean;
 }
 
