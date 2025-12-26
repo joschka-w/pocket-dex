@@ -1,6 +1,6 @@
 type Unit = 'year' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second';
 
-export function formatToRelativeTime(date: Date) {
+export function toRelativeTime(date: Date) {
   const now = Date.now();
   const diffInSeconds = Math.floor((now - date.getTime()) / 1000);
 

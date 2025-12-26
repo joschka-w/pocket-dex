@@ -1,0 +1,32 @@
+export const PULL_RATES = {
+  '1-3': {
+    diamond_1: 1,
+    diamond_2: 0,
+    diamond_3: 0,
+    diamond_4: 0,
+    star_1: 0,
+    star_2: 0,
+    star_3: 0,
+    crown: 0,
+  },
+  '4': {
+    diamond_1: 0,
+    diamond_2: 0.9,
+    diamond_3: 0.05,
+    diamond_4: 0.0166,
+    star_1: 0.022572,
+    star_2: 0.005,
+    star_3: 0.00222,
+    crown: 0.0004,
+  },
+  '5': {
+    diamond_1: 0,
+    diamond_2: 0.6,
+    diamond_3: 0.2,
+    diamond_4: 0.06664,
+    star_1: 0.10288,
+    star_2: 0.02,
+    star_3: 0.00888,
+    crown: 0.0016,
+  },
+};

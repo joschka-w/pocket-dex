@@ -9,14 +9,14 @@ interface Props {
 
 function CardImage({ card, hasHoverAnimation = false }: Props) {
   return (
-    <div className="aspect-600/825 @container relative">
+    <div className="@container relative aspect-600/825">
       <Image
         className={cn(
-          'select-none aspect-600/825 rounded-[3.5cqw]',
+          'aspect-600/825 rounded-[3.5cqw] select-none',
           hasHoverAnimation &&
-            'hover:scale-104 hover:brightness-110 transition-[filter,scale] duration-250'
+            'transition-[filter,scale] duration-250 hover:scale-104 hover:brightness-110',
         )}
-        src={card.image_path!}
+        src={card.image_path}
         width={600}
         height={825}
         alt={`${card.name} Cover art`}

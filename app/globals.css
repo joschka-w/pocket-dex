@@ -24,6 +24,12 @@
   --spacing-header-height: 64px;
   --spacing-topbar-height: 74px;
 
+  /* Variables for the SimilarCards carousel (card page) */
+  --slides-per-page: 6;
+  --slide-gap: 1.25rem;
+  --slide-size: calc(100% / var(--slides-per-page));
+  --gap-per-slide: calc((var(--slide-gap) * (var(--slides-per-page) - 1)) / var(--slides-per-page));
+
   /* Animation */
   @keyframes loader-1 {
     0% {

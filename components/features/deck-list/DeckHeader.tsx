@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { colorSVGs } from '@/lib/constants/asset-maps';
 import { DeckResult } from '@/lib/data/fetchDecks';
 import { cn } from '@/lib/utils/cn';
-import { formatToRelativeTime } from '@/lib/utils/formatToRelativeTime';
+import { toRelativeTime } from '@/lib/utils/formatToRelativeTime';
 
 interface Props {
   deck: DeckResult;
@@ -12,7 +12,7 @@ interface Props {
 type CardInDeck = DeckResult['cards'][number]['card'];
 
 function DeckHeader({ deck }: Props) {
-  const dateFormatted = formatToRelativeTime(new Date(deck.created_at));
+  const dateFormatted = toRelativeTime(new Date(deck.created_at));
 
   const coverCard = deck.cards[0].card;
 
@@ -22,8 +22,8 @@ function DeckHeader({ deck }: Props) {
 
       <div className="flex items-center justify-between p-4">
         <div className="z-10 flex flex-col gap-1">
-          <h3 className="text-2xl font-semibold leading-none">{deck.title}</h3>
-          <span className="text-sm text-text-muted">{dateFormatted}</span>
+          <h3 className="text-2xl leading-none font-semibold">{deck.title}</h3>
+          <span className="text-text-muted text-sm">{dateFormatted}</span>
         </div>
 
         <ul className="z-10 row-span-2 flex gap-1">
@@ -42,12 +42,12 @@ function Backdrop({ coverCard }: { coverCard: CardInDeck }) {
   return (
     <div
       className={cn(
-        'inset-0 -bottom-2 absolute inset-shadow-[0_0_12px_0] inset-shadow-black z-0 overflow-hidden',
-        "before:content-[''] before:absolute before:inset-0 before:bg-linear-to-b before:from-transparent before:to-bg-1 before:z-10"
+        'absolute inset-0 -bottom-2 z-0 overflow-hidden inset-shadow-[0_0_12px_0] inset-shadow-black',
+        "before:to-bg-1 before:absolute before:inset-0 before:z-10 before:bg-linear-to-b before:from-transparent before:content-['']",
       )}
     >
       <Image
-        className="opacity-30 object-cover w-full h-full object-[50%_30%] blur-md"
+        className="h-full w-full object-cover object-[50%_30%] opacity-30 blur-md"
         src={coverCard.image_path}
         placeholder="blur"
         blurDataURL={coverCard.image_placeholder}

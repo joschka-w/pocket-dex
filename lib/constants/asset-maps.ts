@@ -29,6 +29,8 @@ export const raritySVGs = {
   crown,
 };
 
+export const getRarityImg = (rarity: keyof typeof raritySVGs) => raritySVGs[rarity];
+
 export const colorSVGs = {
   grass,
   fire,
@@ -41,3 +43,5 @@ export const colorSVGs = {
   dragon,
   colorless,
 };
+
+export const getColorImg = (color: keyof typeof colorSVGs) => colorSVGs[color];
