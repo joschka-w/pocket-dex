@@ -21,7 +21,7 @@ async function fetchDecks() {
           rarity
         )
     )
-    `
+    `,
     )
     .order('created_at', { ascending: false });
 }

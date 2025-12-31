@@ -9,10 +9,13 @@ interface Props {
 async function DeckList({ className }: Props) {
   const { data, error } = await fetchDecks();
 
-  if (error) throw error;
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
 
   return (
-    <ol className={cn('w-full grid grid-cols-2 gap-7', className)}>
+    <ol className={cn('grid w-full grid-cols-2 gap-7', className)}>
       {data?.map(deck => (
         <li key={`deck-list-${deck.id}`}>
           <Deck deck={deck} />
