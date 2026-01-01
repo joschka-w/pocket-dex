@@ -1,11 +1,11 @@
 'use server';
 
 import { Tables } from '@/types/database';
-import { createClient } from '../utils/supabase/client';
+import { createClient } from '../utils/supabase/server';
 
 // Fetch all cards that are the same pokemon (card 'Pikachu ex' returns all pikachu cards)
 export async function fetchSimilarCards(card: Pick<Tables<'card'>, 'id' | 'name'>) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const pokemonName = card.name.replace(/ ex$/, '');
 

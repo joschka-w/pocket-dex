@@ -1,0 +1,1170 @@
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+
+COMMENT ON SCHEMA "public" IS 'standard public schema';
+
+
+
+CREATE EXTENSION IF NOT EXISTS "hypopg" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "index_advisor" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "pg_graphql" WITH SCHEMA "graphql";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "pg_stat_statements" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "pgcrypto" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "supabase_vault" WITH SCHEMA "vault";
+
+
+
+
+
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
+
+
+
+
+
+
+CREATE TYPE "public"."card_type" AS ENUM (
+    'pokemon',
+    'trainer'
+);
+
+
+ALTER TYPE "public"."card_type" OWNER TO "postgres";
+
+
+CREATE TYPE "public"."color" AS ENUM (
+    'grass',
+    'fire',
+    'water',
+    'lightning',
+    'psychic',
+    'fighting',
+    'darkness',
+    'metal',
+    'dragon',
+    'colorless'
+);
+
+
+ALTER TYPE "public"."color" OWNER TO "postgres";
+
+
+CREATE TYPE "public"."rarity" AS ENUM (
+    'diamond_1',
+    'diamond_2',
+    'diamond_3',
+    'diamond_4',
+    'star_1',
+    'star_2',
+    'star_3',
+    'crown',
+    'promo'
+);
+
+
+ALTER TYPE "public"."rarity" OWNER TO "postgres";
+
+
+CREATE TYPE "public"."stage" AS ENUM (
+    'Basic',
+    'Stage 1',
+    'Stage 2'
+);
+
+
+ALTER TYPE "public"."stage" OWNER TO "postgres";
+
+
+CREATE TYPE "public"."trainer_card_type" AS ENUM (
+    'Supporter',
+    'Item',
+    'Item (Fossil)',
+    'Pokemon Tool'
+);
+
+
+ALTER TYPE "public"."trainer_card_type" OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."array_distinct"("anyarray", boolean DEFAULT false) RETURNS "anyarray"
+    LANGUAGE "sql" IMMUTABLE
+    AS $_$
+      SELECT array_agg(DISTINCT x) 
+      FROM unnest($1) t(x) 
+      WHERE CASE WHEN $2 THEN x IS NOT NULL ELSE true END;
+$_$;
+
+
+ALTER FUNCTION "public"."array_distinct"("anyarray", boolean) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."create_deck"("p_title" "text", "p_colors" "public"."color"[], "p_cards" "jsonb", "p_description" "text") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+  v_deck_id UUID;
+  v_card_id TEXT;
+  v_quantity INTEGER;
+  v_total_cards INTEGER := 0;
+  v_card_record RECORD;
+  v_user_id UUID;
+BEGIN
+  -- Get user id
+  v_user_id := auth.uid();
+
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'Please login to create a deck';
+  END IF;
+
+  -- Validate input
+  FOR v_card_record IN SELECT * FROM jsonb_each_text(p_cards) LOOP
+    v_card_id := v_card_record.key;
+    v_quantity := v_card_record.value::INTEGER;
+
+    -- Validate quantity per card (max 2)
+    IF v_quantity < 1 OR v_quantity > 2 THEN
+      RAISE EXCEPTION 'Card % must have quantity between 1 and 2 (got %)',
+        v_card_id, v_quantity;
+    END IF;
+
+    v_total_cards := v_total_cards + v_quantity;
+  END LOOP;
+
+  -- Validate deck size (20)
+  IF v_total_cards != 20 THEN
+    RAISE EXCEPTION 'Deck has to contain exactly 20 cards (got %)',
+      v_total_cards;
+  END IF;
+
+  -- Create deck
+  INSERT INTO deck(title, description, colors, author)
+  VALUES(p_title, p_description, p_colors, v_user_id)
+  RETURNING id INTO v_deck_id;
+
+  -- Insert
+  FOR v_card_record IN SELECT * FROM jsonb_each_text(p_cards) LOOP
+    v_card_id := v_card_record.key;
+    v_quantity := v_card_record.value::INTEGER;
+
+    INSERT INTO deck_card_link(deck_id, card_id, quantity)
+    VALUES(v_deck_id, v_card_id, v_quantity);
+  END LOOP;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."create_deck"("p_title" "text", "p_colors" "public"."color"[], "p_cards" "jsonb", "p_description" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."create_pokemon_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "hp" integer, "type" "public"."color", "retreat_cost" integer, "weakness" "public"."color", "is_ex" boolean, "stage" "public"."stage", "ability_name" "text", "ability_effect" "text", "pack_ids" integer[], "attack_1_name" "text", "attack_1_energy_cost" "public"."color"[], "attack_1_damage" integer, "attack_1_damage_modifier" "text", "attack_1_effect" "text", "attack_2_name" "text", "attack_2_energy_cost" "public"."color"[], "attack_2_damage" integer, "attack_2_damage_modifier" "text", "attack_2_effect" "text") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+  pack_id INTEGER;
+BEGIN
+  INSERT INTO card(name, set_symbol, set_number, rarity, card_type, image_path, image_placeholder)
+  VALUES (name, set_symbol, set_number, rarity, card_type, image_path, image_placeholder);
+
+  INSERT INTO pokemon_card(id, hp, type, retreat_cost, weakness, is_ex, stage, ability_name, ability_effect)
+  VALUES (id, hp, type, retreat_cost, weakness, is_ex, stage, ability_name, ability_effect);
+
+  FOREACH pack_id IN ARRAY pack_ids LOOP
+    INSERT INTO card_booster_pack_link(card_id, booster_pack_id)
+    VALUES(id, pack_id);
+  END LOOP;
+
+  IF attack_1_name IS NOT NULL THEN
+    INSERT INTO attack(name, energy_cost, damage, damage_modifier, effect, pokemon_card_id)
+    VALUES (attack_1_name, attack_1_energy_cost, attack_1_damage, attack_1_damage_modifier, attack_1_effect, id);
+  END IF;
+
+    IF attack_2_name IS NOT NULL THEN
+    INSERT INTO attack(name, energy_cost, damage, damage_modifier, effect, pokemon_card_id)
+    VALUES (attack_2_name, attack_2_energy_cost, attack_2_damage, attack_2_damage_modifier, attack_2_effect, id);
+  END IF;
+END
+$$;
+
+
+ALTER FUNCTION "public"."create_pokemon_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "hp" integer, "type" "public"."color", "retreat_cost" integer, "weakness" "public"."color", "is_ex" boolean, "stage" "public"."stage", "ability_name" "text", "ability_effect" "text", "pack_ids" integer[], "attack_1_name" "text", "attack_1_energy_cost" "public"."color"[], "attack_1_damage" integer, "attack_1_damage_modifier" "text", "attack_1_effect" "text", "attack_2_name" "text", "attack_2_energy_cost" "public"."color"[], "attack_2_damage" integer, "attack_2_damage_modifier" "text", "attack_2_effect" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."create_trainer_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "pack_ids" integer[], "trainer_card_type" "public"."trainer_card_type", "hp" integer, "effect" "text") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+  pack_id INTEGER;
+BEGIN
+  INSERT INTO card(name, set_symbol, set_number, rarity, card_type, image_path, image_placeholder)
+  VALUES (name, set_symbol, set_number, rarity, card_type, image_path, image_placeholder);
+
+  INSERT INTO trainer_card(id, trainer_card_type, hp, effect)
+  VALUES (id, trainer_card_type, hp, effect);
+
+  FOREACH pack_id IN ARRAY pack_ids LOOP
+    INSERT INTO card_booster_pack_link(card_id, booster_pack_id)
+    VALUES (id, pack_id);
+  END LOOP;
+END
+$$;
+
+
+ALTER FUNCTION "public"."create_trainer_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "pack_ids" integer[], "trainer_card_type" "public"."trainer_card_type", "hp" integer, "effect" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_card_count"("pack_id" bigint) RETURNS "jsonb"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  RETURN (
+    SELECT COALESCE(
+      jsonb_object_agg(rarity, count),
+      '{}'::jsonb
+    )
+    FROM (
+      SELECT 
+        rarity,
+        COUNT(*) as count
+      FROM
+        card
+        JOIN card_booster_pack_link link on link.card_id = card.id
+        JOIN booster_pack pack on pack.id = link.booster_pack_id
+      WHERE
+        pack.id = pack_id
+      GROUP by
+        rarity
+    ) counts
+  );
+END
+$$;
+
+
+ALTER FUNCTION "public"."get_card_count"("pack_id" bigint) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_enum_values"("enum_type_name" "text") RETURNS "text"[]
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+    result text[];
+BEGIN
+    EXECUTE format('
+        SELECT array_agg(enum_value::text) 
+        FROM unnest(enum_range(NULL::%I)) as enum_value
+    ', enum_type_name) INTO result;
+    
+    RETURN result;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."get_enum_values"("enum_type_name" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."handle_new_user"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO ''
+    AS $$
+begin
+  insert into public.profile(id, username, avatar_url, created_at)
+  values (
+    new.id,
+    null,
+    new.raw_user_meta_data ->> 'avatar_url',
+    now()
+  );
+
+  return new;
+end;
+$$;
+
+
+ALTER FUNCTION "public"."handle_new_user"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."like_deck"("p_deck_id" "uuid") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+DECLARE
+  v_is_liked BOOLEAN;
+  v_user_id UUID := auth.uid();
+BEGIN
+  -- Check if user has already liked the deck
+   SELECT EXISTS (
+    SELECT 1 FROM deck_likes 
+    WHERE deck_id = p_deck_id AND user_id = v_user_id
+  ) INTO v_is_liked;
+
+  IF v_is_liked THEN
+  -- If already liked, remove the like
+    DELETE FROM deck_likes
+    WHERE deck_id = p_deck_id AND user_id = v_user_id;
+
+    -- And update the like count
+    UPDATE deck SET likes_count = likes_count - 1 WHERE id = p_deck_id;
+  ELSE
+  -- If not liked, add the like
+    INSERT INTO deck_likes (deck_id, user_id)
+    VALUES (p_deck_id, v_user_id);
+
+    -- And update the like count
+    UPDATE deck SET likes_count = likes_count + 1 WHERE id = p_deck_id;
+  END IF;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."like_deck"("p_deck_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."validate_pokemon_card"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM card 
+    WHERE id = NEW.id AND card_type = 'pokemon'
+  ) THEN
+    RAISE EXCEPTION 'Card ID % must reference a pokemon card type', NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."validate_pokemon_card"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."validate_trainer_card"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM card 
+    WHERE id = NEW.id AND card_type = 'trainer'
+  ) THEN
+    RAISE EXCEPTION 'Card ID % must reference a trainer card type', NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."validate_trainer_card"() OWNER TO "postgres";
+
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+
+CREATE TABLE IF NOT EXISTS "public"."attack" (
+    "id" bigint NOT NULL,
+    "name" "text" NOT NULL,
+    "energy_cost" "public"."color"[] NOT NULL,
+    "damage" integer,
+    "damage_modifier" "text",
+    "effect" "text",
+    "pokemon_card_id" "text" NOT NULL
+);
+
+
+ALTER TABLE "public"."attack" OWNER TO "postgres";
+
+
+ALTER TABLE "public"."attack" ALTER COLUMN "id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME "public"."attack_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."booster_pack" (
+    "id" bigint NOT NULL,
+    "set_symbol" "text" NOT NULL,
+    "name" "text" NOT NULL,
+    "release_date" "date" NOT NULL,
+    "symbol" "text" NOT NULL
+);
+
+
+ALTER TABLE "public"."booster_pack" OWNER TO "postgres";
+
+
+ALTER TABLE "public"."booster_pack" ALTER COLUMN "id" ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME "public"."booster_pack_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+
+CREATE TABLE IF NOT EXISTS "public"."card" (
+    "id" "text" GENERATED ALWAYS AS ((("set_symbol" || '-'::"text") || "lpad"(("set_number")::"text", 3, '0'::"text"))) STORED NOT NULL,
+    "name" "text" NOT NULL,
+    "rarity" "public"."rarity" NOT NULL,
+    "card_type" "public"."card_type" NOT NULL,
+    "set_symbol" "text" NOT NULL,
+    "set_number" integer NOT NULL,
+    "image_path" "text" NOT NULL,
+    "image_placeholder" "text" NOT NULL
+);
+
+
+ALTER TABLE "public"."card" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."card_booster_pack_link" (
+    "card_id" "text" NOT NULL,
+    "booster_pack_id" bigint NOT NULL
+);
+
+
+ALTER TABLE "public"."card_booster_pack_link" OWNER TO "postgres";
+
+
+CREATE OR REPLACE VIEW "public"."card_view_new" AS
+SELECT
+    NULL::"text" AS "name",
+    NULL::"text" AS "id",
+    NULL::"public"."rarity" AS "rarity",
+    NULL::"text" AS "image_path",
+    NULL::"text" AS "image_placeholder",
+    NULL::"public"."card_type" AS "card_type",
+    NULL::integer AS "combined_hp",
+    NULL::"jsonb" AS "pokemon_card",
+    NULL::"jsonb" AS "trainer_card",
+    NULL::"jsonb" AS "set",
+    NULL::"text"[] AS "packs";
+
+
+ALTER VIEW "public"."card_view_new" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."deck" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "title" "text" NOT NULL,
+    "description" "text",
+    "likes_count" integer DEFAULT 0 NOT NULL,
+    "created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "colors" "public"."color"[] NOT NULL,
+    "author" "uuid" NOT NULL,
+    CONSTRAINT "deck_colors_check" CHECK ((("cardinality"("colors") >= 1) AND ("cardinality"("colors") <= 3) AND ("cardinality"("colors") = "cardinality"("public"."array_distinct"("colors")))))
+);
+
+
+ALTER TABLE "public"."deck" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."deck_card_link" (
+    "deck_id" "uuid" NOT NULL,
+    "card_id" "text" NOT NULL,
+    "quantity" integer NOT NULL
+);
+
+
+ALTER TABLE "public"."deck_card_link" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."pokemon_card" (
+    "id" "text" NOT NULL,
+    "hp" integer NOT NULL,
+    "type" "public"."color" NOT NULL,
+    "retreat_cost" integer NOT NULL,
+    "weakness" "public"."color",
+    "is_ex" boolean NOT NULL,
+    "stage" "public"."stage" NOT NULL,
+    "ability_name" "text",
+    "ability_effect" "text"
+);
+
+
+ALTER TABLE "public"."pokemon_card" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."profile" (
+    "id" "uuid" NOT NULL,
+    "username" "text",
+    "avatar_url" "text",
+    "created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE "public"."profile" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."set" (
+    "symbol" "text" NOT NULL,
+    "name" "text" NOT NULL,
+    "release_date" "date" NOT NULL
+);
+
+
+ALTER TABLE "public"."set" OWNER TO "postgres";
+
+
+CREATE OR REPLACE VIEW "public"."set_overview" AS
+SELECT
+    NULL::"text" AS "name",
+    NULL::"text" AS "symbol",
+    NULL::"jsonb" AS "packs";
+
+
+ALTER VIEW "public"."set_overview" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."trainer_card" (
+    "id" "text" NOT NULL,
+    "trainer_card_type" "public"."trainer_card_type" NOT NULL,
+    "hp" integer,
+    "effect" "text" NOT NULL,
+    CONSTRAINT "check_fossil_hp" CHECK (((("trainer_card_type" = 'Item (Fossil)'::"public"."trainer_card_type") AND ("hp" IS NOT NULL)) OR (("trainer_card_type" <> 'Item (Fossil)'::"public"."trainer_card_type") AND ("hp" IS NULL))))
+);
+
+
+ALTER TABLE "public"."trainer_card" OWNER TO "postgres";
+
+
+ALTER TABLE ONLY "public"."attack"
+    ADD CONSTRAINT "attack_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."booster_pack"
+    ADD CONSTRAINT "booster_pack_name_key" UNIQUE ("name");
+
+
+
+ALTER TABLE ONLY "public"."booster_pack"
+    ADD CONSTRAINT "booster_pack_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."card_booster_pack_link"
+    ADD CONSTRAINT "card_booster_pack_link_pkey" PRIMARY KEY ("card_id", "booster_pack_id");
+
+
+
+ALTER TABLE ONLY "public"."card"
+    ADD CONSTRAINT "card_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."deck_card_link"
+    ADD CONSTRAINT "deck_card_link_pkey" PRIMARY KEY ("deck_id", "card_id");
+
+
+
+ALTER TABLE ONLY "public"."deck"
+    ADD CONSTRAINT "deck_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."pokemon_card"
+    ADD CONSTRAINT "pokemon_card_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."profile"
+    ADD CONSTRAINT "profile_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."profile"
+    ADD CONSTRAINT "profile_username_key" UNIQUE ("username");
+
+
+
+ALTER TABLE ONLY "public"."set"
+    ADD CONSTRAINT "set_name_key" UNIQUE ("name");
+
+
+
+ALTER TABLE ONLY "public"."set"
+    ADD CONSTRAINT "set_pkey" PRIMARY KEY ("symbol");
+
+
+
+ALTER TABLE ONLY "public"."trainer_card"
+    ADD CONSTRAINT "trainer_card_pkey" PRIMARY KEY ("id");
+
+
+
+CREATE OR REPLACE VIEW "public"."card_view_new" AS
+ SELECT "card"."name",
+    "card"."id",
+    "card"."rarity",
+    "card"."image_path",
+    "card"."image_placeholder",
+    "card"."card_type",
+    COALESCE("pc"."hp", "tc"."hp") AS "combined_hp",
+        CASE
+            WHEN ("pc"."id" IS NOT NULL) THEN "jsonb_build_object"('type', "pc"."type", 'retreat_cost', "pc"."retreat_cost", 'weakness', "pc"."weakness", 'hp', "pc"."hp", 'stage', "pc"."stage", 'is_ex', "pc"."is_ex")
+            ELSE NULL::"jsonb"
+        END AS "pokemon_card",
+        CASE
+            WHEN ("tc"."id" IS NOT NULL) THEN "jsonb_build_object"('trainer_card_type', "tc"."trainer_card_type", 'hp', "tc"."hp")
+            ELSE NULL::"jsonb"
+        END AS "trainer_card",
+    "jsonb_build_object"('name', "set"."name", 'symbol', "card"."set_symbol") AS "set",
+    "array_agg"(DISTINCT "pack"."symbol") AS "packs"
+   FROM (((((("public"."card"
+     LEFT JOIN "public"."pokemon_card" "pc" ON (("card"."id" = "pc"."id")))
+     LEFT JOIN "public"."trainer_card" "tc" ON (("card"."id" = "tc"."id")))
+     LEFT JOIN "public"."set" ON (("card"."set_symbol" = "set"."symbol")))
+     LEFT JOIN "public"."attack" ON (("card"."id" = "attack"."pokemon_card_id")))
+     LEFT JOIN "public"."card_booster_pack_link" ON (("card"."id" = "card_booster_pack_link"."card_id")))
+     LEFT JOIN "public"."booster_pack" "pack" ON (("pack"."id" = "card_booster_pack_link"."booster_pack_id")))
+  GROUP BY "card"."name", "card"."id", "card"."set_symbol", "card"."rarity", "pc"."type", "pc"."id", "pc"."hp", "pc"."retreat_cost", "pc"."weakness", "pc"."is_ex", "pc"."stage", "tc"."id", "set"."name";
+
+
+
+CREATE OR REPLACE VIEW "public"."set_overview" AS
+ SELECT "set"."name",
+    "set"."symbol",
+    "jsonb_agg"("jsonb_build_object"('name', "booster_pack"."name", 'value', "booster_pack"."symbol")) AS "packs"
+   FROM ("public"."set"
+     LEFT JOIN "public"."booster_pack" ON (("set"."symbol" = "booster_pack"."set_symbol")))
+  GROUP BY "set"."name", "set"."symbol"
+  ORDER BY "set"."release_date";
+
+
+
+CREATE OR REPLACE TRIGGER "pokemon_card_validation" BEFORE INSERT OR UPDATE ON "public"."pokemon_card" FOR EACH ROW EXECUTE FUNCTION "public"."validate_pokemon_card"();
+
+
+
+CREATE OR REPLACE TRIGGER "trainer_card_validation" BEFORE INSERT OR UPDATE ON "public"."trainer_card" FOR EACH ROW EXECUTE FUNCTION "public"."validate_trainer_card"();
+
+
+
+ALTER TABLE ONLY "public"."attack"
+    ADD CONSTRAINT "attack_pokemon_card_id_fkey" FOREIGN KEY ("pokemon_card_id") REFERENCES "public"."pokemon_card"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."booster_pack"
+    ADD CONSTRAINT "booster_pack_set_symbol_fkey" FOREIGN KEY ("set_symbol") REFERENCES "public"."set"("symbol");
+
+
+
+ALTER TABLE ONLY "public"."card_booster_pack_link"
+    ADD CONSTRAINT "card_booster_pack_link_booster_pack_id_fkey" FOREIGN KEY ("booster_pack_id") REFERENCES "public"."booster_pack"("id");
+
+
+
+ALTER TABLE ONLY "public"."card_booster_pack_link"
+    ADD CONSTRAINT "card_booster_pack_link_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "public"."card"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."card"
+    ADD CONSTRAINT "card_set_symbol_fkey" FOREIGN KEY ("set_symbol") REFERENCES "public"."set"("symbol") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."deck"
+    ADD CONSTRAINT "deck_author_fkey" FOREIGN KEY ("author") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."deck_card_link"
+    ADD CONSTRAINT "deck_card_link_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "public"."card"("id");
+
+
+
+ALTER TABLE ONLY "public"."deck_card_link"
+    ADD CONSTRAINT "deck_card_link_deck_id_fkey" FOREIGN KEY ("deck_id") REFERENCES "public"."deck"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."pokemon_card"
+    ADD CONSTRAINT "pokemon_card_id_fkey" FOREIGN KEY ("id") REFERENCES "public"."card"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."profile"
+    ADD CONSTRAINT "profile_id_fkey" FOREIGN KEY ("id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."trainer_card"
+    ADD CONSTRAINT "trainer_card_id_fkey" FOREIGN KEY ("id") REFERENCES "public"."card"("id") ON DELETE CASCADE;
+
+
+
+
+
+ALTER PUBLICATION "supabase_realtime" OWNER TO "postgres";
+
+
+GRANT USAGE ON SCHEMA "public" TO "postgres";
+GRANT USAGE ON SCHEMA "public" TO "anon";
+GRANT USAGE ON SCHEMA "public" TO "authenticated";
+GRANT USAGE ON SCHEMA "public" TO "service_role";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GRANT ALL ON FUNCTION "public"."array_distinct"("anyarray", boolean) TO "anon";
+GRANT ALL ON FUNCTION "public"."array_distinct"("anyarray", boolean) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."array_distinct"("anyarray", boolean) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."create_deck"("p_title" "text", "p_colors" "public"."color"[], "p_cards" "jsonb", "p_description" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."create_deck"("p_title" "text", "p_colors" "public"."color"[], "p_cards" "jsonb", "p_description" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."create_deck"("p_title" "text", "p_colors" "public"."color"[], "p_cards" "jsonb", "p_description" "text") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."create_pokemon_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "hp" integer, "type" "public"."color", "retreat_cost" integer, "weakness" "public"."color", "is_ex" boolean, "stage" "public"."stage", "ability_name" "text", "ability_effect" "text", "pack_ids" integer[], "attack_1_name" "text", "attack_1_energy_cost" "public"."color"[], "attack_1_damage" integer, "attack_1_damage_modifier" "text", "attack_1_effect" "text", "attack_2_name" "text", "attack_2_energy_cost" "public"."color"[], "attack_2_damage" integer, "attack_2_damage_modifier" "text", "attack_2_effect" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."create_pokemon_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "hp" integer, "type" "public"."color", "retreat_cost" integer, "weakness" "public"."color", "is_ex" boolean, "stage" "public"."stage", "ability_name" "text", "ability_effect" "text", "pack_ids" integer[], "attack_1_name" "text", "attack_1_energy_cost" "public"."color"[], "attack_1_damage" integer, "attack_1_damage_modifier" "text", "attack_1_effect" "text", "attack_2_name" "text", "attack_2_energy_cost" "public"."color"[], "attack_2_damage" integer, "attack_2_damage_modifier" "text", "attack_2_effect" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."create_pokemon_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "hp" integer, "type" "public"."color", "retreat_cost" integer, "weakness" "public"."color", "is_ex" boolean, "stage" "public"."stage", "ability_name" "text", "ability_effect" "text", "pack_ids" integer[], "attack_1_name" "text", "attack_1_energy_cost" "public"."color"[], "attack_1_damage" integer, "attack_1_damage_modifier" "text", "attack_1_effect" "text", "attack_2_name" "text", "attack_2_energy_cost" "public"."color"[], "attack_2_damage" integer, "attack_2_damage_modifier" "text", "attack_2_effect" "text") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."create_trainer_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "pack_ids" integer[], "trainer_card_type" "public"."trainer_card_type", "hp" integer, "effect" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."create_trainer_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "pack_ids" integer[], "trainer_card_type" "public"."trainer_card_type", "hp" integer, "effect" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."create_trainer_card"("id" "text", "name" "text", "set_symbol" "text", "set_number" integer, "rarity" "public"."rarity", "card_type" "public"."card_type", "image_path" "text", "image_placeholder" "text", "pack_ids" integer[], "trainer_card_type" "public"."trainer_card_type", "hp" integer, "effect" "text") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_card_count"("pack_id" bigint) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_card_count"("pack_id" bigint) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_card_count"("pack_id" bigint) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_enum_values"("enum_type_name" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_enum_values"("enum_type_name" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_enum_values"("enum_type_name" "text") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "anon";
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."like_deck"("p_deck_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."like_deck"("p_deck_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."like_deck"("p_deck_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."validate_pokemon_card"() TO "anon";
+GRANT ALL ON FUNCTION "public"."validate_pokemon_card"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."validate_pokemon_card"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."validate_trainer_card"() TO "anon";
+GRANT ALL ON FUNCTION "public"."validate_trainer_card"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."validate_trainer_card"() TO "service_role";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GRANT ALL ON TABLE "public"."attack" TO "anon";
+GRANT ALL ON TABLE "public"."attack" TO "authenticated";
+GRANT ALL ON TABLE "public"."attack" TO "service_role";
+
+
+
+GRANT ALL ON SEQUENCE "public"."attack_id_seq" TO "anon";
+GRANT ALL ON SEQUENCE "public"."attack_id_seq" TO "authenticated";
+GRANT ALL ON SEQUENCE "public"."attack_id_seq" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."booster_pack" TO "anon";
+GRANT ALL ON TABLE "public"."booster_pack" TO "authenticated";
+GRANT ALL ON TABLE "public"."booster_pack" TO "service_role";
+
+
+
+GRANT ALL ON SEQUENCE "public"."booster_pack_id_seq" TO "anon";
+GRANT ALL ON SEQUENCE "public"."booster_pack_id_seq" TO "authenticated";
+GRANT ALL ON SEQUENCE "public"."booster_pack_id_seq" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."card" TO "anon";
+GRANT ALL ON TABLE "public"."card" TO "authenticated";
+GRANT ALL ON TABLE "public"."card" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."card_booster_pack_link" TO "anon";
+GRANT ALL ON TABLE "public"."card_booster_pack_link" TO "authenticated";
+GRANT ALL ON TABLE "public"."card_booster_pack_link" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."card_view_new" TO "anon";
+GRANT ALL ON TABLE "public"."card_view_new" TO "authenticated";
+GRANT ALL ON TABLE "public"."card_view_new" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."deck" TO "anon";
+GRANT ALL ON TABLE "public"."deck" TO "authenticated";
+GRANT ALL ON TABLE "public"."deck" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."deck_card_link" TO "anon";
+GRANT ALL ON TABLE "public"."deck_card_link" TO "authenticated";
+GRANT ALL ON TABLE "public"."deck_card_link" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."pokemon_card" TO "anon";
+GRANT ALL ON TABLE "public"."pokemon_card" TO "authenticated";
+GRANT ALL ON TABLE "public"."pokemon_card" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."profile" TO "anon";
+GRANT ALL ON TABLE "public"."profile" TO "authenticated";
+GRANT ALL ON TABLE "public"."profile" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."set" TO "anon";
+GRANT ALL ON TABLE "public"."set" TO "authenticated";
+GRANT ALL ON TABLE "public"."set" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."set_overview" TO "anon";
+GRANT ALL ON TABLE "public"."set_overview" TO "authenticated";
+GRANT ALL ON TABLE "public"."set_overview" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."trainer_card" TO "anon";
+GRANT ALL ON TABLE "public"."trainer_card" TO "authenticated";
+GRANT ALL ON TABLE "public"."trainer_card" TO "service_role";
+
+
+
+
+
+
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "service_role";
+
+
+
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "service_role";
+
+
+
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "service_role";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+drop extension if exists "pg_net";
+
+CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+

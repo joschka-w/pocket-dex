@@ -4,6 +4,7 @@ import { atomWithStorage } from 'jotai/utils';
 export interface CardWithQuantity extends Tables<'card_view_new'> {
   quantity: number;
 }
+
 export type Deck = Map<string, CardWithQuantity>; // Maps cardId -> CardWithQuantity
 
 // TODO - Add privacy notice, something like:

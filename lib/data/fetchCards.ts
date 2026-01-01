@@ -70,7 +70,7 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
       query = query.or(
         `card_type.eq.pokemon, trainer_card->>trainer_card_type.in.(${trainerTypes
           .map(val => `"${val}"`)
-          .join(',')})`
+          .join(',')})`,
       );
     }
   }

@@ -1,9 +1,9 @@
 'use server';
 
-import { createClient } from '../utils/supabase/client';
+import { createClient } from '../utils/supabase/server';
 
 export async function fetchCardCountPerPack(packId: number) {
-  const supabase = createClient({
+  const supabase = await createClient({
     fetchOptions: {
       next: {
         revalidate: 60 * 60 * 24 * 7,

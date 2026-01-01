@@ -1,0 +1,15 @@
+ALTER TABLE profile
+ALTER COLUMN created_at SET NOT NULL;
+
+CREATE OR REPLACE FUNCTION set_created_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.created_at = CURRENT_TIMESTAMP;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_set_created_at
+  BEFORE INSERT ON profile
+  FOR EACH ROW
+  EXECUTE FUNCTION set_created_at();

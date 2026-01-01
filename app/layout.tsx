@@ -8,6 +8,7 @@ import NuqsProvider from '@/components/providers/NuqsProvider';
 import TanstackProvider from '@/components/providers/TanstackProvider';
 import { Provider as JotaiProvider } from 'jotai';
 import CustomToaster from '@/components/CustomToaster';
+import AuthInitializer from '@/components/AuthInitializer';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -27,11 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} bg-bg-base min-h-screen flex flex-col items-center text-text antialiased`}
+        className={`${inter.className} bg-bg-base text-text flex min-h-screen flex-col items-center antialiased`}
       >
         <TanstackProvider>
           <NuqsProvider>
             <JotaiProvider>
+              <AuthInitializer />
               <Header />
               <CustomToaster />
               {children}

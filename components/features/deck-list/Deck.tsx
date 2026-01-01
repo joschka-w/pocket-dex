@@ -9,7 +9,7 @@ interface Props {
 
 function Deck({ deck }: Props) {
   return (
-    <div className="relative flex w-full flex-col overflow-hidden rounded-xl border border-bg-2 bg-bg-1">
+    <div className="border-bg-2 bg-bg-1 relative flex w-full flex-col overflow-hidden rounded-xl border">
       <DeckHeader deck={deck} />
 
       <DeckCardList cards={deck.cards} />

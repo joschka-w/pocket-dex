@@ -42,7 +42,6 @@ function useDeckForm() {
   useEffect(() => {
     if (!isSubmitSuccessful) return;
 
-    // TODO - Add success modal or something similar to show user that it was successful
     resetForm();
     resetDeck();
   }, [isSubmitSuccessful, resetDeck, resetForm]);

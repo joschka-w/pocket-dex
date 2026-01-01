@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         hostname: 'assets.tcgdex.net',
         protocol: 'https',
       },
+      {
+        hostname: 'lh3.googleusercontent.com',
+        protocol: 'https',
+      },
     ],
   },
   async redirects() {

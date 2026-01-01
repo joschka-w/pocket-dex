@@ -23,7 +23,7 @@ function DeckHeader({ deck }: Props) {
       <div className="flex items-center justify-between p-4">
         <div className="z-10 flex flex-col gap-1">
           <h3 className="text-2xl leading-none font-semibold">{deck.title}</h3>
-          <span className="text-text-muted text-sm">{dateFormatted}</span>
+          <span className="text-text-muted text-sm">{`by ${deck.author.username} • ${dateFormatted}`}</span>
         </div>
 
         <ul className="z-10 row-span-2 flex gap-1">

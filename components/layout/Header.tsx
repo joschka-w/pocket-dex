@@ -1,21 +1,17 @@
-import Image from 'next/image';
-import Link from 'next/link';
-
-import logo from '@/assets/logo.svg';
 import Navbar from './NavBar';
+import LogoWithText from '../common/LogoWithText';
+import Avatar from '../features/avatar/Avatar';
 
 function Header() {
   return (
-    <header className="sticky top-0 z-50 flex h-header-height w-full items-center justify-center bg-bg-1 shadow-md">
-      <div className="flex h-full w-full max-w-mw items-center gap-16">
-        <Link href={'/'} className="flex h-full select-none items-center gap-3">
-          <div className="relative h-full w-11">
-            <Image src={logo} fill alt="Logo" />
-          </div>
-          <span className="text-lg font-bold">PocketDex</span>
-        </Link>
+    <header className="h-header-height bg-bg-1 sticky top-0 z-50 flex w-full items-center justify-center shadow-md">
+      <div className="max-w-mw flex h-full w-full items-center gap-16">
+        <LogoWithText isLink />
 
         <Navbar />
+
+        {/* <LoginLogoutButton className="ml-auto" /> */}
+        <Avatar />
       </div>
     </header>
   );

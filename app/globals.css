@@ -31,6 +31,16 @@
   --gap-per-slide: calc((var(--slide-gap) * (var(--slides-per-page) - 1)) / var(--slides-per-page));
 
   /* Animation */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(100%);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
   @keyframes loader-1 {
     0% {
       clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
@@ -54,6 +64,7 @@
       clip-path: polygon(50% 50%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 50% 100%, 0% 100%);
     }
   }
+
   @keyframes loader-2 {
     0% {
       transform: scaleY(1) rotate(0deg);

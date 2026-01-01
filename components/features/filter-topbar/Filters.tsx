@@ -16,7 +16,7 @@ interface Props {
 
 function Filters({ setData }: Props) {
   return (
-    <div className="flex gap-2 items-center ml-10">
+    <div className="ml-10 flex items-center gap-2">
       <FilterPopover filterKeys="set" name="Set">
         <SetFilter allSets={setData} initialVisibleCount={15} />
       </FilterPopover>
