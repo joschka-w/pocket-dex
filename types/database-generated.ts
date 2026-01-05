@@ -254,6 +254,29 @@ export type Database = {
           },
         ]
       }
+      deck_likes: {
+        Row: {
+          deck_id: string
+          user_id: string
+        }
+        Insert: {
+          deck_id: string
+          user_id: string
+        }
+        Update: {
+          deck_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deck_likes_deck_id_fkey"
+            columns: ["deck_id"]
+            isOneToOne: false
+            referencedRelation: "deck"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pokemon_card: {
         Row: {
           ability_effect: string | null
@@ -468,7 +491,7 @@ export type Database = {
       }
       get_card_count: { Args: { pack_id: number }; Returns: Json }
       get_enum_values: { Args: { enum_type_name: string }; Returns: string[] }
-      like_deck: { Args: { p_deck_id: string }; Returns: undefined }
+      like_deck: { Args: { p_deck_id: string }; Returns: number }
       username_exists: { Args: { input_username: string }; Returns: boolean }
     }
     Enums: {

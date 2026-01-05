@@ -28,7 +28,7 @@ function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) 
     <ol
       className={cn(
         `relative grid gap-4 ${columns === '5' ? 'grid-cols-5' : 'grid-cols-4'}`,
-        className
+        className,
       )}
     >
       <InfiniteScroll

@@ -28,7 +28,7 @@ async function fetchDecks() {
           image_placeholder,
           rarity
         )
-    )
+      )
     `,
     )
     .order('created_at', { ascending: false });

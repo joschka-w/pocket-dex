@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSetAtom } from 'jotai';
+import { User } from '@supabase/supabase-js';
 
 import { authLoadingAtom, profileAtom, userAtom } from '@/lib/atoms/auth-atoms';
 import { createClient } from '@/lib/utils/supabase/client';
-import { useRouter } from 'next/navigation';
 
 function AuthInitializer() {
   const setUser = useSetAtom(userAtom);
@@ -30,28 +31,25 @@ function AuthInitializer() {
         });
     };
 
-    // Initial user fetch
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
+    const setData = (user: User | null) => {
+      setUser(user);
 
-      if (data.user) {
-        fetchProfile(data.user.id);
-      } else setProfile(null);
+      if (user) fetchProfile(user.id);
+      else setProfile(null);
 
       setAuthLoading(false);
+    };
+
+    // Initial user fetch
+    supabase.auth.getUser().then(({ data }) => {
+      setData(data.user);
     });
 
     // Listen to auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
-
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else setProfile(null);
-
-      setAuthLoading(false);
+      setData(session?.user || null);
     });
 
     return () => {
