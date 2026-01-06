@@ -2,7 +2,7 @@ import { cn } from '@/shared/utils/cn';
 
 import CardSearchInput from './CardSearchInput';
 import SortSelect from './SortSelect';
-import SortDirectionToggle from './SortDirectionToggle';
+import CardSortDirectionToggle from './SortDirectionToggle';
 
 interface Props {
   className?: string;
@@ -21,7 +21,7 @@ function Searchbar({ className }: Props) {
       <CardSearchInput />
       <div className="flex gap-2">
         <SortSelect />
-        <SortDirectionToggle />
+        <CardSortDirectionToggle />
       </div>
     </div>
   );

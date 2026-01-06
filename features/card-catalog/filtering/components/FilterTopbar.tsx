@@ -3,7 +3,7 @@ import { cn } from '@/shared/utils/cn';
 import Filters from './Filters';
 import CardSearchInput from '../../search/CardSearchInput';
 import SortSelect from '../../search/SortSelect';
-import SortDirectionToggle from '../../search/SortDirectionToggle';
+import CardSortDirectionToggle from '../../search/SortDirectionToggle';
 import fetchSetData from '../../api/fetchSetData';
 
 interface Props {
@@ -26,7 +26,7 @@ async function FilterTopbar({ className }: Props) {
 
       <div className="ml-auto flex gap-2">
         <SortSelect />
-        <SortDirectionToggle />
+        <CardSortDirectionToggle />
       </div>
     </div>
   );

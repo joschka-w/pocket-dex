@@ -2,15 +2,15 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { createClient } from '../../../../shared/utils/supabase/client';
 import { getQueryClient } from '../../../../shared/utils/getQueryClient';
-import { DeckResult } from '@/features/deck-management/api/fetchDecks';
+import { DeckResult } from '../api/fetchDecks';
 
-type OnMutateResult =
-  | {
-      prevUserLikes?: Set<string>;
-      prevCount?: number;
-    }
-  | undefined;
+type OnMutateResult = {
+  prevUserLikes?: Set<string>;
+  prevCount?: number;
+};
 
+// This is spaghetti code, works for now though
+// TODO - Maybe abstract into general 'useOptimisticMutation' hook or something, or at least split up into code thats more readable
 export function useLikeDeck(deck: DeckResult, userId?: string) {
   const queryClient = getQueryClient();
   const supabase = createClient();
@@ -50,7 +50,31 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
     initialData: deck.likes_count,
   });
 
-  const toggleUserLikesOptimistic = async (deckId: string) => {
+  const { mutate: toggleLike } = useMutation({
+    mutationFn: async (deckId: string) => {
+      const { data: newLikeCount, error } = await supabase.rpc('like_deck', { p_deck_id: deckId });
+
+      if (error) throw new Error(error.message);
+
+      return newLikeCount;
+    },
+    onMutate: async deckId => {
+      const { prevUserLikes, wasLiked } = await toggleUserLikesOptimistic(deckId);
+      const { prevCount } = await updateCountOptimistic(wasLiked);
+
+      return { prevUserLikes, prevCount };
+    },
+    onSuccess: newCount => {
+      // Update with likes count from server (like_deck function returns new like count)
+      queryClient.setQueryData(likesCountQueryKey, newCount);
+    },
+    onError: (error, _deckId, onMutateResult) => {
+      handleRollback(onMutateResult);
+      console.error('Error toggling like: ', error);
+    },
+  });
+
+  async function toggleUserLikesOptimistic(deckId: string) {
     await queryClient.cancelQueries({ queryKey: userLikesQueryKey });
 
     const prevUserLikes = queryClient.getQueryData<Set<string>>(userLikesQueryKey);
@@ -63,9 +87,9 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
     queryClient.setQueryData(userLikesQueryKey, newUserLikes);
 
     return { prevUserLikes, wasLiked };
-  };
+  }
 
-  const updateCountOptimistic = async (wasLiked: boolean) => {
+  async function updateCountOptimistic(wasLiked: boolean) {
     await queryClient.cancelQueries({ queryKey: likesCountQueryKey });
 
     const prevCount = queryClient.getQueryData<number>(likesCountQueryKey);
@@ -74,9 +98,9 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
     queryClient.setQueryData(likesCountQueryKey, newCount);
 
     return { prevCount };
-  };
+  }
 
-  const handleRollback = (result: OnMutateResult) => {
+  function handleRollback(result: OnMutateResult | undefined) {
     if (result?.prevUserLikes) {
       queryClient.setQueryData(userLikesQueryKey, result.prevUserLikes);
     }
@@ -84,31 +108,7 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
     if (result?.prevCount !== undefined) {
       queryClient.setQueryData(likesCountQueryKey, result.prevCount);
     }
-  };
-
-  const { mutate: toggleLike } = useMutation({
-    mutationFn: async (deckId: string) => {
-      const { data, error } = await supabase.rpc('like_deck', { p_deck_id: deckId });
-
-      if (error) throw new Error(error.message);
-
-      return data;
-    },
-    onMutate: async deckId => {
-      const { prevUserLikes, wasLiked } = await toggleUserLikesOptimistic(deckId);
-      const { prevCount } = await updateCountOptimistic(wasLiked);
-
-      return { prevUserLikes, prevCount };
-    },
-    onSuccess: newCount => {
-      // Update with likes count from server (toggleLike returns new like count)
-      queryClient.setQueryData(likesCountQueryKey, newCount);
-    },
-    onError: (error, _deckId, result) => {
-      handleRollback(result);
-      console.error('Error toggling like: ', error);
-    },
-  });
+  }
 
   const isLiked = userLikes?.has(deck.id);
 
