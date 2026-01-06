@@ -4,8 +4,8 @@ import { HeartIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/shared/utils/cn';
-import { useLikeDeck } from '@/features/deck-management/deck-list/hooks/useLikeDeck';
-import { DeckResult } from '../../api/fetchDecks';
+import { DeckResult } from '../api/fetchDecks';
+import { useLikeDeck } from '../hooks/useLikeDeck';
 
 interface Props {
   deck: DeckResult;
@@ -29,7 +29,7 @@ function DeckLikeButton({ deck, userId }: Props) {
         <HeartIcon
           data-state={!isInitial && (isLiked ? 'liked' : 'unliked')}
           className={cn(
-            'data-[state="liked"]:animate-[like_500ms_cubic-bezier(0.34,1.56,0.64,1)] data-[state="unliked"]:animate-[unlike_300ms_ease]',
+            'data-[state="liked"]:animate-[like_500ms_cubic-bezier(0.34,1.56,0.64,1)] data-[state="unliked"]:animate-[unlike_300ms_ease-in-out]',
             isLiked && 'fill-red-500 text-red-500',
           )}
         />

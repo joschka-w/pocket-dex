@@ -1,7 +1,7 @@
 import DeckHeader from './DeckHeader';
 import DeckCardList from './DeckCardList';
 import DeckFooter from './DeckFooter';
-import { DeckResult } from '../../api/fetchDecks';
+import { DeckResult } from '../api/fetchDecks';
 
 interface Props {
   deck: DeckResult;
@@ -9,7 +9,7 @@ interface Props {
 
 function Deck({ deck }: Props) {
   return (
-    <div className="border-bg-2 bg-bg-1 relative flex w-full flex-col overflow-hidden rounded-xl border">
+    <div className="border-bg-2 bg-bg-1 relative flex h-full w-full flex-col overflow-hidden rounded-xl border">
       <DeckHeader deck={deck} />
 
       <DeckCardList cards={deck.cards} />

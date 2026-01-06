@@ -3,11 +3,11 @@ import { HydrationBoundary } from '@tanstack/react-query';
 
 import packPointsSymbol from '@/assets/pack_points_symbol.svg';
 import { createClient } from '@/shared/utils/supabase/server';
-import { DeckResult } from '../../api/fetchDecks';
-import { calcDeckPrice } from '../../deck-statistics/utils/calculate-deck-stats';
 
 import DeckLikeButton from './DeckLikeButton';
 import { prefetchUserLikes } from '../utils/prefetchUserLikes';
+import { DeckResult } from '../api/fetchDecks';
+import { calcDeckPrice } from '@/features/deck-management/deck-statistics/utils/calculate-deck-stats';
 
 interface Props {
   deck: DeckResult;

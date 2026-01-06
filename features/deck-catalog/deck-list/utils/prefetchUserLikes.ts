@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { dehydrate } from '@tanstack/react-query';
 
 import { getQueryClient } from '@/shared/utils/getQueryClient';
-import { fetchUserLikes } from '../../api/fetchUserLikes';
+import { fetchUserLikes } from '../api/fetchUserLikes';
 
 // 'cache' prevents multiple fetches per request, it doesn't cache across
 // different requests (which wouldn't work, as the data depends on the user)

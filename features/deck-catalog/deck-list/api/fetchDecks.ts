@@ -3,7 +3,7 @@
 import { createClient } from '@/shared/utils/supabase/server';
 import { ExtractQueryData } from '@/types/helpers';
 
-async function fetchDecks() {
+export async function fetchDecks() {
   // Everytime we create or update a deck, we have to revalidateTag/updateTag
   const supabase = await createClient({
     fetchOptions: {
@@ -44,5 +44,3 @@ async function fetchDecks() {
 
 export type DecksResult = ExtractQueryData<typeof fetchDecks>;
 export type DeckResult = NonNullable<DecksResult>[number];
-
-export default fetchDecks;

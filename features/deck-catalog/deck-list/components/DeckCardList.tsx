@@ -1,6 +1,6 @@
 import CardRoot from '@/features/cards/components/card-parts/CardRoot';
-import { DeckResult } from '../../api/fetchDecks';
 import CardImage from '@/features/cards/components/card-parts/CardImage';
+import { DeckResult } from '../api/fetchDecks';
 
 export type Cards = DeckResult['cards'];
 
@@ -10,11 +10,11 @@ interface Props {
 
 function DeckCardList({ cards }: Props) {
   return (
-    <ol className="grid grid-cols-6 gap-2 px-4">
+    <ol className="mb-auto grid grid-cols-6 gap-2 px-4">
       {cards
         .sort((a, b) => b.quantity - a.quantity)
         .map(({ card, quantity }) => (
-          <li key={card.id}>
+          <li key={card.id} className="h-fit">
             <CardRoot className="relative">
               <CardImage card={card} />
               {quantity > 1 && (

@@ -1,18 +1,14 @@
 import { Enums } from '@/types/database';
 
 import {
-  CARD_PRICES,
-  RARITY_GROUP_LOOKUP_MAP,
+  getCardPrice,
+  getRarityGroup,
 } from '@/features/deck-management/deck-builder/constants/deck-builder';
 import { CardWithQuantity, Deck } from '../../deck-builder/atoms/deckBuilder';
 
 export type RarityGroup = 'diamond' | 'star' | 'crown';
 export type ColorStats = Map<Enums<'color'>, number>;
 export type RarityStats = Map<RarityGroup, number>;
-
-const getRarityGroup = (rarity: Enums<'rarity'>): RarityGroup | null => {
-  return RARITY_GROUP_LOOKUP_MAP[rarity] || null;
-};
 
 function calcColorStats(cards: CardWithQuantity[]) {
   const map: ColorStats = new Map();
@@ -43,7 +39,7 @@ function calcRarityStats(cards: CardWithQuantity[]) {
 }
 
 export function calcDeckPrice(cards: Pick<CardWithQuantity, 'quantity' | 'rarity'>[]) {
-  return cards.reduce((sum, card) => sum + CARD_PRICES[card.rarity] * card.quantity, 0);
+  return cards.reduce((sum, card) => sum + getCardPrice(card.rarity) * card.quantity, 0);
 }
 
 function calculateDeckStats(deck: Deck) {

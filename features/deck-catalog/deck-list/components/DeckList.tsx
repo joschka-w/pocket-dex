@@ -1,6 +1,6 @@
 import { cn } from '@/shared/utils/cn';
 import Deck from './Deck';
-import fetchDecks from '../../api/fetchDecks';
+import { fetchDecks } from '../api/fetchDecks';
 
 interface Props {
   className?: string;

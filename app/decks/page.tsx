@@ -1,4 +1,4 @@
-import DeckList from '@/features/deck-management/deck-list/components/DeckList';
+import DeckList from '@/features/deck-catalog/deck-list/components/DeckList';
 
 function DecksPage() {
   return (

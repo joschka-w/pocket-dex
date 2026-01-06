@@ -17,6 +17,8 @@ export const CARD_PRICES: Readonly<Record<Enums<'rarity'>, number>> = {
   promo: 0,
 };
 
+export const getCardPrice = (rarity: Enums<'rarity'>) => CARD_PRICES[rarity];
+
 export const RARITY_GROUP_LOOKUP_MAP: Readonly<Record<Enums<'rarity'>, RarityGroup | null>> = {
   diamond_1: 'diamond',
   diamond_2: 'diamond',
@@ -28,3 +30,5 @@ export const RARITY_GROUP_LOOKUP_MAP: Readonly<Record<Enums<'rarity'>, RarityGro
   crown: 'crown',
   promo: null,
 };
+
+export const getRarityGroup = (rarity: Enums<'rarity'>) => RARITY_GROUP_LOOKUP_MAP[rarity];

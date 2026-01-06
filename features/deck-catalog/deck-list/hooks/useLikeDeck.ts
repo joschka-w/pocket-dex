@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { createClient } from '../../../../shared/utils/supabase/client';
 import { getQueryClient } from '../../../../shared/utils/getQueryClient';
-import { DeckResult } from '../../api/fetchDecks';
+import { DeckResult } from '@/features/deck-management/api/fetchDecks';
 
 type OnMutateResult =
   | {
