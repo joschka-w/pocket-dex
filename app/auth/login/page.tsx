@@ -1,13 +1,13 @@
 'use client';
 
-import LogoWithText from '@/components/common/LogoWithText';
+import LogoWithText from '@/shared/components/LogoWithText';
 import Image from 'next/image';
 
 import googleLogo from '@/assets/auth-provider-logos/google.svg';
 import githubLogo from '@/assets/auth-provider-logos/github.svg';
 import Link from 'next/link';
-import { signInWithGoogle } from '@/lib/data/auth/signInWithGoogle';
-import { signInWithGithub } from '@/lib/data/auth/signInWithGithub';
+import { signInWithGoogle } from '@/features/auth/api/signInWithGoogle';
+import { signInWithGithub } from '@/features/auth/api/signInWithGithub';
 
 function LoginPage() {
   return (

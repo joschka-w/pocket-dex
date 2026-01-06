@@ -1,5 +1,5 @@
-import UsernameForm from '@/components/features/create-username-form/UsernameForm';
-import { fetchUser } from '@/lib/data/auth/fetchUser';
+import UsernameForm from '@/features/auth/components/UsernameForm';
+import { fetchUser } from '@/features/auth/api/fetchUser';
 import { redirect } from 'next/navigation';
 
 async function EnterPage() {

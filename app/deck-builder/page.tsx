@@ -1,9 +1,9 @@
-import DeckBuilder from '@/components/features/deck-builder/DeckBuilder';
-import CardListWithPrefetchedData from '@/components/features/card-list/CardListWithPrefetchedData';
-import DeckForm from '@/components/features/deck-form/DeckForm';
-import FilterTopbar from '@/components/features/filter-topbar/FilterTopbar';
-import Seperator from '@/components/ui/Seperator';
-import DeckStatistics from '@/components/features/deck-builder/deck-statistics/DeckStatistics';
+import DeckForm from '@/features/deck-management/deck-form/components/DeckForm';
+import Seperator from '@/shared/components/ui/Seperator';
+import DeckBuilder from '@/features/deck-management/deck-builder/components/DeckBuilder';
+import FilterTopbar from '@/features/card-catalog/filtering/components/FilterTopbar';
+import CardListWithPrefetchedData from '@/features/card-catalog/components/CardListWithPrefetchedData';
+import DeckStatistics from '@/features/deck-management/deck-statistics/components/DeckStatistics';
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -11,14 +11,14 @@ interface Props {
 
 function DeckBuilderPage({ searchParams }: Props) {
   return (
-    <main className="relative grid w-full max-w-mw grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-x-7">
-      <FilterTopbar className="col-span-2 sticky top-header-height h-topbar-height bg-bg-base z-30" />
+    <main className="max-w-mw relative grid w-full grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-x-7">
+      <FilterTopbar className="top-header-height h-topbar-height bg-bg-base sticky z-30 col-span-2" />
       <CardListWithPrefetchedData searchParams={searchParams} columns="4" isInDeckBuilder />
 
-      <div className="flex flex-col gap-4 h-fit sticky top-[calc(var(--spacing-header-height)+var(--spacing-topbar-height))] max-h-[calc(100vh-((var(--spacing-header-height)+var(--spacing-topbar-height))))] overflow-hidden">
+      <div className="sticky top-[calc(var(--spacing-header-height)+var(--spacing-topbar-height))] flex h-fit max-h-[calc(100vh-((var(--spacing-header-height)+var(--spacing-topbar-height))))] flex-col gap-4 overflow-hidden">
         <DeckStatistics />
 
-        <div className="flex h-fit w-fit flex-col gap-4 rounded-xl overflow-auto bg-bg-1 p-4">
+        <div className="bg-bg-1 flex h-fit w-fit flex-col gap-4 overflow-auto rounded-xl p-4">
           <DeckForm />
           <Seperator />
           <DeckBuilder />

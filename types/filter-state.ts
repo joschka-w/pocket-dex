@@ -1,4 +1,4 @@
-import { FilterParsers } from '@/lib/filters/filterConfig';
+import { FilterParsers } from '@/features/card-catalog/filtering/config/filterConfig';
 import { inferParserType, Options } from 'nuqs/server';
 
 export interface FilterValueProps<K extends keyof FilterParsers> {
@@ -13,7 +13,7 @@ export interface FilterSetterOptions extends Options {
 
 export type FilterSetter<K extends keyof FilterParsers> = (
   value: inferParserType<FilterParsers[K]> | null,
-  options?: FilterSetterOptions
+  options?: FilterSetterOptions,
 ) => Promise<URLSearchParams>;
 
 export type FilterSetters = {

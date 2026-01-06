@@ -1,13 +1,13 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
-import { fetchCard } from '@/lib/data/fetchCard';
-import { getCardIdFromSlug } from '@/lib/utils/card-slug-utils';
-import { fetchSimilarCards } from '@/lib/data/fetchSimilarCards';
+import { fetchCard } from '@/features/card-detail/api/fetchCard';
+import { getCardIdFromSlug } from '@/shared/utils/card-slug-utils';
+import { fetchSimilarCards } from '@/features/card-detail/api/fetchSimilarCards';
 
-import PokemonCardInfo from '@/components/features/card-page/PokemonCardInfo';
-import SimilarCards from '@/components/features/card-page/SimilarCards';
-import TrainerCardInfo from '@/components/features/card-page/TrainerCardInfo';
+import PokemonCardInfo from '@/features/card-detail/components/PokemonCardInfo';
+import TrainerCardInfo from '@/features/card-detail/components/TrainerCardInfo';
+import SimilarCards from '@/features/card-detail/components/SimilarCards';
 
 interface Params {
   slug: string;

@@ -1,8 +1,8 @@
-import DeckList from '@/components/features/deck-list/DeckList';
+import DeckList from '@/features/deck-management/deck-list/components/DeckList';
 
 function DecksPage() {
   return (
-    <main className="w-full max-w-mw">
+    <main className="max-w-mw w-full">
       <DeckList />
     </main>
   );

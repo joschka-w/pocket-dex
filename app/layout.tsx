@@ -3,12 +3,12 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import Header from '@/components/layout/Header';
-import NuqsProvider from '@/components/providers/NuqsProvider';
-import TanstackProvider from '@/components/providers/TanstackProvider';
+import Header from '@/shared/components/layout/Header';
+import NuqsProvider from '@/shared/providers/NuqsProvider';
+import TanstackProvider from '@/shared/providers/TanstackProvider';
 import { Provider as JotaiProvider } from 'jotai';
-import CustomToaster from '@/components/CustomToaster';
-import AuthInitializer from '@/components/AuthInitializer';
+import CustomToaster from '@/shared/components/CustomToaster';
+import AuthInitializer from '@/features/auth/components/AuthInitializer';
 
 const inter = Inter({
   variable: '--font-inter',
