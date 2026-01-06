@@ -1,19 +1,19 @@
 import Image from 'next/image';
+import { HydrationBoundary } from '@tanstack/react-query';
 
 import packPointsSymbol from '@/assets/pack_points_symbol.svg';
-import DeckLikeButton from './DeckLikeButton';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/shared/utils/getQueryClient';
 import { createClient } from '@/shared/utils/supabase/server';
 import { DeckResult } from '../../api/fetchDecks';
 import { calcDeckPrice } from '../../deck-statistics/utils/calculate-deck-stats';
+
+import DeckLikeButton from './DeckLikeButton';
+import { prefetchUserLikes } from '../utils/prefetchUserLikes';
 
 interface Props {
   deck: DeckResult;
 }
 
 async function DeckFooter({ deck }: Props) {
-  const queryClient = getQueryClient();
   const supabase = await createClient();
 
   const cards = deck.cards.map(({ card, quantity }) => ({ rarity: card.rarity, quantity }));
@@ -23,23 +23,7 @@ async function DeckFooter({ deck }: Props) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // TODO - Add caching
-  // Prefetching likes for better UX
-  await queryClient.prefetchQuery({
-    queryKey: ['user-likes', user?.id],
-    queryFn: async () => {
-      if (!user) return new Set();
-
-      const { data, error } = await supabase
-        .from('deck_likes')
-        .select('deck_id')
-        .eq('user_id', user.id);
-
-      if (error) throw new Error(error.message);
-
-      return new Set(data.map(d => d.deck_id));
-    },
-  });
+  const dehydratedState = await prefetchUserLikes(user?.id);
 
   return (
     <div className="mt-2 flex justify-between p-4">
@@ -48,7 +32,7 @@ async function DeckFooter({ deck }: Props) {
         {price}
       </div>
 
-      <HydrationBoundary state={dehydrate(queryClient)}>
+      <HydrationBoundary state={dehydratedState}>
         <DeckLikeButton deck={deck} userId={user?.id} />
       </HydrationBoundary>
     </div>

@@ -4,7 +4,15 @@ import { createClient } from '@/shared/utils/supabase/server';
 import { ExtractQueryData } from '@/types/helpers';
 
 async function fetchDecks() {
-  const supabase = await createClient();
+  // Everytime we create or update a deck, we have to revalidateTag/updateTag
+  const supabase = await createClient({
+    fetchOptions: {
+      next: {
+        revalidate: 60 * 60 * 24,
+        tags: ['decks'],
+      },
+    },
+  });
 
   return await supabase
     .from('deck')
