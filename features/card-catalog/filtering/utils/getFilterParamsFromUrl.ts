@@ -1,25 +1,35 @@
-import { filterParsers, filterUrlKeys } from '../config/filterConfig';
+import { SingleParserBuilder, UrlKeys } from 'nuqs/server';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface Options<T extends Record<string, any>> {
+  urlKeys?: UrlKeys<T>;
+  convertUrlKeys?: boolean;
+}
 
 // Extracts only the url state that is relevant to the filters
-function getFilterParamsFromUrl(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getFilterParamsFromUrl<T extends Record<string, SingleParserBuilder<any>>>(
   params: { [key: string]: string | string[] | undefined },
-  convertUrlKeys: boolean = false,
+  parsers: T,
+  options?: Options<T>,
 ) {
   const entries = Object.entries(params);
 
+  const urlKeys = options?.urlKeys || {};
+
   const filteresEntries = entries.filter(([key]) => {
-    if (key in filterUrlKeys) return false;
-    return key in filterParsers || Object.values(filterUrlKeys).includes(key);
+    if (key in urlKeys) return false;
+    return key in parsers || Object.values(urlKeys).includes(key);
   });
 
   // TODO - So ugly, gotta refactor this
-  if (convertUrlKeys) {
+  if (options?.convertUrlKeys) {
     const res: {
       [k: string]: string | string[] | undefined;
     } = {};
 
     filteresEntries.forEach(([entryKey, entryVal]) => {
-      const matchedKey = Object.entries(filterUrlKeys).find(([, val]) => val === entryKey);
+      const matchedKey = Object.entries(urlKeys).find(([, val]) => val === entryKey);
 
       if (matchedKey) {
         const [stateKey] = matchedKey;

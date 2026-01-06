@@ -2,16 +2,21 @@
 
 import useFilterState from '@/features/card-catalog/filtering/hooks/useFilterState';
 import getFilterParamsFromUrl from '@/features/card-catalog/filtering/utils/getFilterParamsFromUrl';
-import { FilterSetters } from '@/types/filter-state';
+import { CardFilterSetters } from '@/types/filter-state';
 import { useSearchParams } from 'next/navigation';
+import { cardFilterParsers, cardFilterUrlKeys } from '../config/card-filter-config';
 
 function ClearAllFiltersButton() {
   const { setters } = useFilterState();
   const params = useSearchParams();
-  const filterParams = getFilterParamsFromUrl(Object.fromEntries(params.entries()), true);
+  const filterParams = getFilterParamsFromUrl(
+    Object.fromEntries(params.entries()),
+    cardFilterParsers,
+    { convertUrlKeys: true, urlKeys: cardFilterUrlKeys },
+  );
 
   const clearFilters = () => {
-    const keys = Object.keys(filterParams) as Array<keyof FilterSetters>;
+    const keys = Object.keys(filterParams) as Array<keyof CardFilterSetters>;
 
     keys.forEach(key => {
       // Clear all filters except the sorting ones, as the user most likely wants to keep the sorting

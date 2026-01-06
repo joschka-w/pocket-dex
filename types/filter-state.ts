@@ -1,21 +1,20 @@
-import { FilterParsers } from '@/features/card-catalog/filtering/config/filterConfig';
+import { CardFilterParsers } from '@/features/card-catalog/filtering/config/card-filter-config';
 import { inferParserType, Options } from 'nuqs/server';
 
-export interface FilterValueProps<K extends keyof FilterParsers> {
-  value: inferParserType<FilterParsers[K]>;
-  setValue: (value: inferParserType<FilterParsers[K]> | null) => Promise<URLSearchParams>;
+export interface CardFilterValueProps<K extends keyof CardFilterParsers> {
+  value: inferParserType<CardFilterParsers[K]>;
+  setValue: (value: inferParserType<CardFilterParsers[K]> | null) => Promise<URLSearchParams>;
+}
+export interface CardFilterSetterOptions extends Options {
+  // TODO - I dont think this is used anywhere, can probably remove this? doesn't hurt though
+  skipLoadingState?: boolean; // won't trigger the loading state if true
 }
 
-export interface FilterSetterOptions extends Options {
-  // won't trigger the loading state if true
-  skipLoadingState?: boolean;
-}
-
-export type FilterSetter<K extends keyof FilterParsers> = (
-  value: inferParserType<FilterParsers[K]> | null,
-  options?: FilterSetterOptions,
+export type CardFilterSetter<K extends keyof CardFilterParsers> = (
+  value: inferParserType<CardFilterParsers[K]> | null,
+  options?: CardFilterSetterOptions,
 ) => Promise<URLSearchParams>;
 
-export type FilterSetters = {
-  [K in keyof FilterParsers]: FilterSetter<K>;
+export type CardFilterSetters = {
+  [K in keyof CardFilterParsers]: CardFilterSetter<K>;
 };

@@ -1,12 +1,12 @@
 'use client';
 
-import { FilterSetters } from '@/types/filter-state';
+import { CardFilterSetters } from '@/types/filter-state';
 import { ReactNode } from 'react';
 
 interface Props {
   children?: ReactNode;
   label: string;
-  setters: FilterSetters[keyof FilterSetters][];
+  setters: CardFilterSetters[keyof CardFilterSetters][];
   clearBtnDisabled?: boolean;
 }
 

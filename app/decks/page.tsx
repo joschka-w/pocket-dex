@@ -1,9 +1,15 @@
 import DeckList from '@/features/deck-catalog/deck-list/components/DeckList';
+import DeckTopbar from '@/features/deck-catalog/filtering/components/DeckTopbar';
 
-function DecksPage() {
+interface Props {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+function DecksPage({ searchParams }: Props) {
   return (
     <main className="max-w-mw w-full">
-      <DeckList />
+      <DeckTopbar className="top-header-height h-topbar-height bg-bg-base sticky z-30" />
+      <DeckList searchParams={searchParams} />
     </main>
   );
 }

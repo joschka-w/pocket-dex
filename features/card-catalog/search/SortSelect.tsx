@@ -4,10 +4,10 @@ import { Select } from 'radix-ui';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 
 import useFilterState from '@/features/card-catalog/filtering/hooks/useFilterState';
-import { SortFilter } from '@/features/card-catalog/filtering/config/filterConfig';
+import { CardSortFilter } from '@/features/card-catalog/filtering/config/card-filter-config';
 import { useId } from 'react';
 
-const sortNamesMap: Record<SortFilter, string> = {
+const sortNamesMap: Record<CardSortFilter, string> = {
   id: 'Id',
   name: 'Name',
   rarity: 'Rarity',
@@ -19,7 +19,7 @@ function SortSelect() {
   const id = useId();
   const { state, setters } = useFilterState();
 
-  const handleValueChange = (value: SortFilter) =>
+  const handleValueChange = (value: CardSortFilter) =>
     setters.sortBy(value, { limitUrlUpdates: { method: 'debounce', timeMs: 0 } });
 
   return (

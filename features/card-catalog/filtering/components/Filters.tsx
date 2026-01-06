@@ -1,4 +1,4 @@
-import { FILTER_DEFAULTS } from '@/features/card-catalog/filtering/config/filterConfig';
+import { CARD_FILTER_DEFAULTS } from '@/features/card-catalog/filtering/config/card-filter-config';
 
 import FilterPopover from './FilterPopover';
 import ClearAllFiltersButton from './ClearAllFiltersButton';
@@ -34,7 +34,7 @@ function Filters({ setData }: Props) {
       </FilterPopover>
 
       <FilterPopover filterKeys={['minHp', 'maxHp']} name="HP">
-        <HpFilter min={FILTER_DEFAULTS.minHp} max={FILTER_DEFAULTS.maxHp} />
+        <HpFilter min={CARD_FILTER_DEFAULTS.minHp} max={CARD_FILTER_DEFAULTS.maxHp} />
       </FilterPopover>
 
       <FilterPopover filterKeys="ex" name="EX">

@@ -2,8 +2,15 @@
 
 import { createClient } from '@/shared/utils/supabase/server';
 import { ExtractQueryData } from '@/types/helpers';
+import { LoaderInput } from 'nuqs/server';
+import {
+  DECK_FILTER_DEFAULTS,
+  DeckSortFilter,
+  loadDeckSearchParams,
+} from '../../filtering/config/deck-filter-config';
+import { deckFilterSchema } from '../../filtering/schemas/deck-filter-schema';
 
-export async function fetchDecks() {
+export async function fetchDecks(searchParams: LoaderInput) {
   // Everytime we create or update a deck, we have to revalidateTag/updateTag
   const supabase = await createClient({
     fetchOptions: {
@@ -14,10 +21,11 @@ export async function fetchDecks() {
     },
   });
 
-  return await supabase
-    .from('deck')
-    .select(
-      `
+  const filtersUnvalidated = loadDeckSearchParams(searchParams);
+  const filters = deckFilterSchema.parse(filtersUnvalidated);
+
+  let query = supabase.from('deck').select(
+    `
       title,
       description,
       colors,
@@ -38,8 +46,26 @@ export async function fetchDecks() {
         )
       )
     `,
-    )
-    .order('created_at', { ascending: false });
+  );
+  // .order('created_at', { ascending: false });
+
+  if (filters.searchQuery !== DECK_FILTER_DEFAULTS.searchQuery) {
+    query = query.ilike('title', `%${filters.searchQuery}%`);
+  }
+
+  const sortFilterMap: Record<DeckSortFilter, string> = {
+    date: 'created_at',
+    favorites: 'likes_count',
+  };
+
+  query = query.order(sortFilterMap[filters.sortBy], {
+    ascending: filters.sortDirection === 'asc',
+    nullsFirst: false,
+  });
+
+  console.log('IS FETCHING DECKS');
+
+  return await query;
 }
 
 export type DecksResult = ExtractQueryData<typeof fetchDecks>;

@@ -4,12 +4,12 @@ import { ReactNode } from 'react';
 import { Popover } from 'radix-ui';
 import { ChevronDownIcon } from 'lucide-react';
 import useFilterState from '@/features/card-catalog/filtering/hooks/useFilterState';
-import { FilterKey } from '@/features/card-catalog/filtering/config/filterConfig';
+import { CardFilterKey } from '@/features/card-catalog/filtering/config/card-filter-config';
 import { cn } from '@/shared/utils/cn';
 
 interface Props {
   name: string;
-  filterKeys: FilterKey | FilterKey[];
+  filterKeys: CardFilterKey | CardFilterKey[];
   children?: ReactNode;
 }
 

@@ -1,6 +1,6 @@
 import { cn } from '@/shared/utils/cn';
 
-import SearchInput from './SearchInput';
+import CardSearchInput from './CardSearchInput';
 import SortSelect from './SortSelect';
 import SortDirectionToggle from './SortDirectionToggle';
 
@@ -18,7 +18,7 @@ function Searchbar({ className }: Props) {
         className,
       )}
     >
-      <SearchInput />
+      <CardSearchInput />
       <div className="flex gap-2">
         <SortSelect />
         <SortDirectionToggle />

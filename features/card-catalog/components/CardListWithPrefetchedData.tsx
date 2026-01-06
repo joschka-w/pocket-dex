@@ -5,6 +5,7 @@ import { getQueryClient } from '@/shared/utils/getQueryClient';
 import getFilterParamsFromUrl from '@/features/card-catalog/filtering/utils/getFilterParamsFromUrl';
 import CardList from './CardList';
 import fetchCards from '@/features/card-catalog/api/fetchCards';
+import { cardFilterParsers, cardFilterUrlKeys } from '../filtering/config/card-filter-config';
 
 interface Props extends ComponentPropsWithoutRef<typeof CardList> {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -12,7 +13,9 @@ interface Props extends ComponentPropsWithoutRef<typeof CardList> {
 
 async function CardListWithPrefetchedData({ searchParams, ...props }: Props) {
   const queryClient = getQueryClient();
-  const filterParams = getFilterParamsFromUrl(await searchParams);
+  const filterParams = getFilterParamsFromUrl(await searchParams, cardFilterParsers, {
+    urlKeys: cardFilterUrlKeys,
+  });
 
   // Prefetching initial cards on server for better UX
   await queryClient.prefetchInfiniteQuery({

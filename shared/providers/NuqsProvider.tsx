@@ -2,9 +2,9 @@
 
 import { PropsWithChildren, useCallback } from 'react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { FilterParsers } from '@/features/card-catalog/filtering/config/filterConfig';
+import { CardFilterParsers } from '@/features/card-catalog/filtering/config/card-filter-config';
 
-const filtersToSort: Set<keyof FilterParsers> = new Set(['cardType', 'color', 'rarity', 'set']);
+const filtersToSort: Set<keyof CardFilterParsers> = new Set(['cardType', 'color', 'rarity', 'set']);
 
 function NuqsProvider({ children }: PropsWithChildren) {
   // Normalizing searchParams (same filters always are in the same order), so that we can use the URLState as a queryKey in tanstack-query.
@@ -17,7 +17,7 @@ function NuqsProvider({ children }: PropsWithChildren) {
     for (const key of keys) {
       const values = params.getAll(key);
 
-      if (filtersToSort.has(key as keyof FilterParsers)) {
+      if (filtersToSort.has(key as keyof CardFilterParsers)) {
         const sortedValue = values[0].split(',').sort().join(',');
         sorted.set(key, sortedValue);
       } else {

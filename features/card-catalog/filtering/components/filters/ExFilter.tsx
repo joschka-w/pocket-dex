@@ -7,9 +7,9 @@ import { CheckIcon, XIcon } from 'lucide-react';
 import useFilterState from '@/features/card-catalog/filtering/hooks/useFilterState';
 import { cn } from '@/shared/utils/cn';
 import {
-  ExFilter as ExFilterType,
-  FILTER_DEFAULTS,
-} from '@/features/card-catalog/filtering/config/filterConfig';
+  CardExFilter as ExFilterType,
+  CARD_FILTER_DEFAULTS,
+} from '@/features/card-catalog/filtering/config/card-filter-config';
 import FilterWrapper from '../FilterWrapper';
 
 function ExFilter() {
@@ -23,7 +23,7 @@ function ExFilter() {
     <FilterWrapper
       label="EX Pokemon?"
       setters={[setters.ex]}
-      clearBtnDisabled={state.ex === FILTER_DEFAULTS.ex}
+      clearBtnDisabled={state.ex === CARD_FILTER_DEFAULTS.ex}
     >
       <ToggleGroup.Root
         value={state.ex}

@@ -2,7 +2,7 @@
 
 import { Slider } from 'radix-ui';
 import useFilterState from '@/features/card-catalog/filtering/hooks/useFilterState';
-import { FILTER_DEFAULTS } from '@/features/card-catalog/filtering/config/filterConfig';
+import { CARD_FILTER_DEFAULTS } from '@/features/card-catalog/filtering/config/card-filter-config';
 import FilterWrapper from '../FilterWrapper';
 
 interface Props {
@@ -15,7 +15,7 @@ function HpFilter({ min, max }: Props) {
 
   const value = [state.minHp, state.maxHp];
   const isDefaultState =
-    state.minHp === FILTER_DEFAULTS.minHp && state.maxHp === FILTER_DEFAULTS.maxHp;
+    state.minHp === CARD_FILTER_DEFAULTS.minHp && state.maxHp === CARD_FILTER_DEFAULTS.maxHp;
 
   const handleValueChange = (values: number[]) => {
     setters.minHp(values[0]);

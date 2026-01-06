@@ -1,7 +1,11 @@
 'use server';
 
 import { LoaderInput } from 'nuqs/server';
-import { FILTER_DEFAULTS, loadSearchParams, SortFilter } from '../filtering/config/filterConfig';
+import {
+  CARD_FILTER_DEFAULTS,
+  loadCardSearchParams,
+  CardSortFilter,
+} from '../filtering/config/card-filter-config';
 import { getRange } from '../../../shared/utils/getRange';
 import { createClient } from '../../../shared/utils/supabase/server';
 import { filterValidationSchema } from '../filtering/schemas/filter-validation-schema';
@@ -24,7 +28,7 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
     },
   });
 
-  const filtersUnvalidated = loadSearchParams(searchParams);
+  const filtersUnvalidated = loadCardSearchParams(searchParams);
   const filters = filterValidationSchema.parse(filtersUnvalidated);
 
   let query = supabase.from('card_view_new').select('*');
@@ -75,15 +79,15 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
     }
   }
 
-  if (filters.minHp !== FILTER_DEFAULTS.minHp) {
+  if (filters.minHp !== CARD_FILTER_DEFAULTS.minHp) {
     query = query.gte('combined_hp', filters.minHp);
   }
 
-  if (filters.maxHp !== FILTER_DEFAULTS.maxHp) {
+  if (filters.maxHp !== CARD_FILTER_DEFAULTS.maxHp) {
     query = query.lte('combined_hp', filters.maxHp);
   }
 
-  if (filters.ex !== FILTER_DEFAULTS.ex) {
+  if (filters.ex !== CARD_FILTER_DEFAULTS.ex) {
     query = query.eq('pokemon_card->>is_ex', filters.ex === 'all' ? 'true' : 'false');
   }
 
@@ -91,7 +95,7 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
     query = query.ilike('name', `%${filters.searchQuery}%`);
   }
 
-  const sortFilterMap: Record<SortFilter, string> = {
+  const sortFilterMap: Record<CardSortFilter, string> = {
     color: 'pokemon_card->type',
     hp: 'combined_hp',
     id: 'id',

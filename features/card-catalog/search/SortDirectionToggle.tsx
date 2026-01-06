@@ -5,7 +5,7 @@ import { ToggleGroup } from 'radix-ui';
 import { SortAsc, SortDesc } from 'lucide-react';
 
 import useFilterState from '@/features/card-catalog/filtering/hooks/useFilterState';
-import { SortDirection } from '@/features/card-catalog/filtering/config/filterConfig';
+import { SortDirection } from '@/features/card-catalog/filtering/config/card-filter-config';
 
 function SortDirectionToggle() {
   const { state, setters } = useFilterState();

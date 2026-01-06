@@ -6,8 +6,8 @@ import CheckboxGroup from '@/shared/components/ui/checkbox-group/root/CheckboxGr
 import {
   CARD_TYPE_FILTERS,
   CardTypeFilter as TCardTypeFilter,
-  FilterState,
-} from '@/features/card-catalog/filtering/config/filterConfig';
+  CardFilterState,
+} from '@/features/card-catalog/filtering/config/card-filter-config';
 import FilterWrapper from '../FilterWrapper';
 
 const cardTypeNamesMap: Record<TCardTypeFilter, string> = {
@@ -28,9 +28,9 @@ function CardTypeFilter() {
   const setValue: Dispatch<SetStateAction<Set<string>>> = value => {
     if (typeof value === 'function') {
       const newValue = value(stateAsSet);
-      setters.cardType([...newValue] as FilterState<'cardType'>);
+      setters.cardType([...newValue] as CardFilterState<'cardType'>);
     } else {
-      setters.cardType([...value] as FilterState<'cardType'>);
+      setters.cardType([...value] as CardFilterState<'cardType'>);
     }
   };
 

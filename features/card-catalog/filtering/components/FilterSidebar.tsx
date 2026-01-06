@@ -8,7 +8,7 @@ import SetFilter from './filters/SetFilter';
 import ClearAllFiltersButton from './ClearAllFiltersButton';
 import CardTypeFilter from './filters/CardTypeFilter';
 import ExFilter from './filters/ExFilter';
-import { FILTER_DEFAULTS } from '@/features/card-catalog/filtering/config/filterConfig';
+import { CARD_FILTER_DEFAULTS } from '@/features/card-catalog/filtering/config/card-filter-config';
 import fetchSetData from '../../api/fetchSetData';
 
 interface Props {
@@ -36,7 +36,7 @@ async function FilterSidebar({ className }: Props) {
         <Seperator />
         <CardTypeFilter />
         <Seperator />
-        <HpFilter min={FILTER_DEFAULTS.minHp} max={FILTER_DEFAULTS.maxHp} />
+        <HpFilter min={CARD_FILTER_DEFAULTS.minHp} max={CARD_FILTER_DEFAULTS.maxHp} />
         <Seperator />
         <ExFilter />
       </ul>
