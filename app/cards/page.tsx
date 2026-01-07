@@ -1,7 +1,8 @@
+import { Suspense } from 'react';
+
 import CardListWithPrefetchedData from '@/features/card-catalog/components/CardListWithPrefetchedData';
 import FilterSidebar from '@/features/card-catalog/filtering/components/FilterSidebar';
 import Searchbar from '@/features/card-catalog/search/Searchbar';
-import { Suspense } from 'react';
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

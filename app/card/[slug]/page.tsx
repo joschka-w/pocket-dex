@@ -41,6 +41,7 @@ async function CardPage({ params }: Props) {
             width={600}
             height={825}
             alt={`${card.name} Cover art`}
+            loading="lazy"
             placeholder="blur"
             blurDataURL={card.image_placeholder!}
           />

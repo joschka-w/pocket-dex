@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 
 import { cn } from '@/shared/utils/cn';
-import { Loader } from 'lucide-react';
+import Loader from './Loader';
 
 interface Props {
   children?: ReactNode;
