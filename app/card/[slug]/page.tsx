@@ -47,9 +47,9 @@ async function CardPage({ params }: Props) {
         </div>
 
         {/* // TODO - Implement this */}
-        <button className="bg-bg-2 inset-ring-bg-3 rounded-xl px-4 py-3 inset-ring-1">
+        {/* <button className="bg-bg-2 inset-ring-bg-3 rounded-xl px-4 py-3 inset-ring-1">
           Find Decks with this Card
-        </button>
+        </button> */}
       </div>
 
       <div>

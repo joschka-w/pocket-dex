@@ -4,7 +4,14 @@ import { Tables } from '@/types/database';
 import { createClient } from '../../../shared/utils/supabase/server';
 
 export async function fetchCard(cardId: string) {
-  const supabase = await createClient();
+  const supabase = await createClient({
+    fetchOptions: {
+      next: {
+        revalidate: Infinity,
+        tags: ['cards'],
+      },
+    },
+  });
 
   const { data, error } = await supabase
     .from('card')

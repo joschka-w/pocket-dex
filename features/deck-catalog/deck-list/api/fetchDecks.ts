@@ -50,7 +50,7 @@ export async function fetchDecks(searchParams: LoaderInput) {
   // .order('created_at', { ascending: false });
 
   if (filters.searchQuery !== DECK_FILTER_DEFAULTS.searchQuery) {
-    query = query.ilike('title', `%${filters.searchQuery}%`);
+    query = query.ilike('title', `%${filters.searchQuery.trim()}%`);
   }
 
   const sortFilterMap: Record<DeckSortFilter, string> = {
@@ -62,8 +62,6 @@ export async function fetchDecks(searchParams: LoaderInput) {
     ascending: filters.sortDirection === 'asc',
     nullsFirst: false,
   });
-
-  console.log('IS FETCHING DECKS');
 
   return await query;
 }

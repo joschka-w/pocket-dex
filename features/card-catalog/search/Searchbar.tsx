@@ -19,6 +19,7 @@ function Searchbar({ className }: Props) {
       )}
     >
       <CardSearchInput />
+
       <div className="flex gap-2">
         <SortSelect />
         <CardSortDirectionToggle />

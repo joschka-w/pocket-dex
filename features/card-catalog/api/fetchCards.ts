@@ -23,7 +23,7 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
     fetchOptions: {
       next: {
         revalidate: 60 * 60 * 24,
-        tags: ['fetch-cards'],
+        tags: ['cards'],
       },
     },
   });
@@ -92,7 +92,7 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
   }
 
   if (filters.searchQuery) {
-    query = query.ilike('name', `%${filters.searchQuery}%`);
+    query = query.ilike('name', `%${filters.searchQuery.trim()}%`);
   }
 
   const sortFilterMap: Record<CardSortFilter, string> = {

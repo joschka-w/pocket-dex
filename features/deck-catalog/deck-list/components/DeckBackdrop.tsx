@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import { cn } from '@/shared/utils/cn';
-import { DeckResult } from '../../api/fetchDecks';
+import { DeckResult } from '../api/fetchDecks';
 
 type CardInDeck = DeckResult['cards'][number]['card'];
 

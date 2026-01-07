@@ -5,7 +5,14 @@ import { Tables } from '@/types/database';
 
 // Fetch all cards that are the same pokemon (card 'Pikachu ex' returns all pikachu cards)
 export async function fetchSimilarCards(card: Pick<Tables<'card'>, 'id' | 'name'>) {
-  const supabase = await createClient();
+  const supabase = await createClient({
+    fetchOptions: {
+      next: {
+        revalidate: Infinity,
+        tags: ['cards'],
+      },
+    },
+  });
 
   const pokemonName = card.name.replace(/ ex$/, '');
 

@@ -2,9 +2,9 @@ import Image from 'next/image';
 
 import { COLOR_SVG_MAP } from '@/shared/constants/asset-maps';
 import { toRelativeTime } from '@/shared/utils/format-to-relative-time';
-import { DeckResult } from '../../api/fetchDecks';
 import DeckBackdrop from './DeckBackdrop';
 import { getDeckCoverCard } from '../utils/getCoverCard';
+import { DeckResult } from '../api/fetchDecks';
 
 interface Props {
   deck: DeckResult;

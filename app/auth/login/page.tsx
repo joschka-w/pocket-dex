@@ -2,10 +2,11 @@
 
 import LogoWithText from '@/shared/components/LogoWithText';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import googleLogo from '@/assets/auth-provider-logos/google.svg';
 import githubLogo from '@/assets/auth-provider-logos/github.svg';
-import Link from 'next/link';
+
 import { signInWithGoogle } from '@/features/auth/api/signInWithGoogle';
 import { signInWithGithub } from '@/features/auth/api/signInWithGithub';
 

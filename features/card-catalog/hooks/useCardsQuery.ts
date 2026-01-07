@@ -12,17 +12,12 @@ function useCardsQuery() {
   const [filterLoading, setFilterLoading] = useAtom(cardFilterLoadingAtom);
 
   const params = useSearchParams();
+
   const filterParams = getFilterParamsFromUrl(
     Object.fromEntries(params.entries()),
     cardFilterParsers,
     { urlKeys: cardFilterUrlKeys },
   ); // TODO - Fix unnecessary parsing to and from entries
-  const filterParamsSerialized = JSON.stringify(filterParams);
-
-  // TODO - Somehow get rid of this useEffect
-  useEffect(() => {
-    setFilterLoading(false);
-  }, [filterParamsSerialized, setFilterLoading]);
 
   // TODO - Add error handling
   const { data, fetchNextPage, isLoading, isFetchingNextPage, error } = useInfiniteQuery({
@@ -36,8 +31,14 @@ function useCardsQuery() {
     },
   });
 
-  const isUpdating = filterLoading || isLoading;
+  // TODO - Somehow get rid of this useEffect
+  useEffect(() => {
+    // Loading is finished once data changes (works because it checks for
+    // referential equality, so even when data is the same this effect triggers)
+    setFilterLoading(false);
+  }, [data, setFilterLoading]);
 
+  const isUpdating = filterLoading || isLoading;
   const allData = data?.pages.flat() || null;
 
   return {

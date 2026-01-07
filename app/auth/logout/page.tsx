@@ -8,7 +8,7 @@ function Logout() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.replace('/');
+      router.replace('/auth/login');
     }, 2000);
   }, [router]);
 
