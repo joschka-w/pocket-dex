@@ -1,0 +1,6 @@
+ALTER TABLE set ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "everybody can read all sets"
+ON set
+FOR SELECT
+USING (true);

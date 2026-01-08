@@ -1,0 +1,1 @@
+ALTER FUNCTION like_deck(uuid) SECURITY DEFINER SET search_path = public;
