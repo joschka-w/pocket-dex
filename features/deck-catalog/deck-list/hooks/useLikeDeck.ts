@@ -24,12 +24,12 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
       .select('deck_id')
       .eq('user_id', userId!);
 
-    if (error) throw new Error(error.message);
+    if (error) throw new Error('An error occured while fetching likes.');
 
     return new Set(data.map(d => d.deck_id));
   };
 
-  const { data: userLikes } = useQuery<Set<string>>({
+  const { data: userLikes, error: fetchUserLikesError } = useQuery<Set<string>>({
     queryKey: userLikesQueryKey,
     queryFn: fetchUserLikes,
     enabled: Boolean(userId),
@@ -50,11 +50,17 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
     initialData: deck.likes_count,
   });
 
-  const { mutate: toggleLike } = useMutation({
+  const { mutate: toggleLike, error: toggleLikeError } = useMutation({
     mutationFn: async (deckId: string) => {
       const { data: newLikeCount, error } = await supabase.rpc('like_deck', { p_deck_id: deckId });
 
-      if (error) throw new Error(error.message);
+      if (error) {
+        if (!userId) {
+          throw new Error('You have to be signed in to like a deck');
+        }
+
+        throw new Error('An error occured. Please try again later.');
+      }
 
       return newLikeCount;
     },
@@ -70,7 +76,6 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
     },
     onError: (error, _deckId, onMutateResult) => {
       handleRollback(onMutateResult);
-      console.error('Error toggling like: ', error);
     },
   });
 
@@ -116,5 +121,6 @@ export function useLikeDeck(deck: DeckResult, userId?: string) {
     toggleLike,
     isLiked,
     likesCount,
+    error: toggleLikeError || fetchUserLikesError,
   };
 }

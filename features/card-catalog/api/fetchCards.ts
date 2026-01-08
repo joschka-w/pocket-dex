@@ -10,7 +10,7 @@ import { getRange } from '../../../shared/utils/getRange';
 import { createClient } from '../../../shared/utils/supabase/server';
 import { filterValidationSchema } from '../filtering/schemas/filter-validation-schema';
 
-const CARDS_PER_PAGE = 100;
+const CARDS_PER_PAGE = 100; // TODO - put in constants file
 
 async function fetchCards(searchParams: LoaderInput, page: number) {
   // Cache each unique filter combination. Common patterns (like no filters or only sorting) avoid repeated fetches.

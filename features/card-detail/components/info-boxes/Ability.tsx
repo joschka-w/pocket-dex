@@ -1,7 +1,7 @@
-import { PokemonCardResult } from '@/features/card-detail/api/fetchCard';
 import { formatCardText } from '@/shared/utils/format-card-text';
 
 import InfoBox from '../InfoBox';
+import { PokemonCardResult } from '../../types/fetch-card-types';
 
 interface Props {
   card: PokemonCardResult;

@@ -8,6 +8,9 @@ import LoadingPopup from './LoadingPopup';
 import NoCardsFound from './NoCardsFound';
 import DeckBuilderCard from '@/features/cards/components/DeckBuilderCard';
 import Card from '@/features/cards/components/Card';
+import ScrollBackToTop from '@/shared/components/ScrollBackToTop';
+import { useState } from 'react';
+import Error from '@/shared/components/Error';
 
 interface Props {
   className?: string;
@@ -16,12 +19,25 @@ interface Props {
 }
 
 function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) {
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
   const { data, error, fetchNextPage, isFetchingNextPage, isLoading, isUpdating } = useCardsQuery();
   const hasCards = data && data.length > 0;
 
+  const observerRef = (node: HTMLLIElement | null) => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowScrollBtn(!entry.isIntersecting),
+      { rootMargin: '500px' },
+    );
+
+    if (node) observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+    };
+  };
+
   if (error) {
-    console.error('An error has occured:', error);
-    throw error;
+    return <Error message={`Error while fetching cards: ${error.message}`} />;
   }
 
   return (
@@ -38,8 +54,8 @@ function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) 
         rootMargin={400}
         className={`py-3 ${columns === '5' ? 'col-span-5' : 'col-span-4'}`}
       >
-        {data?.map(card => (
-          <li key={card.id} className="list-none">
+        {data?.map((card, i) => (
+          <li key={card.id} className="list-none" ref={i === 0 ? observerRef : undefined}>
             {isInDeckBuilder ? (
               <DeckBuilderCard card={card} isUpdating={isUpdating} />
             ) : (
@@ -58,6 +74,8 @@ function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) 
           <LoadingPopup className="fixed mt-20" />
         </div>
       )}
+
+      <ScrollBackToTop show={showScrollBtn} />
     </ol>
   );
 }

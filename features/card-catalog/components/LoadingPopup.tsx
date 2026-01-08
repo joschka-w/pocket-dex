@@ -14,7 +14,7 @@ function LoadingPopup({ className }: Props) {
         className,
       )}
     >
-      Updating...
+      Loading...
       <Loader />
     </div>
   );

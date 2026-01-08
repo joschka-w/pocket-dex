@@ -3,7 +3,7 @@
 import { createElement, ReactNode } from 'react';
 import Link from 'next/link';
 import { DropdownMenu } from 'radix-ui';
-import { HeartIcon, LayersIcon, LogOutIcon, LucideIcon, UserIcon } from 'lucide-react';
+import { LogOutIcon, LucideIcon, UserIcon } from 'lucide-react';
 
 import { cn } from '@/shared/utils/cn';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -32,17 +32,19 @@ function ProfileMenu({ signOut, hasUsername, children }: Props) {
           align="end"
           className="bg-bg-1 inset-ring-bg-2 z-50 flex min-w-48 flex-col rounded-lg px-1.5 py-2 shadow-lg inset-ring-1 shadow-black/50"
         >
-          <DropdownMenu.Label className="mb-3 flex items-center gap-4 p-2">
+          <DropdownMenu.Label className="mb-1 flex items-center gap-4 p-2">
             <AvatarImage profile={profile} />
 
             <div className="flex flex-col">
               <span>Welcome back</span>
               {profile.username && <span className="font-bold">{`@${profile.username}`}</span>}
+              {!profile.username && <span className="font-bold">to PocketDeck</span>}
             </div>
           </DropdownMenu.Label>
 
-          <Item icon={LayersIcon}>My Decks</Item>
-          <Item icon={HeartIcon}>Liked Decks</Item>
+          {/* // TODO - Implement this */}
+          {/* <Item icon={LayersIcon}>My Decks</Item>
+          <Item icon={HeartIcon}>Liked Decks</Item> */}
 
           {!hasUsername && (
             <>

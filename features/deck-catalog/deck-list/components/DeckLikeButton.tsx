@@ -1,11 +1,12 @@
 'use client';
 
 import { HeartIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cn } from '@/shared/utils/cn';
 import { DeckResult } from '../api/fetchDecks';
 import { useLikeDeck } from '../hooks/useLikeDeck';
+import toast from 'react-hot-toast';
 
 interface Props {
   deck: DeckResult;
@@ -13,13 +14,19 @@ interface Props {
 }
 
 function DeckLikeButton({ deck, userId }: Props) {
-  const { isLiked, likesCount, toggleLike } = useLikeDeck(deck, userId);
+  const { isLiked, likesCount, toggleLike, error } = useLikeDeck(deck, userId);
   const [isInitial, setIsInitial] = useState(true);
 
   const handleClick = () => {
     toggleLike(deck.id);
     setIsInitial(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message, { id: error.message });
+    }
+  }, [error]);
 
   return (
     <div className="flex gap-2">

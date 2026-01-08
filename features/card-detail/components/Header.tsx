@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { getColorImg, getRarityImg } from '@/shared/constants/asset-maps';
-import { CardResult } from '@/features/card-detail/api/fetchCard';
+import { CardResult } from '../types/fetch-card-types';
 
 interface Props {
   card: CardResult;

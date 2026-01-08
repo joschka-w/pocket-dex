@@ -1,4 +1,5 @@
-import { TrainerCardResult } from '@/features/card-detail/api/fetchCard';
+import { TrainerCardResult } from '../types/fetch-card-types';
+
 import Header from './Header';
 import InfoBox from './InfoBox';
 import PullRates from './info-boxes/PullRates';

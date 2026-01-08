@@ -1,4 +1,4 @@
-import { PokemonCardResult } from '@/features/card-detail/api/fetchCard';
+import { PokemonCardResult } from '../types/fetch-card-types';
 
 import InfoBox from './InfoBox';
 import Header from './Header';

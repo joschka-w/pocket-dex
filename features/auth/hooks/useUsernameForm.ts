@@ -7,6 +7,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { usernameValidationSchema } from '../schemas/username-validation-schema';
 import { isUsernameTaken } from '../api/isUsernameTaken';
 import { createUsername } from '../api/createUsername';
+import toast from 'react-hot-toast';
 
 export function useUsernameForm(debounceTime: number = 400) {
   const [isTaken, setIsTaken] = useState(false);
@@ -17,6 +18,7 @@ export function useUsernameForm(debounceTime: number = 400) {
     handleSubmit: handleSubmitIntern,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     trigger,
+    setError,
   } = useForm({
     resolver: zodResolver(z.object({ username: usernameValidationSchema })),
   });
@@ -29,9 +31,8 @@ export function useUsernameForm(debounceTime: number = 400) {
   const isInitial = validationLoading === null;
   const isValid = !isInitial && !error && !validationLoading;
 
-  const validateUsernameDebounced = useDebouncedCallback(async (input: string) => {
+  const validateUsername = useDebouncedCallback(async (input: string) => {
     const res = await isUsernameTaken(input);
-
     trigger('username');
 
     if (!res || res.error) {
@@ -47,14 +48,14 @@ export function useUsernameForm(debounceTime: number = 400) {
     const { error } = await createUsername(data.username);
 
     if (error) {
-      console.error(error);
-      throw new Error(error.message);
+      toast.error(error.message);
+      setError('root', { message: error.message });
     }
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValidationLoading(true);
-    validateUsernameDebounced(e.target.value);
+    validateUsername(e.target.value);
     register('username').onChange(e);
   };
 

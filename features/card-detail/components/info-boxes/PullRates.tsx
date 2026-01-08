@@ -1,9 +1,9 @@
 import { toPercentage } from '@/shared/utils/format-to-percentage';
 
-import { CardResult } from '@/features/card-detail/api/fetchCard';
 import { calculatePullRates } from '../../utils/calculate-pull-rates';
 
 import InfoBox from '../InfoBox';
+import { CardResult } from '../../types/fetch-card-types';
 
 interface Props {
   card: CardResult;

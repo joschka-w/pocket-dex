@@ -1,4 +1,4 @@
-import { CardResult } from '@/features/card-detail/api/fetchCard';
+import { CardResult } from '../../types/fetch-card-types';
 import InfoBox from '../InfoBox';
 
 interface Props {

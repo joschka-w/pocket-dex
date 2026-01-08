@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { PokemonCardResult } from '@/features/card-detail/api/fetchCard';
 import { getColorImg } from '@/shared/constants/asset-maps';
 import InfoBox from '../InfoBox';
+import { PokemonCardResult } from '../../types/fetch-card-types';
 
 interface Props {
   card: PokemonCardResult;

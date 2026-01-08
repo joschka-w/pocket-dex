@@ -2,15 +2,14 @@ import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAtom } from 'jotai';
 
-import { cardFilterLoadingAtom } from '../filtering/atoms/cardFilterLoadingAtom';
+import fetchCards from '../api/fetchCards';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import getFilterParamsFromUrl from '../filtering/utils/getFilterParamsFromUrl';
-import fetchCards from '../api/fetchCards';
 import { cardFilterParsers, cardFilterUrlKeys } from '../filtering/config/card-filter-config';
+import { cardFilterLoadingAtom } from '../filtering/atoms/cardFilterLoadingAtom';
 
 function useCardsQuery() {
   const [filterLoading, setFilterLoading] = useAtom(cardFilterLoadingAtom);
-
   const params = useSearchParams();
 
   const filterParams = getFilterParamsFromUrl(
@@ -19,11 +18,11 @@ function useCardsQuery() {
     { urlKeys: cardFilterUrlKeys },
   ); // TODO - Fix unnecessary parsing to and from entries
 
-  // TODO - Add error handling
   const { data, fetchNextPage, isLoading, isFetchingNextPage, error } = useInfiniteQuery({
     queryKey: ['cards', filterParams],
     queryFn: ({ pageParam }) => fetchCards(filterParams, pageParam),
     initialPageParam: 0,
+    retry: 1,
     getNextPageParam(lastPage, allPages) {
       const nextPage = lastPage.length ? allPages.length : undefined;
 

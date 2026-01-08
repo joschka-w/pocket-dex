@@ -18,11 +18,7 @@ export async function signInWithGoogle() {
     },
   });
 
-  // TODO - Add error handling
-  if (error) {
-    console.error('ERROR:', error);
-    throw new Error(error.message);
-  }
+  if (error) return { message: `An error occured: ${error.message}` };
 
   redirect(data.url);
 }

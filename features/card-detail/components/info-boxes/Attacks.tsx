@@ -1,10 +1,12 @@
-import { PokemonCardResult } from '@/features/card-detail/api/fetchCard';
-import InfoBox from '../InfoBox';
-import { getColorImg } from '@/shared/constants/asset-maps';
 import Image from 'next/image';
-import { formatCardText } from '@/shared/utils/format-card-text';
-import Seperator from '@/shared/components/ui/Seperator';
 import { Fragment } from 'react/jsx-runtime';
+
+import { PokemonCardResult } from '../../types/fetch-card-types';
+import { getColorImg } from '@/shared/constants/asset-maps';
+import { formatCardText } from '@/shared/utils/format-card-text';
+
+import Seperator from '@/shared/components/ui/Seperator';
+import InfoBox from '../InfoBox';
 
 interface Props {
   card: PokemonCardResult;

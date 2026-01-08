@@ -28,6 +28,5 @@ export async function GET(request: Request) {
     }
   }
 
-  // TODO - Add error handling, this route doesn't exist
   return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }

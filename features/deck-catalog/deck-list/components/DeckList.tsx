@@ -2,6 +2,7 @@ import { cn } from '@/shared/utils/cn';
 import Deck from './Deck';
 import { fetchDecks } from '../api/fetchDecks';
 import DecksLoadingPopup from './DecksLoadingPopup';
+import Error from '@/shared/components/Error';
 
 interface Props {
   className?: string;
@@ -12,8 +13,7 @@ async function DeckList({ searchParams, className }: Props) {
   const { data, error } = await fetchDecks(await searchParams);
 
   if (error) {
-    console.error(error);
-    throw new Error(error.message);
+    return <Error message={`Error while fetching decks: ${error.message}`} />;
   }
 
   return (

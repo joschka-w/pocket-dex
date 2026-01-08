@@ -47,7 +47,6 @@ export async function fetchDecks(searchParams: LoaderInput) {
       )
     `,
   );
-  // .order('created_at', { ascending: false });
 
   if (filters.searchQuery !== DECK_FILTER_DEFAULTS.searchQuery) {
     query = query.ilike('title', `%${filters.searchQuery.trim()}%`);

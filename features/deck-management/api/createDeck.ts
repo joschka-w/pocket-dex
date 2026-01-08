@@ -9,12 +9,21 @@ import { fetchUser } from '../../auth/api/fetchUser';
 export async function createDeck(deck: DeckSchema) {
   const supabase = await createClient();
 
-  const { profile } = await fetchUser();
+  const { profile, user } = await fetchUser();
+
+  if (!user) {
+    return {
+      data: null,
+      error: { message: 'Please create an account or log in to create a deck.' },
+    };
+  }
 
   if (!profile?.username) {
     return {
       data: null,
-      error: { message: 'Please choose a username before creating a deck' },
+      error: {
+        message: 'Please set up your username in your profile settings before creating a deck.',
+      },
     };
   }
 

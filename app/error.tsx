@@ -1,17 +1,14 @@
 'use client';
 
+import Error from '@/shared/components/Error';
+
 interface Props {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-function Error({ error }: Props) {
-  return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <p>{error.message}</p>
-    </div>
-  );
+function ErrorFallback({ error }: Props) {
+  return <Error message={`Something went wrong: ${error.message}`} />;
 }
 
-export default Error;
+export default ErrorFallback;

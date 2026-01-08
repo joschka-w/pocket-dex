@@ -8,6 +8,7 @@ import { fetchSimilarCards } from '@/features/card-detail/api/fetchSimilarCards'
 import PokemonCardInfo from '@/features/card-detail/components/PokemonCardInfo';
 import TrainerCardInfo from '@/features/card-detail/components/TrainerCardInfo';
 import SimilarCards from '@/features/card-detail/components/SimilarCards';
+import Error from '@/shared/components/Error';
 
 interface Params {
   slug: string;
@@ -24,12 +25,10 @@ async function CardPage({ params }: Props) {
   if (!cardId) notFound();
 
   const { data: card, error } = await fetchCard(cardId);
-  const { data: similarCards } = await fetchSimilarCards(card);
+  const { data: similarCards = null } = await fetchSimilarCards(card);
 
   if (error) {
-    // TODO - Add error handling
-    console.error('Error while fetching card: ', error);
-    throw new Error(error.message);
+    return <Error message={`Error while fetching card: ${error.message}`} />;
   }
 
   return (

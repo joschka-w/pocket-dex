@@ -1,7 +1,7 @@
 import { formatCardText } from '@/shared/utils/format-card-text';
 
-import { TrainerCardResult } from '@/features/card-detail/api/fetchCard';
 import InfoBox from '../InfoBox';
+import { TrainerCardResult } from '../../types/fetch-card-types';
 
 interface Props {
   card: TrainerCardResult;
