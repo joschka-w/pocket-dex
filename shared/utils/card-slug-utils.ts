@@ -1,6 +1,6 @@
 import { Tables } from '@/types/database';
 
-export function getCardUrl(card: Pick<Tables<'card_view_new'>, 'id' | 'name'>) {
+export function getCardUrl(card: Pick<Tables<'card_view'>, 'id' | 'name'>) {
   const nameFormatted = card.name.replace(' ', '_');
 
   const slug = `${card.id}-${nameFormatted}`;

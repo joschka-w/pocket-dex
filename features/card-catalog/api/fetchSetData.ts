@@ -7,7 +7,7 @@ async function fetchSetData() {
   const supabase = await createClient({
     fetchOptions: {
       cache: 'force-cache',
-      next: { tags: ['set-data'] },
+      next: { tags: ['sets'] },
     },
   });
 

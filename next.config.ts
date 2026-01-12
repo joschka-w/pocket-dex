@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'assets.tcgdex.net',
+        hostname: 'sxqrthtfhlhehldnczni.supabase.co',
         protocol: 'https',
       },
       {

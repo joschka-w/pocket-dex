@@ -7,6 +7,7 @@ import { RarityGroup, RarityStats as TRarityStats } from '../utils/calculate-dec
 const RARITY_GROUP_TO_SVG_NAME: Record<RarityGroup, Exclude<Enums<'rarity'>, 'promo'>> = {
   diamond: 'diamond_1',
   star: 'star_1',
+  shiny: 'shiny_1',
   crown: 'crown',
 };
 

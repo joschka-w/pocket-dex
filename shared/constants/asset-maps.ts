@@ -5,6 +5,8 @@ import diamond_4 from '@/assets/rarity/diamond_4.svg';
 import star_1 from '@/assets/rarity/star_1.svg';
 import star_2 from '@/assets/rarity/star_2.svg';
 import star_3 from '@/assets/rarity/star_3.svg';
+import shiny_1 from '@/assets/rarity/shiny_1.svg';
+import shiny_2 from '@/assets/rarity/shiny_2.svg';
 import crown from '@/assets/rarity/crown.svg';
 
 import grass from '@/assets/colors/grass.png';
@@ -17,6 +19,7 @@ import darkness from '@/assets/colors/darkness.png';
 import metal from '@/assets/colors/metal.png';
 import dragon from '@/assets/colors/dragon.png';
 import colorless from '@/assets/colors/colorless.png';
+import noEnergy from '@/assets/colors/no-energy.svg';
 
 export const RARITY_SVG_MAP = {
   diamond_1,
@@ -26,6 +29,8 @@ export const RARITY_SVG_MAP = {
   star_1,
   star_2,
   star_3,
+  shiny_1,
+  shiny_2,
   crown,
 };
 
@@ -44,4 +49,8 @@ export const COLOR_SVG_MAP = {
   colorless,
 };
 
-export const getColorImg = (color: keyof typeof COLOR_SVG_MAP) => COLOR_SVG_MAP[color];
+export const getColorImg = (color: keyof typeof COLOR_SVG_MAP | 'none') => {
+  if (color === 'none') return noEnergy;
+
+  return COLOR_SVG_MAP[color];
+};

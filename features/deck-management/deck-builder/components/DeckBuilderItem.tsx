@@ -6,6 +6,7 @@ import { Minus, Plus } from 'lucide-react';
 import { CardWithQuantity } from '@/features/deck-management/deck-builder/atoms/deckBuilder';
 import { cn } from '@/shared/utils/cn';
 import { useDeck } from '../hooks/useDeckBuilder';
+import { getCardImageUrl } from '@/shared/utils/get-card-image-url';
 
 interface Props {
   card: CardWithQuantity;
@@ -14,15 +15,15 @@ interface Props {
 function DeckBuilderItem({ card }: Props) {
   const { addCard, removeCard, canCardBeAdded } = useDeck();
 
-  const canBeAdded = canCardBeAdded(card.id!);
+  const canBeAdded = canCardBeAdded(card.id);
 
   const handleAddCard = () => addCard(card);
-  const handleRemoveCard = () => removeCard(card.id!);
+  const handleRemoveCard = () => removeCard(card.id);
 
   return (
     <div className={cn('bg-bg-2 flex w-24 flex-col gap-2 rounded-lg p-2')}>
       <div className="aspect-605/846 rounded-md">
-        <Image src={card.image_path!} width={605} height={846} alt={card.name!} />
+        <Image src={getCardImageUrl(card.id, 'low')} width={605} height={846} alt={card.name} />
       </div>
 
       <h4 className="overflow-hidden leading-none font-medium text-nowrap text-ellipsis">

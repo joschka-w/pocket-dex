@@ -1,0 +1,42 @@
+ALTER FUNCTION create_pokemon_card(
+  text,
+  text,
+  text,
+  integer,
+  rarity,
+  card_type,
+  text,
+  integer,
+  color,
+  integer,
+  color,
+  boolean,
+  stage,
+  text,
+  text,
+  integer[],
+  text,
+  color[],
+  integer,
+  text,
+  text,
+  text,
+  color[],
+  integer,
+  text,
+  text
+) SET search_path = pg_catalog, public;
+
+ALTER FUNCTION create_trainer_card(
+  text,
+  text,
+  text,
+  integer,
+  rarity,
+  card_type,
+  text,
+  integer[],
+  trainer_card_type,
+  integer,
+  text
+) SET search_path = pg_catalog, public;

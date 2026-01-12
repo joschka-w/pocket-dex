@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { fetchCard } from '@/features/card-detail/api/fetchCard';
 import { getCardIdFromSlug } from '@/shared/utils/card-slug-utils';
 import { fetchSimilarCards } from '@/features/card-detail/api/fetchSimilarCards';
+import { getCardImageUrl } from '@/shared/utils/get-card-image-url';
 
 import PokemonCardInfo from '@/features/card-detail/components/PokemonCardInfo';
 import TrainerCardInfo from '@/features/card-detail/components/TrainerCardInfo';
@@ -36,7 +37,7 @@ async function CardPage({ params }: Props) {
       <div className="flex flex-col justify-between gap-4">
         <div className="max-w-96">
           <Image
-            src={card.image_path}
+            src={getCardImageUrl(cardId, 'high')}
             width={600}
             height={825}
             alt={`${card.name} Cover art`}

@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { cn } from '@/shared/utils/cn';
 import { DeckResult } from '../api/fetchDecks';
+import { getCardImageUrl } from '@/shared/utils/get-card-image-url';
 
 type CardInDeck = DeckResult['cards'][number]['card'];
 
@@ -19,7 +20,7 @@ function DeckBackdrop({ coverCard }: Props) {
     >
       <Image
         className="h-full w-full object-cover object-[50%_30%] opacity-15 blur-xs"
-        src={coverCard.image_path}
+        src={getCardImageUrl(coverCard.id, 'low')}
         placeholder="blur"
         blurDataURL={coverCard.image_placeholder}
         width={600}

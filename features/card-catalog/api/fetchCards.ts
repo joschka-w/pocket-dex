@@ -31,7 +31,7 @@ async function fetchCards(searchParams: LoaderInput, page: number) {
   const filtersUnvalidated = loadCardSearchParams(searchParams);
   const filters = filterValidationSchema.parse(filtersUnvalidated);
 
-  let query = supabase.from('card_view_new').select('*');
+  let query = supabase.from('card_view').select('*');
 
   if (filters.set && filters.set.length > 0) {
     query = query.filter('packs', 'ov', `{${filters.set.join(',')}}`);

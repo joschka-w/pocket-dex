@@ -1,7 +1,7 @@
 import { Tables } from '@/types/database';
 import { atomWithStorage } from 'jotai/utils';
 
-export interface CardWithQuantity extends Tables<'card_view_new'> {
+export interface CardWithQuantity extends Tables<'card_view'> {
   quantity: number;
 }
 

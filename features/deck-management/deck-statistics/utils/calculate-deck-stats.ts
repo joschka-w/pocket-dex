@@ -6,7 +6,7 @@ import {
 } from '@/features/deck-management/deck-builder/constants/deck-builder';
 import { CardWithQuantity, Deck } from '../../deck-builder/atoms/deckBuilder';
 
-export type RarityGroup = 'diamond' | 'star' | 'crown';
+export type RarityGroup = 'diamond' | 'star' | 'crown' | 'shiny';
 export type ColorStats = Map<Enums<'color'>, number>;
 export type RarityStats = Map<RarityGroup, number>;
 

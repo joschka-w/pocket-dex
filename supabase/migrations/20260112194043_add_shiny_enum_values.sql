@@ -1,0 +1,2 @@
+ALTER TYPE rarity ADD VALUE IF NOT EXISTS 'shiny_1' AFTER 'star_3';
+ALTER TYPE rarity ADD VALUE IF NOT EXISTS 'shiny_2' AFTER 'shiny_1';

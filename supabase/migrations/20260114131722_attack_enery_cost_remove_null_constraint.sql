@@ -1,0 +1,3 @@
+ALTER TABLE attack
+ALTER COLUMN energy_cost
+DROP NOT NULL;

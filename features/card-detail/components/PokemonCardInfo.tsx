@@ -8,6 +8,7 @@ import Weakness from './info-boxes/Weakness';
 import Expansion from './info-boxes/Expansion';
 import Attacks from './info-boxes/Attacks';
 import Ability from './info-boxes/Ability';
+import { cn } from '@/shared/utils/cn';
 
 interface Props {
   card: PokemonCardResult;
@@ -33,8 +34,8 @@ async function PokemonCardInfo({ card }: Props) {
           <RetreatCost card={card} />
           <Weakness card={card} />
 
-          <PullRates card={card} />
-          <Expansion card={card} />
+          {card.rarity !== 'promo' && <PullRates card={card} />}
+          <Expansion card={card} className={cn(card.rarity === 'promo' && 'col-span-6')} />
 
           <Attacks card={card} />
 

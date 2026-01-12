@@ -11,7 +11,7 @@ export function useDeck() {
 
   const deckSize = getDeckSize(deck);
 
-  const addCard = (card: Tables<'card_view_new'>) => {
+  const addCard = (card: Tables<'card_view'>) => {
     setDeck(prevDeck => {
       const newDeck = new Map(prevDeck);
       const existingCard = newDeck.get(card.id!);

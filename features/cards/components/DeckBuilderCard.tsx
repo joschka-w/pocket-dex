@@ -8,11 +8,12 @@ import CardInfo from './card-parts/CardInfo';
 import { useDeck } from '@/features/deck-management/deck-builder/hooks/useDeckBuilder';
 
 interface Props {
-  card: Tables<'card_view_new'>;
+  card: Tables<'card_view'>;
   isUpdating?: boolean;
+  quality: 'high' | 'low';
 }
 
-function DeckBuilderCard({ card, isUpdating }: Props) {
+function DeckBuilderCard({ card, quality, isUpdating }: Props) {
   const { addCard, removeCard } = useDeck();
 
   const handleClick = () => addCard(card);
@@ -30,7 +31,7 @@ function DeckBuilderCard({ card, isUpdating }: Props) {
       className="cursor-pointer"
     >
       <CardDeckBuilderOverlay card={card}>
-        <CardImage card={card} />
+        <CardImage card={card} quality={quality} />
       </CardDeckBuilderOverlay>
       <CardInfo card={card} />
     </CardRoot>

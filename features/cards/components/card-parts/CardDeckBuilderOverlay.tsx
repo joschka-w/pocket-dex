@@ -11,7 +11,7 @@ import { useDeck } from '@/features/deck-management/deck-builder/hooks/useDeckBu
 
 interface Props {
   children?: ReactNode;
-  card: Tables<'card_view_new'>;
+  card: Tables<'card_view'>;
 }
 
 function CardDeckBuilderOverlay({ card, children }: Props) {

@@ -1,7 +1,7 @@
 import { Tables } from '@/types/database';
 
 interface Props {
-  card: Pick<Tables<'card_view_new'>, 'id' | 'name'>;
+  card: Pick<Tables<'card_view'>, 'id' | 'name'>;
 }
 
 function CardInfo({ card }: Props) {

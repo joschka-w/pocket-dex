@@ -37,6 +37,7 @@ function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) 
   };
 
   if (error) {
+    if (process.env.NODE_ENV === 'development') console.error(error);
     return <Error message={`Error while fetching cards: ${error.message}`} />;
   }
 
@@ -57,9 +58,9 @@ function CardList({ columns = '5', isInDeckBuilder = false, className }: Props) 
         {data?.map((card, i) => (
           <li key={card.id} className="list-none" ref={i === 0 ? observerRef : undefined}>
             {isInDeckBuilder ? (
-              <DeckBuilderCard card={card} isUpdating={isUpdating} />
+              <DeckBuilderCard card={card} isUpdating={isUpdating} quality="low" />
             ) : (
-              <Card card={card} isUpdating={isUpdating} />
+              <Card card={card} isUpdating={isUpdating} quality="low" />
             )}
           </li>
         ))}

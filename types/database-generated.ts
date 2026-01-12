@@ -95,7 +95,6 @@ export type Database = {
         Row: {
           card_type: Database["public"]["Enums"]["card_type"]
           id: string
-          image_path: string
           image_placeholder: string
           name: string
           rarity: Database["public"]["Enums"]["rarity"]
@@ -105,7 +104,6 @@ export type Database = {
         Insert: {
           card_type: Database["public"]["Enums"]["card_type"]
           id?: string
-          image_path: string
           image_placeholder: string
           name: string
           rarity: Database["public"]["Enums"]["rarity"]
@@ -115,7 +113,6 @@ export type Database = {
         Update: {
           card_type?: Database["public"]["Enums"]["card_type"]
           id?: string
-          image_path?: string
           image_placeholder?: string
           name?: string
           rarity?: Database["public"]["Enums"]["rarity"]
@@ -171,7 +168,7 @@ export type Database = {
             foreignKeyName: "card_booster_pack_link_card_id_fkey"
             columns: ["card_id"]
             isOneToOne: false
-            referencedRelation: "card_view_new"
+            referencedRelation: "card_view"
             referencedColumns: ["id"]
           },
         ]
@@ -242,7 +239,7 @@ export type Database = {
             foreignKeyName: "deck_card_link_card_id_fkey"
             columns: ["card_id"]
             isOneToOne: false
-            referencedRelation: "card_view_new"
+            referencedRelation: "card_view"
             referencedColumns: ["id"]
           },
           {
@@ -323,7 +320,7 @@ export type Database = {
             foreignKeyName: "pokemon_card_id_fkey"
             columns: ["id"]
             isOneToOne: true
-            referencedRelation: "card_view_new"
+            referencedRelation: "card_view"
             referencedColumns: ["id"]
           },
         ]
@@ -398,19 +395,24 @@ export type Database = {
             foreignKeyName: "trainer_card_id_fkey"
             columns: ["id"]
             isOneToOne: true
-            referencedRelation: "card_view_new"
+            referencedRelation: "card_view"
             referencedColumns: ["id"]
           },
         ]
       }
     }
     Views: {
-      card_view_new: {
+      card_names_view: {
+        Row: {
+          cards: Json | null
+        }
+        Relationships: []
+      }
+      card_view: {
         Row: {
           card_type: Database["public"]["Enums"]["card_type"] | null
           combined_hp: number | null
           id: string | null
-          image_path: string | null
           image_placeholder: string | null
           name: string | null
           packs: string[] | null
@@ -457,7 +459,6 @@ export type Database = {
           card_type: Database["public"]["Enums"]["card_type"]
           hp: number
           id: string
-          image_path: string
           image_placeholder: string
           is_ex: boolean
           name: string
@@ -478,7 +479,6 @@ export type Database = {
           effect: string
           hp: number
           id: string
-          image_path: string
           image_placeholder: string
           name: string
           pack_ids: number[]
@@ -515,6 +515,8 @@ export type Database = {
         | "star_1"
         | "star_2"
         | "star_3"
+        | "shiny_1"
+        | "shiny_2"
         | "crown"
         | "promo"
       stage: "Basic" | "Stage 1" | "Stage 2"
@@ -667,6 +669,8 @@ export const Constants = {
         "star_1",
         "star_2",
         "star_3",
+        "shiny_1",
+        "shiny_2",
         "crown",
         "promo",
       ],

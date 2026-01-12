@@ -1,20 +1,26 @@
+import { cn } from '@/shared/utils/cn';
 import { CardResult } from '../../types/fetch-card-types';
 import InfoBox from '../InfoBox';
 
 interface Props {
   card: CardResult;
+  className?: string;
 }
 
-function Expansion({ card }: Props) {
+function Expansion({ card, className }: Props) {
   return (
     <InfoBox
       label={
         <div className="flex items-center justify-between">
           <span>Expansion</span>
-          <span className="text-text text-base font-semibold">{card.set.name}</span>
+
+          <div className="flex gap-2 text-base font-semibold">
+            <span className="text-text">{card.set.name}</span>
+            <span className="text-text-muted">{`(${card.set_symbol})`}</span>
+          </div>
         </div>
       }
-      className="col-span-3"
+      className={cn('col-span-3', className)}
     >
       {card.packs.length >= 1 && (
         <>

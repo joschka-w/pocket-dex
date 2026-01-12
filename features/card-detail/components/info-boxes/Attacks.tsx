@@ -36,15 +36,28 @@ interface AttackProps {
 }
 
 function Attack({ attack }: AttackProps) {
+  const hasCost = Boolean(attack.energy_cost);
+
   return (
     <li>
       <div className="flex items-center">
         <ol className="flex gap-1">
-          {attack.energy_cost.map((color, i) => (
-            <li key={`attack-color-${attack.id}-${color}-${i}`}>
-              <Image src={getColorImg(color)} alt={color} className="aspect-square w-6" />
+          {hasCost &&
+            attack.energy_cost.map((color, i) => (
+              <li key={`attack-color-${attack.id}-${color}-${i}`}>
+                <Image src={getColorImg(color)} alt={color} className="aspect-square w-6" />
+              </li>
+            ))}
+
+          {!hasCost && (
+            <li key={`attack-color-${attack.id}-no-cost-color`}>
+              <Image
+                src={getColorImg('none')}
+                alt={'No energy cost'}
+                className="aspect-square w-6"
+              />
             </li>
-          ))}
+          )}
         </ol>
 
         <h5 className="ml-3 font-medium">{attack.name}</h5>

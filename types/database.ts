@@ -7,12 +7,11 @@ export type DB = MergeDeep<
   {
     public: {
       Views: {
-        card_view_new: {
+        card_view: {
           Row: {
             card_type: DatabaseGenerated['public']['Enums']['card_type'];
             combined_hp: number;
             id: string;
-            image_path: string;
             image_placeholder: string;
             name: string;
             packs: string[];

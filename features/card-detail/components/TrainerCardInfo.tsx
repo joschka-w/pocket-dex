@@ -5,6 +5,7 @@ import InfoBox from './InfoBox';
 import PullRates from './info-boxes/PullRates';
 import Expansion from './info-boxes/Expansion';
 import Effect from './info-boxes/Effect';
+import { cn } from '@/shared/utils/cn';
 
 interface Props {
   card: TrainerCardResult;
@@ -34,8 +35,8 @@ function TrainerCardInfo({ card }: Props) {
             </InfoBox>
           )}
 
-          <PullRates card={card} />
-          <Expansion card={card} />
+          {card.rarity !== 'promo' && <PullRates card={card} />}
+          <Expansion card={card} className={cn(card.rarity === 'promo' && 'col-span-6')} />
 
           <Effect card={card} />
         </dl>

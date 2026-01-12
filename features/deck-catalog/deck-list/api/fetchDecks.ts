@@ -40,7 +40,6 @@ export async function fetchDecks(searchParams: LoaderInput) {
         card (
           id,
           name,
-          image_path,
           image_placeholder,
           rarity
         )

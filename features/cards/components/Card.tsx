@@ -6,15 +6,16 @@ import CardImage from './card-parts/CardImage';
 import CardInfo from './card-parts/CardInfo';
 
 interface Props {
-  card: Pick<Tables<'card_view_new'>, 'name' | 'id' | 'image_path' | 'image_placeholder'>;
+  card: Pick<Tables<'card_view'>, 'name' | 'id' | 'image_placeholder'>;
   isUpdating?: boolean;
+  quality: 'high' | 'low';
 }
 
-function Card({ card, isUpdating = false }: Props) {
+function Card({ card, quality, isUpdating = false }: Props) {
   return (
     <Link href={getCardUrl(card)}>
       <CardRoot isUpdating={isUpdating}>
-        <CardImage card={card} hasHoverAnimation />
+        <CardImage card={card} hasHoverAnimation quality={quality} />
         <CardInfo card={card} />
       </CardRoot>
     </Link>

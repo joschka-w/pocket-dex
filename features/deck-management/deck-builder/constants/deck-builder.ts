@@ -13,6 +13,8 @@ export const CARD_PRICES: Readonly<Record<Enums<'rarity'>, number>> = {
   star_1: 400,
   star_2: 1250,
   star_3: 1500,
+  shiny_1: 1000,
+  shiny_2: 1350,
   crown: 2500,
   promo: 0,
 };
@@ -27,6 +29,8 @@ export const RARITY_GROUP_LOOKUP_MAP: Readonly<Record<Enums<'rarity'>, RarityGro
   star_1: 'star',
   star_2: 'star',
   star_3: 'star',
+  shiny_1: 'shiny',
+  shiny_2: 'shiny',
   crown: 'crown',
   promo: null,
 };
