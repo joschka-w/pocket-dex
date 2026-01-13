@@ -6,7 +6,7 @@ import { Minus, Plus } from 'lucide-react';
 import { CardWithQuantity } from '@/features/deck-management/deck-builder/atoms/deckBuilder';
 import { cn } from '@/shared/utils/cn';
 import { useDeck } from '../hooks/useDeckBuilder';
-import { getCardImageUrl } from '@/shared/utils/get-card-image-url';
+import { getCardImageUrl } from '@/features/cards/utils/get-card-image-url';
 
 interface Props {
   card: CardWithQuantity;

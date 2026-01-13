@@ -1,5 +1,5 @@
 import { cn } from '@/shared/utils/cn';
-import { getCardImageUrl } from '@/shared/utils/get-card-image-url';
+import { getCardImageUrl } from '@/features/cards/utils/get-card-image-url';
 import { Tables } from '@/types/database';
 import Image from 'next/image';
 

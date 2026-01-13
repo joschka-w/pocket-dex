@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { cn } from '@/shared/utils/cn';
 import { DeckResult } from '../api/fetchDecks';
-import { getCardImageUrl } from '@/shared/utils/get-card-image-url';
+import { getCardImageUrl } from '@/features/cards/utils/get-card-image-url';
 
 type CardInDeck = DeckResult['cards'][number]['card'];
 

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { fetchCard } from '@/features/card-detail/api/fetchCard';
 import { getCardIdFromSlug } from '@/shared/utils/card-slug-utils';
 import { fetchSimilarCards } from '@/features/card-detail/api/fetchSimilarCards';
-import { getCardImageUrl } from '@/shared/utils/get-card-image-url';
+import { getCardImageUrl } from '@/features/cards/utils/get-card-image-url';
 
 import PokemonCardInfo from '@/features/card-detail/components/PokemonCardInfo';
 import TrainerCardInfo from '@/features/card-detail/components/TrainerCardInfo';
