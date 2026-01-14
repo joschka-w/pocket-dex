@@ -37,6 +37,14 @@ function Expansion({ card, className }: Props) {
           </ul>
         </>
       )}
+
+      {card.packs.length === 0 && (
+        <>
+          <p className="text-text-muted font-medium normal-case italic">
+            Not availabe in any packs
+          </p>
+        </>
+      )}
     </InfoBox>
   );
 }
