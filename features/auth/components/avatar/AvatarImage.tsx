@@ -11,7 +11,10 @@ function AvatarImage({ profile }: Props) {
   const fallbackContent = profile.username?.at(0)?.toUpperCase() || 'U';
 
   return (
-    <RadixAvatar.Root className="flex aspect-square w-11 items-center justify-center overflow-hidden rounded-full">
+    <RadixAvatar.Root
+      aria-label="Profile"
+      className="flex aspect-square w-11 items-center justify-center overflow-hidden rounded-full"
+    >
       {profile.avatar_url && (
         <RadixAvatar.Image src={profile.avatar_url} referrerPolicy="no-referrer" />
       )}
