@@ -3,6 +3,11 @@ import { Suspense } from 'react';
 import CardListWithPrefetchedData from '@/features/card-catalog/components/CardListWithPrefetchedData';
 import FilterSidebar from '@/features/card-catalog/filtering/components/FilterSidebar';
 import Searchbar from '@/features/card-catalog/search/Searchbar';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Cards',
+};
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

@@ -1,10 +1,13 @@
-'use client';
-
 import LogoWithText from '@/shared/components/LogoWithText';
 import Link from 'next/link';
 
 import GoogleLoginButton from '@/features/auth/components/GoogleLoginButton';
 import GithubLoginButton from '@/features/auth/components/GithubLoginButton';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Login',
+};
 
 function LoginPage() {
   // TODO - Add terms and privacy policy links

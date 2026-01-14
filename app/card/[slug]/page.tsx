@@ -10,6 +10,7 @@ import PokemonCardInfo from '@/features/card-detail/components/PokemonCardInfo';
 import TrainerCardInfo from '@/features/card-detail/components/TrainerCardInfo';
 import SimilarCards from '@/features/card-detail/components/SimilarCards';
 import Error from '@/shared/components/Error';
+import { Metadata } from 'next';
 
 interface Params {
   slug: string;
@@ -17,6 +18,19 @@ interface Params {
 
 interface Props {
   params: Promise<Params>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const slug = (await params).slug;
+  const cardId = getCardIdFromSlug(slug);
+
+  if (!cardId) return { title: slug };
+
+  const { data: card } = await fetchCard(cardId);
+
+  return {
+    title: `${card.name} | ${card.id}`,
+  };
 }
 
 async function CardPage({ params }: Props) {

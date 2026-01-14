@@ -1,5 +1,10 @@
 import DeckList from '@/features/deck-catalog/deck-list/components/DeckList';
 import DeckTopbar from '@/features/deck-catalog/filtering/components/DeckTopbar';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Decks',
+};
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

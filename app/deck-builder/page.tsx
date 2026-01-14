@@ -4,6 +4,11 @@ import DeckBuilder from '@/features/deck-management/deck-builder/components/Deck
 import FilterTopbar from '@/features/card-catalog/filtering/components/FilterTopbar';
 import CardListWithPrefetchedData from '@/features/card-catalog/components/CardListWithPrefetchedData';
 import DeckStatistics from '@/features/deck-management/deck-statistics/components/DeckStatistics';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Deck Builder',
+};
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
