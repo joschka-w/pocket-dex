@@ -13,7 +13,7 @@ function DeckFormSuccessModal({ open, setOpen }: Props) {
         <Dialog.Title>Deck Created Successfully!</Dialog.Title>
         <Dialog.Description>
           Your deck has been published. You can view it{' '}
-          <Link href={'/deck/${deckId}'} className="text-text underline-offset-3 hover:underline">
+          <Link href={'/decks?sort=date'} className="text-text underline-offset-3 hover:underline">
             here
           </Link>{' '}
           or continue creating more decks.

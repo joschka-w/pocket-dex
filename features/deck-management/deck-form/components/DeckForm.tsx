@@ -2,12 +2,12 @@
 
 import { Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import useDeckForm from '../../deck-builder/hooks/useDeckForm';
 
 import TextArea from '@/shared/components/ui/TextArea';
 import TextInput from '@/shared/components/ui/TextInput';
 import DeckEnergySelect from './DeckEnergySelect';
 import DeckFormSuccessModal from './DeckFormSuccessModal';
-import useDeckForm from '../../deck-builder/hooks/useDeckForm';
 
 function DeckForm() {
   const {
