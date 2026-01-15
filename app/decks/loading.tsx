@@ -3,7 +3,7 @@ import { useId } from 'react';
 
 function Loading() {
   return (
-    <div className="max-w-mw mt-topbar-height relative grid w-full grid-cols-2 gap-7">
+    <div className="max-w-mw mt-topbar-height relative grid h-screen w-full grid-cols-2 gap-7">
       <DeckSkeleton />
       <DeckSkeleton />
     </div>
@@ -14,7 +14,7 @@ function DeckSkeleton() {
   const id = useId();
 
   return (
-    <div className="bg-bg-1/75 relative flex h-full w-full flex-col overflow-hidden rounded-xl">
+    <div className="bg-bg-1/75 relative flex h-fit w-full flex-col overflow-hidden rounded-xl">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <div className="z-10 flex w-40 flex-col gap-1">

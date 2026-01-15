@@ -10,7 +10,7 @@ function LogoWithText({ isLink = false }: Props) {
   const inner = (
     <>
       <div className="relative h-full w-11">
-        <Image src={logo} fill alt="Logo" />
+        <Image src={logo} fill alt="Logo" priority />
       </div>
       <span className="text-lg font-bold">PocketDex</span>
     </>
