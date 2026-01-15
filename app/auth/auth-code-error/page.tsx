@@ -10,7 +10,11 @@ function AuthCodeErrorPage() {
 
   const handleRetry = () => router.replace('/auth/login');
 
-  return <Error message={message} onRetry={handleRetry} />;
+  return (
+    <main className="mb-auto">
+      <Error message={message} onRetry={handleRetry} />
+    </main>
+  );
 }
 
 export default AuthCodeErrorPage;

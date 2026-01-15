@@ -10,6 +10,7 @@ import NuqsProvider from '@/shared/providers/NuqsProvider';
 import TanstackProvider from '@/shared/providers/TanstackProvider';
 import CustomToaster from '@/shared/components/CustomToaster';
 import AuthInitializer from '@/features/auth/components/AuthInitializer';
+import Footer from '@/shared/components/footer/Footer';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -42,6 +43,7 @@ export default function RootLayout({
               <SpeedInsights />
               <Header />
               {children}
+              <Footer />
             </JotaiProvider>
           </NuqsProvider>
         </TanstackProvider>

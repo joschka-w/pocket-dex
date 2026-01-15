@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 function LoginPage() {
   return (
-    <form className="bg-bg-1 mt-12 flex w-md flex-col items-center rounded-xl px-15 pt-10 pb-7">
+    <form className="bg-bg-1 my-auto flex w-md flex-col items-center rounded-xl px-15 pt-10 pb-7">
       <header className="flex w-full flex-col items-center">
         <LogoWithText />
         <h2 className="mt-6 text-center text-xl leading-none font-semibold">

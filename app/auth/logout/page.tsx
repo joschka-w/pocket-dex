@@ -12,7 +12,7 @@ function Logout() {
     }, 2000);
   }, [router]);
 
-  return <div className="mt-12 font-medium">You have been logged out. redirecting...</div>;
+  return <div className="mt-16 mb-auto font-medium">You have been logged out. redirecting...</div>;
 }
 
 export default Logout;
