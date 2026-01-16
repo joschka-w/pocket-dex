@@ -10,8 +10,6 @@ export const metadata: Metadata = {
 };
 
 function LoginPage() {
-  // TODO - Add terms and privacy policy links
-
   return (
     <form className="bg-bg-1 mt-12 flex w-md flex-col items-center rounded-xl px-15 pt-10 pb-7">
       <header className="flex w-full flex-col items-center">
@@ -31,11 +29,14 @@ function LoginPage() {
 
       <p className="text-text-muted mt-10 text-xs">
         {'By continuing, you agree to our '}
-        <Link href={'#'} className="hover:text-text underline transition-colors duration-100">
+        <Link href={'/terms'} className="hover:text-text underline transition-colors duration-100">
           Terms
         </Link>
         {' and '}
-        <Link href={'#'} className="hover:text-text underline transition-colors duration-100">
+        <Link
+          href={'/privacy'}
+          className="hover:text-text underline transition-colors duration-100"
+        >
           Privacy Policy
         </Link>
         .

@@ -1,0 +1,101 @@
+import { LegalName, LegalAddress, LegalEmail } from '@/features/legal/components/DynamicValues';
+
+export const metadata = {
+  title: 'Cookie Policy',
+};
+
+# Cookie Policy
+
+**Last Updated:** January 16, 2026
+
+## What Are Cookies?
+
+Cookies are small text files stored on your device when you visit a website. They help websites remember information about your visit.
+
+## Cookies We Use
+
+This Site uses only **strictly necessary cookies** required for authentication. We do not use tracking, analytics, or advertising cookies.
+
+### Authentication Cookies
+
+When you sign in, the following cookies are set by Supabase (our authentication provider):
+
+| Cookie Name                    | Purpose                              | Duration           | Type               |
+| ------------------------------ | ------------------------------------ | ------------------ | ------------------ |
+| `sb-[project-id]-auth-token.0` | Authentication session (first part)  | Session/Persistent | Strictly Necessary |
+| `sb-[project-id]-auth-token.1` | Authentication session (second part) | Session/Persistent | Strictly Necessary |
+
+These cookies are **essential** for the Site to function and cannot be disabled if you wish to use authentication features.
+
+### No Consent Required
+
+Under GDPR Article 5(3) of the ePrivacy Directive, strictly necessary cookies do not require user consent. Since we only use authentication cookies essential for the service you requested (signing in), no cookie consent banner is required.
+
+## Local Storage
+
+In addition to cookies, this Site uses **localStorage** (a browser storage mechanism similar to cookies) to save your in-progress deck compositions.
+
+### What We Store in localStorage
+
+- Deck compositions (card selections and quantities)
+- Draft/in-progress decks that you haven't yet published
+
+### Key Points About localStorage
+
+- Data stays **only on your device** - it never leaves your browser
+- Data persists until you clear it manually
+- Data is not transmitted to our servers unless you explicitly publish the deck
+- You can clear localStorage anytime through your browser settings
+
+## Third-Party Cookies
+
+When you authenticate with Google or GitHub, those services may set their own cookies. Please refer to their respective privacy policies:
+
+- Google: https://policies.google.com/privacy
+- GitHub: https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement
+
+## Managing Cookies
+
+### Blocking Cookies
+
+You can block cookies through your browser settings. However, blocking our authentication cookies will prevent you from signing in.
+
+**How to manage cookies in different browsers:**
+
+- **Chrome**: Settings > Privacy and Security > Cookies
+- **Firefox**: Settings > Privacy & Security > Cookies and Site Data
+- **Safari**: Preferences > Privacy > Cookies and Website Data
+- **Edge**: Settings > Cookies and Site Permissions
+
+### Clearing localStorage
+
+To clear localStorage in your browser:
+
+1. Open browser Developer Tools (usually F12)
+2. Go to Application/Storage tab
+3. Find Local Storage > [site domain]
+4. Right-click and clear
+
+Or clear all site data through your browser's privacy settings.
+
+## No Tracking
+
+This Site does **not** use:
+
+- Analytics cookies (e.g., Google Analytics)
+- Advertising cookies
+- Social media tracking pixels
+- Third-party marketing cookies
+- Cross-site tracking
+
+We use **Vercel Speed Insights** to monitor website performance, but this service does **not** use cookies. It collects anonymous performance metrics without any user tracking or identification. See our [Privacy Policy](/privacy) for more details on what data Speed Insights collects.
+
+We respect your privacy and collect only the minimum data necessary to provide the service.
+
+## Changes to This Policy
+
+We may update this Cookie Policy from time to time. Any changes will be posted on this page with an updated date.
+
+## Questions?
+
+If you have questions about our use of cookies, contact: <LegalEmail/>

@@ -1,10 +1,12 @@
 import type { NextConfig } from 'next';
+import createMDX from '@next/mdx';
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
   // logging: {
   //   fetches: { fullUrl: true },
   // },
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   images: {
     remotePatterns: [
       {
@@ -28,4 +30,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
+  options: { remarkPlugins: ['remark-gfm'] },
+});
+
+export default withMDX(nextConfig);

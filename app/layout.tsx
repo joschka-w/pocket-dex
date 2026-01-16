@@ -2,11 +2,11 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Provider as JotaiProvider } from 'jotai';
 
 import Header from '@/shared/components/layout/Header';
 import NuqsProvider from '@/shared/providers/NuqsProvider';
 import TanstackProvider from '@/shared/providers/TanstackProvider';
-import { Provider as JotaiProvider } from 'jotai';
 import CustomToaster from '@/shared/components/CustomToaster';
 import AuthInitializer from '@/features/auth/components/AuthInitializer';
 
@@ -26,6 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>PocketDex</title>
+      </head>
+
       <body
         className={`${inter.className} bg-bg-base text-text flex min-h-screen flex-col items-center antialiased`}
       >
@@ -33,8 +37,8 @@ export default function RootLayout({
           <NuqsProvider>
             <JotaiProvider>
               <AuthInitializer />
-              <Header />
               <CustomToaster />
+              <Header />
               {children}
             </JotaiProvider>
           </NuqsProvider>
