@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   // },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   images: {
+    unoptimized: true,
     minimumCacheTTL: 2678400,
     remotePatterns: [
       {
