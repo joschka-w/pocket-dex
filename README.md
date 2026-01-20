@@ -19,6 +19,8 @@
   <a href="#"><img src="https://img.shields.io/github/languages/code-size/joschka-w/pocket-dex?style=for-the-badge" /></a>
 </div>
 
+<br />
+
 <details>
   <summary>Table of Contents</summary>
   <ol>
