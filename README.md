@@ -8,8 +8,12 @@
     <br/>
     to browse cards, create decks, and publish them.
   </p>
-  <a href="https://pocket-dex-web.vercel.app">Live Demo</a>
+  <h3>
+    <a href="https://pocket-dex-web.vercel.app">Live Demo</a>
+  </h3>
 </div>
+
+[![Deployment][deployment-badge]][deployment-link] ![last-commit-badge] ![code-size-badge]
 
 <details>
   <summary>Table of Contents</summary>
@@ -37,6 +41,7 @@
     <li><a href="#feedback--suggestions">Feedback & Suggestions</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
+    <li><a href="#disclaimer">Disclaimer</a></li>
   </ol>
 </details>
 
@@ -71,7 +76,7 @@
 - **URL-Based Filter State** - Search and filter parameters persist in the URL for easy sharing and state preservation across page reloads
 - **Complex Database Architecture** - PostgreSQL database with normalized tables, multiple relationship patterns, custom functions, triggers, and views
 - **Server-Side Rendering** - Uses Next.js App Router with static generation, dynamic rendering, and streaming with React Suspense for optimal performance
-- **OAuth Authentication Flow** - Secure authentication with Google and GitHub providers, implented with Supabase Auth
+- **OAuth Authentication Flow** - Secure authentication with Google and GitHub providers, implemented with Supabase Auth
 - **Real-Time Username Validation** - Instant feedback on username availability with debounced calls to database & validation on both server and client
 - **Type-Safe Form Handling** - Form validation using Zod schemas and React Hook Form for UX and type safety
 - **Full TypeScript Coverage** - End-to-end type safety across frontend, backend, and database queries
@@ -79,11 +84,11 @@
 
 ### Built With
 
-- [![Next][nextjs-shield]][nextjs-link]
-- [![Typescript][typescript-shield]][typescript-link]
-- [![Supabase][supabase-shield]][supabase-link]
-- [![PostgreSQL][postgres-shield]][postgres-link]
-- [![Tailwind CSS][tailwind-shield]][tailwind-link]
+- [![Next][nextjs-badge]][nextjs-link]
+- [![Typescript][typescript-badge]][typescript-link]
+- [![Supabase][supabase-badge]][supabase-link]
+- [![PostgreSQL][postgres-badge]][postgres-link]
+- [![Tailwind CSS][tailwind-badge]][tailwind-link]
 
 ### Database Schema
 
@@ -95,7 +100,7 @@ Building PocketDex was my first full-scale web application, and it taught me way
 
 #### 🗄️ PostgreSQL & Database Design
 
-- **Starting From Zero**: I've only worked with Firebase before (a NoSQL database), so jumping into Postgres was a learning curve.I gathered experience designing database schemas, setting up relationships between tables, and using features like triggers and Row Level Security for access control. I also learned how indexes can improve query performance (even though it doesn't really matter with the few thousand rows in the database).
+- **Starting From Zero**: I've only worked with Firebase before (a NoSQL database), so jumping into Postgres was a learning curve. I gained experience designing database schemas, setting up relationships between tables, and using features like triggers and Row Level Security for access control. I also learned how indexes can improve query performance (even though it doesn't really matter with the few thousand rows in the database).
 
 #### 🎨 Design First, Code Later
 
@@ -165,13 +170,22 @@ Additional packages I used include:
 - [`Lucide Icons`][lucide-link]
 - [`Embla Carousel`][embla-link]
 
+## Disclaimer
+
+**Pokémon** and **Pokémon TCG Pocket** are trademarks of Nintendo, Creatures Inc., GAME FREAK inc., and DeNA. All card images and game assets are property of their respective owners.
+
+This is an unofficial fan project created for educational and portfolio purposes. Not affiliated with or endorsed by Nintendo, The Pokémon Company, or related entities.
+
 <!-- Shields -->
 
-[nextjs-shield]: https://img.shields.io/badge/Next.js%20-%20000000?style=for-the-badge&logo=nextdotjs&color=000000&link=https%3A%2F%2Fnextjs.org
-[typescript-shield]: https://img.shields.io/badge/Typescript%20-%20%233178C6?style=for-the-badge&logo=typescript&logoColor=%23ffffff&color=%233178C6
-[supabase-shield]: https://img.shields.io/badge/Supabase-%2331B075?style=for-the-badge&logo=supabase&logoColor=%23ffffff&color=%2331B075
-[postgres-shield]: https://img.shields.io/badge/PostgreSQL-%234169E1?style=for-the-badge&logo=postgresql&logoColor=%23ffffff&color=%234169E1
-[tailwind-shield]: https://img.shields.io/badge/Tailwind%20CSS-%2306B6D4?style=for-the-badge&logo=tailwindcss&logoColor=%23ffffff&color=%2306B6D4
+[deployment-badge]: https://img.shields.io/badge/Deployed%20on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white
+[last-commit-badge]: https://img.shields.io/github/last-commit/joschka-w/pocket-dex?style=for-the-badge
+[code-size-badge]: https://img.shields.io/github/languages/code-size/joschka-w/pocket-dex?style=for-the-badge
+[nextjs-badge]: https://img.shields.io/badge/Next.js%20-%20000000?style=for-the-badge&logo=nextdotjs&color=000000&link=https%3A%2F%2Fnextjs.org
+[typescript-badge]: https://img.shields.io/badge/Typescript%20-%20%233178C6?style=for-the-badge&logo=typescript&logoColor=%23ffffff&color=%233178C6
+[supabase-badge]: https://img.shields.io/badge/Supabase-%2331B075?style=for-the-badge&logo=supabase&logoColor=%23ffffff&color=%2331B075
+[postgres-badge]: https://img.shields.io/badge/PostgreSQL-%234169E1?style=for-the-badge&logo=postgresql&logoColor=%23ffffff&color=%234169E1
+[tailwind-badge]: https://img.shields.io/badge/Tailwind%20CSS-%2306B6D4?style=for-the-badge&logo=tailwindcss&logoColor=%23ffffff&color=%2306B6D4
 
 <!-- Links -->
 
@@ -180,6 +194,7 @@ Additional packages I used include:
 [supabase-link]: https://supabase.com/
 [postgres-link]: https://www.postgresql.org/
 [tailwind-link]: https://tailwindcss.com/
+[deployment-link]: https://pocket-dex-web.vercel.app
 
 <!-- Additional links -->
 
