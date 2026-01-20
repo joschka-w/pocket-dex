@@ -13,7 +13,11 @@
   </h3>
 </div>
 
-[![Deployment][deployment-badge]][deployment-link] ![last-commit-badge] ![code-size-badge]
+<div align="center">
+  <a href="https://pocket-dex-web.vercel.app"><img src="https://img.shields.io/badge/Deployed%20on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" /></a>
+  <a href="#"><img src="https://img.shields.io/github/last-commit/joschka-w/pocket-dex?style=for-the-badge" /></a>
+  <a href="#"><img src="https://img.shields.io/github/languages/code-size/joschka-w/pocket-dex?style=for-the-badge" /></a>
+</div>
 
 <details>
   <summary>Table of Contents</summary>
@@ -178,9 +182,6 @@ This is an unofficial fan project created for educational and portfolio purposes
 
 <!-- Shields -->
 
-[deployment-badge]: https://img.shields.io/badge/Deployed%20on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white
-[last-commit-badge]: https://img.shields.io/github/last-commit/joschka-w/pocket-dex?style=for-the-badge
-[code-size-badge]: https://img.shields.io/github/languages/code-size/joschka-w/pocket-dex?style=for-the-badge
 [nextjs-badge]: https://img.shields.io/badge/Next.js%20-%20000000?style=for-the-badge&logo=nextdotjs&color=000000&link=https%3A%2F%2Fnextjs.org
 [typescript-badge]: https://img.shields.io/badge/Typescript%20-%20%233178C6?style=for-the-badge&logo=typescript&logoColor=%23ffffff&color=%233178C6
 [supabase-badge]: https://img.shields.io/badge/Supabase-%2331B075?style=for-the-badge&logo=supabase&logoColor=%23ffffff&color=%2331B075
@@ -194,7 +195,6 @@ This is an unofficial fan project created for educational and portfolio purposes
 [supabase-link]: https://supabase.com/
 [postgres-link]: https://www.postgresql.org/
 [tailwind-link]: https://tailwindcss.com/
-[deployment-link]: https://pocket-dex-web.vercel.app
 
 <!-- Additional links -->
 
