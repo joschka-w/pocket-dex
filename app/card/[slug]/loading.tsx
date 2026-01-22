@@ -1,6 +1,13 @@
-import SkeletonText from '@/shared/components/skeleton/SkeletonText';
+'use client';
 
-async function Loading() {
+import SkeletonText from '@/shared/components/skeleton/SkeletonText';
+import { useEffect } from 'react';
+
+function Loading() {
+  useEffect(() => {
+    window.scroll({ top: 0 });
+  }, []);
+
   return (
     <div className="max-w-mw mt-15 grid h-fit w-full grid-cols-[auto_1fr] grid-rows-1 gap-x-15">
       <div className="skeleton aspect-600/825 w-[600] max-w-96" />
